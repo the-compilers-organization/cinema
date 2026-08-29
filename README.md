@@ -1,23 +1,15 @@
-```{=html}
-<h1>
-```
-🎬 Sistema de Cinema
-```{=html}
-</h1>
-```
-```{=html}
+
+<h1>🎬 Sistema de Cinema </h1>
+
 <p align="center">
-```
-`<img src="https://img.shields.io/static/v1?label=Java&message=POO&color=ED8B00&style=for-the-badge&logo=openjdk"/>`{=html}
-`<img src="https://img.shields.io/static/v1?label=Git&message=Versionamento&color=F05032&style=for-the-badge&logo=git"/>`{=html}
-`<img src="https://img.shields.io/static/v1?label=GitHub&message=2026.2&color=181717&style=for-the-badge&logo=github"/>`{=html}
-`<img src="https://img.shields.io/static/v1?label=STATUS&message=EM%20DESENVOLVIMENTO&color=yellow&style=for-the-badge"/>`{=html}
-`<img src="https://img.shields.io/static/v1?label=License&message=MIT&color=green&style=for-the-badge"/>`{=html}
-```{=html}
+  <img src="https://img.shields.io/static/v1?label=Java&message=POO&color=ED8B00&style=for-the-badge&logo=openjdk"/>
+  <img src="https://img.shields.io/static/v1?label=Git&message=Versionamento&color=F05032&style=for-the-badge&logo=git"/>
+  <img src="https://img.shields.io/static/v1?label=GitHub&message=2026.2&color=181717&style=for-the-badge&logo=github"/>
+  <img src="https://img.shields.io/static/v1?label=STATUS&message=EM%20DESENVOLVIMENTO&color=yellow&style=for-the-badge"/>
+  <img src="https://img.shields.io/static/v1?label=License&message=MIT&color=green&style=for-the-badge"/>
 </p>
-```
-> Status do Projeto: :heavy_check_mark: (concluído) \| :warning: (em
-> desenvolvimento) \| :x: (não iniciado)
+
+> Status do Projeto: :heavy_check_mark: (concluído) | :warning: (em desenvolvimento) | :x: (não iniciada)
 
 ------------------------------------------------------------------------
 
@@ -66,52 +58,40 @@ Projeto](#status-do-projeto-construction)
 
 # Contexto :information_source:
 
-```{=html}
+
 <p align="justify">
-```
+
 O `<strong>`{=html}Sistema de Cinema`</strong>`{=html} é um projeto
 desenvolvido para a disciplina de `<strong>`{=html}Programação Orientada
 a Objetos`</strong>`{=html}, do 3º período do curso de Ciência da
 Computação da Universidade Católica de Pernambuco (UNICAP), durante o
 semestre 2026.2.
-```{=html}
 </p>
-```
-```{=html}
+
 <p align="justify">
-```
 O projeto consiste na implementação de um sistema de cinema em Java,
 envolvendo usuários, filmes, salas, sessões, bilhetes e compras. Durante
 seu desenvolvimento serão aplicados, de forma prática, os conceitos
 estudados na disciplina de Programação Orientada a Objetos.
-```{=html}
 </p>
-```
 
 ------------------------------------------------------------------------
 
 # Objetivo :dart:
 
-```{=html}
 <p align="justify">
-```
 O objetivo do projeto é desenvolver um sistema capaz de representar
 algumas das principais operações de um cinema, permitindo trabalhar com
 usuários, filmes, salas, sessões, escolha de cadeiras, bilhetes e
 compras.
-```{=html}
 </p>
-```
-```{=html}
+
 <p align="justify">
-```
 Além das funcionalidades do sistema, o projeto tem como objetivo aplicar
 conceitos de Programação Orientada a Objetos, como encapsulamento,
 associação entre objetos, herança, sobrescrita, sobrecarga, enumerações,
 classes abstratas, exceções e padrões de projeto.
-```{=html}
 </p>
-```
 
 ------------------------------------------------------------------------
 
@@ -447,12 +427,27 @@ java -cp src Main
 
 Time responsável pelo desenvolvimento do projeto.
 
-  -----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-   [`<img src="https://github.com/Amanda-Aziz.png" width=115>`{=html}`<br>`{=html}`<sub>`{=html}Amanda   [`<img src="https://github.com/francisLauriano.png" width=115>`{=html}`<br>`{=html}`<sub>`{=html}Francis   [`<img src="https://github.com/Sofiafs.png" width=115>`{=html}`<br>`{=html}`<sub>`{=html}Sofia
-                          Aziz`</sub>`{=html}](https://github.com/Amanda-Aziz)                                                 Lauriano`</sub>`{=html}](https://github.com/francisLauriano)                                               Farias`</sub>`{=html}](https://github.com/Sofiafs)
-  ----------------------------------------------------------------------------------------------------- ---------------------------------------------------------------------------------------------------------- ------------------------------------------------------------------------------------------------
+Sim. Para as três desenvolvedoras, podemos substituir a seção anterior por uma estrutura igual à do seu exemplo.
 
-  -----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+Como precisamos do **ID numérico do GitHub (`u/...`)** para carregar a foto de perfil diretamente, a forma mais simples e robusta é usar a própria URL do perfil como imagem, acrescentando `.png`.
+
+```markdown
+# Desenvolvedoras :octocat:
+
+Time responsável pelo desenvolvimento do projeto.
+
+| [<img src="https://github.com/Amanda-Aziz.png" width=115><br><sub>Amanda Aziz</sub>](https://github.com/Amanda-Aziz) | [<img src="https://github.com/francisLauriano.png" width=115><br><sub>Francis Lauriano</sub>](https://github.com/francisLauriano) | [<img src="https://github.com/Sofiafs.png" width=115><br><sub>Sofia Farias</sub>](https://github.com/Sofiafs) |
+| :---: | :---: | :---: |
+```
+
+No README do GitHub, a ideia é que apareça aproximadamente assim:
+
+# Desenvolvedoras :octocat:
+
+Time responsável pelo desenvolvimento do projeto.
+
+| [<img src="https://github.com/Amanda-Aziz.png" width=115><br><sub>Amanda Aziz</sub>](https://github.com/Amanda-Aziz) | [<img src="https://github.com/francisLauriano.png" width=115><br><sub>Francis Lauriano</sub>](https://github.com/francisLauriano) | [<img src="https://github.com/Sofiafs.png" width=115><br><sub>Sofia Farias</sub>](https://github.com/Sofiafs) |
+| :------------------------------------------------------------------------------------------------------------------: | :-------------------------------------------------------------------------------------------------------------------------------: | :-----------------------------------------------------------------------------------------------------------: |
 
 ------------------------------------------------------------------------
 
