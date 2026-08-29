@@ -427,25 +427,6 @@ java -cp src Main
 
 Time responsável pelo desenvolvimento do projeto.
 
-Sim. Para as três desenvolvedoras, podemos substituir a seção anterior por uma estrutura igual à do seu exemplo.
-
-Como precisamos do **ID numérico do GitHub (`u/...`)** para carregar a foto de perfil diretamente, a forma mais simples e robusta é usar a própria URL do perfil como imagem, acrescentando `.png`.
-
-```markdown
-# Desenvolvedoras :octocat:
-
-Time responsável pelo desenvolvimento do projeto.
-
-| [<img src="https://github.com/Amanda-Aziz.png" width=115><br><sub>Amanda Aziz</sub>](https://github.com/Amanda-Aziz) | [<img src="https://github.com/francisLauriano.png" width=115><br><sub>Francis Lauriano</sub>](https://github.com/francisLauriano) | [<img src="https://github.com/Sofiafs.png" width=115><br><sub>Sofia Farias</sub>](https://github.com/Sofiafs) |
-| :---: | :---: | :---: |
-```
-
-No README do GitHub, a ideia é que apareça aproximadamente assim:
-
-# Desenvolvedoras :octocat:
-
-Time responsável pelo desenvolvimento do projeto.
-
 | [<img src="https://github.com/Amanda-Aziz.png" width=115><br><sub>Amanda Aziz</sub>](https://github.com/Amanda-Aziz) | [<img src="https://github.com/francisLauriano.png" width=115><br><sub>Francis Lauriano</sub>](https://github.com/francisLauriano) | [<img src="https://github.com/Sofiafs.png" width=115><br><sub>Sofia Farias</sub>](https://github.com/Sofiafs) |
 | :------------------------------------------------------------------------------------------------------------------: | :-------------------------------------------------------------------------------------------------------------------------------: | :-----------------------------------------------------------------------------------------------------------: |
 
