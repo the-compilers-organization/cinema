@@ -61,9 +61,9 @@ Projeto](#status-do-projeto-construction)
 
 <p align="justify">
 
-O `<strong>`Sistema de Cinema`</strong>` é um projeto
-desenvolvido para a disciplina de `<strong>` Programação Orientada
-a Objetos`</strong>`, do 3º período do curso de Ciência da
+O <strong>Sistema de Cinema</strong> é um projeto
+desenvolvido para a disciplina de<strong> Programação Orientada
+a Objetos</strong>, do 3º período do curso de Ciência da
 Computação da Universidade Católica de Pernambuco (UNICAP), durante o
 semestre 2026.2.
 </p>
