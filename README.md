@@ -439,7 +439,7 @@ Time responsável pelo desenvolvimento do projeto.
 **Disciplina:** Programação Orientada a Objetos\
 **Período:** 3º período\
 **Semestre:** 2026.2\
-**Docente:** Jheymesson A. Cavalcanti
+**Docente:** Jheymesson A. Cavalcanti\
 **Discente:**
   - Amanda Aziz | RA:
   - Francis Lauriano | RA: 00000860720
