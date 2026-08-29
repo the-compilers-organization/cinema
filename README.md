@@ -111,13 +111,13 @@ Os documentos utilizados como base para o desenvolvimento do projeto estão disp
 
 Primeira etapa do projeto, responsável pela definição da estrutura inicial do sistema de cinema, suas classes e relacionamentos.
 
-🔗 [Apresentação de projeto - Parte 1](doc/Apresentacao_de_projeto_parte1.pdf)
+🔗 [Apresentação de projeto - Parte 1](doc/apresentacao_de_projeto_parte1.pdf)
 
 ### 📄 Parte 02 — Herança, Sobrescrita e Sobrecarga
 
 Segunda etapa do projeto, responsável pela evolução da estrutura inicial, acrescentando novos conceitos de Programação Orientada a Objetos, como herança, sobrescrita, sobrecarga e enumerações.
 
-🔗 [Apresentação de projeto - Parte 2](doc/Apresentacao_de_projeto_parte2.pdf)
+🔗 [Apresentação de projeto - Parte 2](doc/apresentacao_de_projeto_parte2.pdf)
 
 📁 [Acessar todos os documentos do projeto](https://github.com/the-compilers-organization/cinema/tree/main/doc)
 
@@ -361,8 +361,8 @@ projeto:
 cinema/
 │
 ├── doc/
-│   ├── Apresentacao_de_projeto_parte1.pdf
-│   └── Apresentacao_de_projeto_parte2.pdf
+│   ├── apresentacao_de_projeto_parte1.pdf
+│   └── apresentacao_de_projeto_parte2.pdf
 │
 ├── src/
 │   ├── Usuario.java
