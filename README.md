@@ -381,13 +381,13 @@ O projeto pode ser desenvolvido utilizando, por exemplo:
 ### 1️⃣ Clonar o repositório
 
 ``` bash
-git clone URL_DO_REPOSITORIO
+git clone https://github.com/the-compilers-organization/cinema.git
 ```
 
 ### 2️⃣ Entrar na pasta do projeto
 
 ``` bash
-cd NOME_DO_REPOSITORIO
+cd cinema
 ```
 
 ------------------------------------------------------------------------
