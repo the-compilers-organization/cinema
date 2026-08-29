@@ -1,42 +1,142 @@
-# 🎬 Sistema de Cinema — Projeto de Programação Orientada a Objetos
+```{=html}
+<h1>
+```
+🎬 Sistema de Cinema
+```{=html}
+</h1>
+```
+```{=html}
+<p align="center">
+```
+`<img src="https://img.shields.io/static/v1?label=Java&message=POO&color=ED8B00&style=for-the-badge&logo=openjdk"/>`{=html}
+`<img src="https://img.shields.io/static/v1?label=Git&message=Versionamento&color=F05032&style=for-the-badge&logo=git"/>`{=html}
+`<img src="https://img.shields.io/static/v1?label=GitHub&message=2026.2&color=181717&style=for-the-badge&logo=github"/>`{=html}
+`<img src="https://img.shields.io/static/v1?label=STATUS&message=EM%20DESENVOLVIMENTO&color=yellow&style=for-the-badge"/>`{=html}
+`<img src="https://img.shields.io/static/v1?label=License&message=MIT&color=green&style=for-the-badge"/>`{=html}
+```{=html}
+</p>
+```
+> Status do Projeto: :heavy_check_mark: (concluído) \| :warning: (em
+> desenvolvimento) \| :x: (não iniciado)
 
-Projeto desenvolvido para a disciplina de **Programação Orientada a Objetos**, do **3º período do curso de Ciência da Computação da Universidade Católica de Pernambuco (UNICAP)**, no semestre **2026.2**.
+------------------------------------------------------------------------
 
-**Professor:** Jheymesson A. Cavalcanti
+# Tópicos
 
----
+:small_blue_diamond: [Contexto](#contexto-information_source)
 
-## 📖 Sobre o projeto
+:small_blue_diamond: [Objetivo](#objetivo-dart)
 
-O projeto consiste no desenvolvimento de um **sistema de cinema utilizando Programação Orientada a Objetos em Java**.
+:small_blue_diamond: [Funcionalidades](#funcionalidades-video_game)
 
-O sistema busca representar algumas das principais funcionalidades relacionadas à compra de ingressos de cinema, como cadastro de usuários, filmes, salas, sessões, bilhetes e compras.
+:small_blue_diamond: [Estrutura do
+Sistema](#estrutura-do-sistema-classical_building)
 
-Ao longo do desenvolvimento, serão aplicados conceitos estudados na disciplina, como:
+:small_blue_diamond: [Tipos de
+Usuário](#tipos-de-usuário-busts_in_silhouette)
 
-- Classes e objetos;
-- Encapsulamento;
-- Construtores;
-- Getters e setters;
-- Associação entre objetos;
-- Vetores e matrizes;
-- Enumerações (`enum`);
-- Herança;
-- Sobrescrita de métodos;
-- Sobrecarga de métodos;
-- Classes abstratas;
-- Tratamento de exceções;
-- Padrões de projeto.
+:small_blue_diamond: [Salas e Sessões](#salas-e-sessões-film_projector)
 
----
+:small_blue_diamond: [Conceitos de POO](#conceitos-de-poo-books)
 
-## 🎯 Objetivo
+:small_blue_diamond: [Estrutura do
+Projeto](#estrutura-do-projeto-file_folder)
 
-O objetivo do projeto é aplicar, de forma prática, os conceitos de **Programação Orientada a Objetos**, desenvolvendo um sistema capaz de representar o funcionamento de um cinema e as interações entre usuários, filmes, salas, sessões, bilhetes e compras.
+:small_blue_diamond: [Pré-requisitos](#pré-requisitos-warning)
 
----
+:small_blue_diamond: [Instalação](#instalação-rocket)
 
-## 🏗️ Estrutura do sistema
+:small_blue_diamond: [Como Rodar o
+Projeto](#como-rodar-o-projeto-computer)
+
+:small_blue_diamond: [Tecnologias
+Utilizadas](#tecnologias-utilizadas-wrench)
+
+:small_blue_diamond: [Desenvolvedoras](#desenvolvedoras-octocat)
+
+:small_blue_diamond: [Informações
+Acadêmicas](#informações-acadêmicas-mortar_board)
+
+:small_blue_diamond: [Status do
+Projeto](#status-do-projeto-construction)
+
+:small_blue_diamond: [Licença](#licença)
+
+------------------------------------------------------------------------
+
+# Contexto :information_source:
+
+```{=html}
+<p align="justify">
+```
+O `<strong>`{=html}Sistema de Cinema`</strong>`{=html} é um projeto
+desenvolvido para a disciplina de `<strong>`{=html}Programação Orientada
+a Objetos`</strong>`{=html}, do 3º período do curso de Ciência da
+Computação da Universidade Católica de Pernambuco (UNICAP), durante o
+semestre 2026.2.
+```{=html}
+</p>
+```
+```{=html}
+<p align="justify">
+```
+O projeto consiste na implementação de um sistema de cinema em Java,
+envolvendo usuários, filmes, salas, sessões, bilhetes e compras. Durante
+seu desenvolvimento serão aplicados, de forma prática, os conceitos
+estudados na disciplina de Programação Orientada a Objetos.
+```{=html}
+</p>
+```
+
+------------------------------------------------------------------------
+
+# Objetivo :dart:
+
+```{=html}
+<p align="justify">
+```
+O objetivo do projeto é desenvolver um sistema capaz de representar
+algumas das principais operações de um cinema, permitindo trabalhar com
+usuários, filmes, salas, sessões, escolha de cadeiras, bilhetes e
+compras.
+```{=html}
+</p>
+```
+```{=html}
+<p align="justify">
+```
+Além das funcionalidades do sistema, o projeto tem como objetivo aplicar
+conceitos de Programação Orientada a Objetos, como encapsulamento,
+associação entre objetos, herança, sobrescrita, sobrecarga, enumerações,
+classes abstratas, exceções e padrões de projeto.
+```{=html}
+</p>
+```
+
+------------------------------------------------------------------------
+
+# Funcionalidades :video_game:
+
+### Funcionalidades principais
+
+-   Cadastro e gerenciamento de usuários;
+-   Cadastro de filmes;
+-   Organização de salas e sessões;
+-   Consulta das sessões disponíveis;
+-   Escolha de cadeiras;
+-   Compra de um ou mais bilhetes;
+-   Compra de produtos do cinema;
+-   Aplicação de cupons promocionais;
+-   Cálculo do valor do ingresso de acordo com o tipo de sala;
+-   Desconto para estudantes;
+-   Gratuidade de bilhetes para críticos;
+-   Avaliação de filmes por críticos;
+-   Registro de críticas dos filmes;
+-   Sugestão de cadeiras próximas para compras de vários bilhetes.
+
+------------------------------------------------------------------------
+
+# Estrutura do Sistema :classical_building:
 
 O sistema é composto inicialmente pelas seguintes classes:
 
@@ -44,204 +144,341 @@ O sistema é composto inicialmente pelas seguintes classes:
 
 Representa o usuário responsável pela compra dos bilhetes.
 
-Entre as informações associadas ao usuário estão:
+Entre suas informações estão:
 
-- Usuário;
-- CPF;
-- Senha;
-- Idade;
-- Sexo;
-- E-mail;
-- Dados do cartão.
+-   Usuário;
+-   CPF;
+-   Senha;
+-   Idade;
+-   Sexo;
+-   E-mail;
+-   Nome do cartão;
+-   Número do cartão;
+-   Código verificador do cartão.
 
-O usuário poderá realizar, alterar e cancelar compras.
+O usuário poderá realizar, alterar ou cancelar uma compra.
 
 ### 🎞️ Filme
 
-Representa os filmes disponíveis no cinema.
+Representa um filme exibido nas sessões do cinema.
 
-Cada filme possui informações como:
+Possui informações como:
 
-- Nome;
-- Duração;
-- Sinopse;
-- Valor;
-- Nota;
-- Quantidade de críticos;
-- Críticas recebidas.
+-   Nome;
+-   Duração;
+-   Sinopse;
+-   Valor;
+-   Nota;
+-   Quantidade de críticos;
+-   Críticas recebidas.
 
 ### 🎟️ Bilhete
 
 Representa o ingresso adquirido pelo usuário.
 
-O bilhete reúne informações relacionadas ao:
+O bilhete contém informações relacionadas ao:
 
-- Usuário;
-- CPF;
-- Sala;
-- Sessão;
-- Filme;
-- Valor;
-- Cadeira escolhida.
+-   Usuário;
+-   CPF;
+-   Sala;
+-   Sessão;
+-   Filme;
+-   Valor;
+-   Cadeira escolhida.
 
 ### 🏢 Sala
 
 Representa uma sala do cinema.
 
-Cada sala possui uma grade de sessões em horários definidos. Caso não exista uma sessão em determinado horário, aquela posição poderá permanecer vazia.
-
-O sistema também considera diferentes tipos de sala, com multiplicadores aplicados ao valor do ingresso:
-
-| Tipo de sala | Multiplicador |
-|--------------|:-------------:|
-| Comum | 1.0 |
-| 3D | 1.2 |
-| XD | 1.3 |
-| XD/3D | 1.4 |
+Cada sala possui uma lista de sessões organizada em uma grade de
+horários. Caso não exista uma sessão em determinado horário, aquela
+posição poderá permanecer nula e não será apresentada ao usuário.
 
 ### 🕐 Sessao
 
-Representa uma sessão de cinema, relacionando o filme exibido às cadeiras disponíveis.
+Representa uma sessão do cinema.
 
-Cada sessão possui uma sala com:
+A sessão relaciona:
 
-- **10 linhas**;
-- **15 colunas**;
-- Total de **150 lugares**.
+-   Filme exibido;
+-   Horário;
+-   Cadeiras disponíveis.
 
-A disponibilidade das cadeiras pode ser representada utilizando uma matriz.
+As cadeiras podem ser representadas através de uma matriz de tamanho
+fixo.
 
 ### 🛒 Compra
 
-Representa as compras realizadas pelo usuário.
+Representa as compras realizadas pelos usuários.
 
-Uma compra pode conter:
+Uma compra poderá possuir:
 
-- Um ou mais bilhetes;
-- Produtos vendidos no cinema;
-- Cupom promocional.
+-   Um ou mais bilhetes;
+-   Produtos do cinema.
 
-Entre os produtos podem estar pipoca, refrigerante, chocolate e outros itens definidos pela equipe.
+O sistema também permite a realização de compras utilizando cupons
+promocionais.
 
----
+### 📝 Critica
 
-## 🍿 Produtos
+Representa um comentário realizado por um crítico sobre determinado
+filme.
 
-Os produtos disponíveis no cinema são representados através de uma enumeração (`enum`).
+Possui:
+
+-   Nome;
+-   Origem;
+-   Mensagem da crítica.
+
+Cada filme poderá armazenar até 100 críticas.
+
+### 🍿 Produtos
+
+Os produtos vendidos pelo cinema são representados através de uma
+enumeração (`enum`).
 
 Cada produto possui:
 
-- Nome;
-- Valor.
+-   Nome;
+-   Valor.
 
-Esses produtos podem ser adicionados às compras realizadas pelos usuários.
+Os produtos são definidos pela equipe e integrados às compras realizadas
+pelos usuários.
 
----
+### 🏷️ CupomPromocional
 
-## 🏷️ Cupons promocionais
+Os cupons promocionais também são representados através de uma
+enumeração (`enum`).
 
-O sistema também possui cupons promocionais implementados através de `enum`.
+O sistema possui três cupons, cada um com seu respectivo desconto.
 
-Cada cupom possui um desconto que poderá ser aplicado às compras de produtos ou bilhetes.
+------------------------------------------------------------------------
 
----
+# Tipos de Usuário :busts_in_silhouette:
 
-## 👥 Tipos de usuário
+O projeto utiliza **herança** para representar diferentes tipos de
+usuários.
 
-Além do usuário comum, o projeto possui especializações utilizando **herança**.
+### 👤 Usuario
+
+Representa o usuário comum do sistema e funciona como base para as
+especializações.
 
 ### 🎓 Estudante
 
-A classe `Estudante` herda as características de `Usuario`.
+A classe `Estudante` herda as características da classe `Usuario`.
 
-Na compra de bilhetes, o estudante possui o benefício de pagar **metade do valor do ingresso**.
+Na compra de bilhetes, o estudante paga **metade do valor total**.
 
 ### 📝 Critico
 
-A classe `Critico` também é uma especialização de `Usuario`.
+A classe `Critico` também herda as características de `Usuario`.
 
-Além dos dados herdados, possui a informação da organização ou órgão ao qual o crítico está ligado.
+Além dos dados do usuário, possui:
+
+-   Origem do crítico.
 
 O crítico poderá:
 
-- Comprar bilhetes com valor zerado;
-- Atribuir notas aos filmes;
-- Registrar críticas sobre os filmes.
+-   Comprar bilhetes com valor igual a zero;
+-   Atribuir notas de 0 a 10 aos filmes;
+-   Registrar críticas sobre os filmes.
 
----
+Sempre que uma nova nota for atribuída, a quantidade de críticos será
+incrementada e uma nova média do filme será calculada.
 
-## ⭐ Avaliação dos filmes
+------------------------------------------------------------------------
 
-Os críticos poderão avaliar os filmes através de notas de **0 a 10**.
+# Salas e Sessões :film_projector:
 
-Sempre que uma nova nota for atribuída:
+Cada sessão possui as cadeiras disponíveis para compra.
 
-1. A quantidade de críticos que avaliaram o filme será atualizada;
-2. A média das avaliações do filme será recalculada.
+A sala de cinema possui:
 
-Também será possível registrar comentários através da classe `Critica`.
+-   **10 linhas**;
+-   **15 colunas**;
+-   **150 cadeiras no total**.
 
----
+A disponibilidade das cadeiras poderá ser representada utilizando uma
+matriz.
 
-## 💺 Escolha de cadeiras
+Quando apenas um bilhete for comprado, o usuário poderá escolher uma
+cadeira livre.
 
-Cada sessão possui uma representação das cadeiras disponíveis na sala.
+Na compra de vários bilhetes, o sistema poderá sugerir cadeiras próximas
+para que as pessoas possam se sentar juntas.
 
-O usuário poderá escolher uma cadeira livre ao comprar um bilhete.
+### Tipos de sala
 
-Quando vários bilhetes forem comprados, o sistema poderá procurar e sugerir cadeiras próximas para que as pessoas possam sentar juntas.
+  Tipo     Multiplicador
+  ------- ---------------
+  Comum         1.0
+  3D            1.2
+  XD            1.3
+  XD/3D         1.4
 
----
+O multiplicador da sala será utilizado no cálculo do valor do bilhete.
 
-## 💻 Tecnologias utilizadas
+------------------------------------------------------------------------
 
-- **Java**
-- **Programação Orientada a Objetos**
-- **Git**
-- **GitHub**
+# Conceitos de POO :books:
 
----
+Durante o desenvolvimento do projeto serão trabalhados conceitos de
+Programação Orientada a Objetos, como:
 
-## 📚 Conceitos de POO aplicados
+-   Classes e objetos;
+-   Encapsulamento;
+-   Construtores;
+-   Getters e setters;
+-   Associação entre objetos;
+-   Vetores de objetos;
+-   Matrizes;
+-   Enumerações (`enum`);
+-   Herança;
+-   Polimorfismo;
+-   Sobrescrita de métodos;
+-   Sobrecarga de métodos;
+-   Classes abstratas;
+-   Tratamento de exceções;
+-   Padrões de projeto.
 
-Durante o desenvolvimento do projeto serão utilizados conceitos como:
+------------------------------------------------------------------------
 
-- Encapsulamento;
-- Composição e associação entre objetos;
-- Herança;
-- Polimorfismo;
-- Sobrescrita de métodos;
-- Sobrecarga de métodos;
-- Enumerações;
-- Classes abstratas;
-- Tratamento de exceções;
-- Padrões de projeto.
+# Estrutura do Projeto :file_folder:
 
----
+A estrutura abaixo poderá ser atualizada conforme o desenvolvimento do
+projeto:
 
-## 👩‍💻 Desenvolvedoras
+``` text
+sistema-cinema/
+│
+├── src/
+│   ├── Usuario.java
+│   ├── Estudante.java
+│   ├── Critico.java
+│   ├── Critica.java
+│   ├── Filme.java
+│   ├── Sala.java
+│   ├── Sessao.java
+│   ├── Bilhete.java
+│   ├── Compra.java
+│   ├── Produtos.java
+│   ├── CupomPromocional.java
+│   └── Main.java
+│
+├── .gitignore
+├── LICENSE
+└── README.md
+```
 
-| Desenvolvedora | GitHub |
-|----------------|--------|
-| Amanda Aziz | [@Amanda-Aziz](https://github.com/Amanda-Aziz) |
-| Francis Lauriano | [@francisLauriano](https://github.com/francisLauriano) |
-| Sofia Farias | [@Sofiafs](https://github.com/Sofiafs) |
+------------------------------------------------------------------------
 
----
+# Pré-requisitos :warning:
 
-## 🎓 Informações acadêmicas
+Antes de clonar e executar o projeto, é necessário ter instalado:
 
-**Universidade:** Universidade Católica de Pernambuco — UNICAP  
-**Curso:** Ciência da Computação  
-**Disciplina:** Programação Orientada a Objetos  
-**Período:** 3º período  
-**Semestre:** 2026.2  
+**1. Java:**
+
+-   JDK instalado e configurado no computador.
+
+**2. Git:**
+
+-   Necessário para clonar e trabalhar com o repositório.
+
+**3. IDE ou editor de código:**
+
+O projeto pode ser desenvolvido utilizando, por exemplo:
+
+-   VS Code;
+-   IntelliJ IDEA;
+-   Eclipse;
+-   NetBeans.
+
+------------------------------------------------------------------------
+
+# Instalação :rocket:
+
+### 1️⃣ Clonar o repositório
+
+``` bash
+git clone URL_DO_REPOSITORIO
+```
+
+### 2️⃣ Entrar na pasta do projeto
+
+``` bash
+cd NOME_DO_REPOSITORIO
+```
+
+------------------------------------------------------------------------
+
+# Como Rodar o Projeto :computer:
+
+Após clonar o repositório, abra o projeto em uma IDE compatível com
+Java.
+
+Compile os arquivos:
+
+``` bash
+javac src/*.java
+```
+
+Execute a classe principal:
+
+``` bash
+java -cp src Main
+```
+
+> Os comandos de compilação e execução poderão ser atualizados de acordo
+> com a organização final dos pacotes do projeto.
+
+------------------------------------------------------------------------
+
+# Tecnologias Utilizadas :wrench:
+
+-   **Java**
+-   **Programação Orientada a Objetos**
+-   **Git**
+-   **GitHub**
+
+------------------------------------------------------------------------
+
+# Desenvolvedoras :octocat:
+
+Time responsável pelo desenvolvimento do projeto.
+
+  -----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+   [`<img src="https://github.com/Amanda-Aziz.png" width=115>`{=html}`<br>`{=html}`<sub>`{=html}Amanda   [`<img src="https://github.com/francisLauriano.png" width=115>`{=html}`<br>`{=html}`<sub>`{=html}Francis   [`<img src="https://github.com/Sofiafs.png" width=115>`{=html}`<br>`{=html}`<sub>`{=html}Sofia
+                          Aziz`</sub>`{=html}](https://github.com/Amanda-Aziz)                                                 Lauriano`</sub>`{=html}](https://github.com/francisLauriano)                                               Farias`</sub>`{=html}](https://github.com/Sofiafs)
+  ----------------------------------------------------------------------------------------------------- ---------------------------------------------------------------------------------------------------------- ------------------------------------------------------------------------------------------------
+
+  -----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+------------------------------------------------------------------------
+
+# Informações Acadêmicas :mortar_board:
+
+**Universidade:** Universidade Católica de Pernambuco --- UNICAP\
+**Curso:** Ciência da Computação\
+**Disciplina:** Programação Orientada a Objetos\
+**Período:** 3º período\
+**Semestre:** 2026.2\
 **Professor:** Jheymesson A. Cavalcanti
 
----
+------------------------------------------------------------------------
 
-## 📌 Status do projeto
+# Status do Projeto :construction:
 
-🚧 **Em desenvolvimento**
+:warning: **Em desenvolvimento**
 
-O projeto será desenvolvido de forma incremental durante a disciplina, incorporando novos conceitos de Programação Orientada a Objetos em cada etapa.
+O projeto será desenvolvido de forma incremental durante a disciplina,
+incorporando novos conceitos de Programação Orientada a Objetos em cada
+etapa.
+
+------------------------------------------------------------------------
+
+# Licença
+
+The [MIT License](LICENSE) (MIT)
+
+Copyright :copyright: 2026 - Sistema de Cinema
