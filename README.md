@@ -1,5 +1,5 @@
 
-<h1>🎬 Sistema de Cinema </h1>
+<h1>🎬 Sistema de Cinema</h1>
 
 <p align="center">
   <img src="https://img.shields.io/static/v1?label=Java&message=POO&color=ED8B00&style=for-the-badge&logo=openjdk"/>
