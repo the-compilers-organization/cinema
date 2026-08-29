@@ -434,7 +434,7 @@ Time responsável pelo desenvolvimento do projeto.
 
 # Informações Acadêmicas :mortar_board:
 
-**Universidade:** Universidade Católica de Pernambuco --- UNICAP\
+**Universidade:** Universidade Católica de Pernambuco - UNICAP\
 **Curso:** Ciência da Computação\
 **Disciplina:** Programação Orientada a Objetos\
 **Período:** 3º período\
