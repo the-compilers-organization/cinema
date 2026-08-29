@@ -19,6 +19,8 @@
 
 :small_blue_diamond: [Objetivo](#objetivo-dart)
 
+:small_blue_diamond: [Documentos de Orientação](#documentos-de-orientação-book)
+
 :small_blue_diamond: [Funcionalidades](#funcionalidades-video_game)
 
 :small_blue_diamond: [Estrutura do
@@ -92,6 +94,32 @@ conceitos de Programação Orientada a Objetos, como encapsulamento,
 associação entre objetos, herança, sobrescrita, sobrecarga, enumerações,
 classes abstratas, exceções e padrões de projeto.
 </p>
+
+------------------------------------------------------------------------
+
+# Documentos de Orientação :book:
+
+<p align="justify">
+O projeto é desenvolvido de forma <strong>incremental</strong>, seguindo as etapas e orientações disponibilizadas pelo professor ao longo da disciplina de Programação Orientada a Objetos.
+</p>
+
+<p align="justify">
+Os documentos utilizados como base para o desenvolvimento do projeto estão disponíveis na pasta <code>doc</code> do repositório.
+</p>
+
+### 📄 Parte 01 — Classes e Encapsulamento
+
+Primeira etapa do projeto, responsável pela definição da estrutura inicial do sistema de cinema, suas classes e relacionamentos.
+
+🔗 [Apresentação de projeto - parte 1](doc/Apresentação%20de%20projeto%20-%20parte%201.pdf)
+
+### 📄 Parte 02 — Herança, Sobrescrita e Sobrecarga
+
+Segunda etapa do projeto, responsável pela evolução da estrutura inicial, acrescentando novos conceitos de Programação Orientada a Objetos, como herança, sobrescrita, sobrecarga e enumerações.
+
+🔗 [Apresentação de projeto - parte 2](doc/Apresentação%20de%20projeto%20-%20parte%202.pdf)
+
+📁 [Acessar todos os documentos do projeto](https://github.com/the-compilers-organization/cinema/tree/main/doc)
 
 ------------------------------------------------------------------------
 
@@ -330,7 +358,11 @@ A estrutura abaixo poderá ser atualizada conforme o desenvolvimento do
 projeto:
 
 ``` text
-sistema-cinema/
+cinema/
+│
+├── doc/
+│   ├── Apresentação de projeto - parte 1.pdf
+│   └── Apresentação de projeto - parte 2.pdf
 │
 ├── src/
 │   ├── Usuario.java
