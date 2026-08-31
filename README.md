@@ -8,7 +8,7 @@
   <img src="https://img.shields.io/static/v1?label=License&message=MIT&color=green&style=for-the-badge"/>
 </p>
 
-> **Status do Projeto:** :heavy_check_mark: (concluído) | :warning: (em desenvolvimento) | :x: (não iniciada)
+> **Status do Projeto:** :warning: em desenvolvimento
 
 ---
 
@@ -566,9 +566,9 @@ Time responsável pelo desenvolvimento do projeto.
 
 | Discente | RA |
 | :--- | :---: |
-| Amanda Aziz | |
+| Amanda Aziz | 00000859509 |
 | Francis Lauriano | 00000860720 |
-| Sofia Farias | |
+| Sofia Farias | 00000860528 |
 
 ---
 
