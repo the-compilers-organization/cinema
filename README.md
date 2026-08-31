@@ -8,7 +8,7 @@
   <img src="https://img.shields.io/static/v1?label=License&message=MIT&color=green&style=for-the-badge"/>
 </p>
 
-> **Status do Projeto:** :heavy_check_mark: (concluído) | :warning: (em desenvolvimento) | :x: (não iniciada)
+> **Status do Projeto:** :warning: em desenvolvimento
 
 ---
 
