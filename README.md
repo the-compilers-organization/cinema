@@ -568,7 +568,7 @@ Time responsável pelo desenvolvimento do projeto.
 | :--- | :---: |
 | Amanda Aziz | 00000859509 |
 | Francis Lauriano | 00000860720 |
-| Sofia Farias | xxxxxxxxxxx |
+| Sofia Farias | 00000860528 |
 
 ---
 
