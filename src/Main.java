@@ -1,4 +1,4 @@
-public class Main {     //Testando FILME
+public class Main {     //Testando FILME, apagar dps...
     
     public static void main(String[] args){
         Filme filme1 = new Filme("\nFrozen", 100, "Gosto de abracos quentihos <3", 20.00);
