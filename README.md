@@ -311,7 +311,6 @@ Sala
         └── Cadeiras
 ```
 
-Caso um determinado horário não possua sessão cadastrada, sua posição será representada por `null`.
 
 ### Exemplo de grade de sessões
 
@@ -333,12 +332,6 @@ A sala de cinema possui:
 
 - **10 linhas**;
 - **15 colunas**.
-
-Portanto, a estrutura poderá ser representada inicialmente por uma matriz:
-
-```java
-boolean[][] cadeiras = new boolean[10][15];
-```
 
 Por exemplo:
 
