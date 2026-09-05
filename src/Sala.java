@@ -13,7 +13,6 @@ public class Sala {
 
     public boolean adicionarSessao(Sessao sessao){
         
-
         if(sessao != null && qtdSessoes < TAM){
             sessoes[qtdSessoes] = sessao;
             qtdSessoes += 1;
