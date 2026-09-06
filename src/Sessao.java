@@ -13,8 +13,28 @@ public class Sessao {
         this.cadeiras = new boolean[TAM_LINHA][TAM_COLUNA]; // inicializar td em false. quando false, a cadeira esta livre. quando true, a cadeira esta ocupada
     }
 
-    // se false, não tem cadeira disponivel. se true, tem cadeira disponivel
+    // false = cadeira disponível
+    // true  = cadeira ocupada
+
+    // se é valido
+    public boolean cadeiraValida(int linha, int coluna){
+
+        if((linha >= 0 && linha < TAM_LINHA) && (coluna >= 0 && coluna < TAM_COLUNA)){
+            return true;
+        }
+
+
+        return false;
+    }
+
+    // na matriz cadeiras ==> false = cadeira disponível | true  = cadeira ocupada
+    // entao, se matriz retorna false, cadeira disponivel (cadeiraDisponivel retorna true) 
+    //  se matriz retorna true, cadeira ocupada (cadeiraDisponivel retorna false) 
     public boolean cadeiraDisponivel(int linha, int coluna){
+        
+        if(cadeiraValida(linha, coluna)){
+            return !cadeiras[linha][coluna];
+        }
 
         return false;
     }
@@ -23,12 +43,23 @@ public class Sessao {
     // se false, não ocupou cadeira. se true, ocupou a cadeira.
     public boolean ocuparCadeira(int linha, int coluna){
 
+        if(cadeiraDisponivel(linha, coluna)){
+            cadeiras[linha][coluna] = true;
+            return true;
+        }
 
         return false;
     }
 
     // se false, nao liberou a cadeira. se true, liberou a cadeira.
     public boolean liberarCadeira(int linha, int coluna){
+
+        if(cadeiraValida(linha, coluna)){
+            if(!cadeiraDisponivel(linha, coluna)){
+                cadeiras[linha][coluna] = false;
+                return true;
+            }
+        }
 
         return false;
     }
@@ -41,6 +72,11 @@ public class Sessao {
     // exibir cadeiras livres juntas na mesma fileira quando a compra for de mais de um bilhete
     public void exibirCadeirasJuntas(){
 
+    }
+
+    public boolean fazParteDeGrupo(){
+
+        return false;
     }
 
     // buscar cadeiras livres juntas na mesma fileira
