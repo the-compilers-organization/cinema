@@ -1,10 +1,10 @@
 // talvez use em na classe compras para setar itens como pipoca, chocolate e refrigerante
 public enum Produtos {
-    PIPOCA("pipoca", 12.00),
-    REFRIGERANTE("refrigerante", 7.00),
-    CHOCOLATE("chocolate", 5.00),
-    AGUA("agua", 5.00),
-    BALA("bala", 4.00);
+    PIPOCA("Pipoca", 12.00),
+    REFRIGERANTE("Refrigerante", 7.00),
+    CHOCOLATE("Chocolate", 5.00),
+    AGUA("Agua", 5.00),
+    BALA("Bala", 4.00);
 
     private String nome;
     private double valor;
