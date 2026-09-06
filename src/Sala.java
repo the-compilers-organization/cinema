@@ -41,22 +41,23 @@ public class Sala {
     public void listarSessoes(){
         int i;
 
-        System.out.print("=".repeat(35));
+        System.out.print("=".repeat(41));
         System.out.print(" SESSOES ");
-        System.out.print("=".repeat(35));
+        System.out.print("=".repeat(41));
         System.out.println();
 
 
-        System.out.printf("%-15s | %-45s | %-12s%n","Horario", "Filme", "Valor R$");
-        System.out.println("-".repeat(79));
+        
+        System.out.printf("%-10d | %-15s | %-45s | %-12s\n","Sala", "Horario", "Filme", "Valor R$");
+        System.out.println("-".repeat(91));
 
         for(i = 0; i < sessoes.length; i += 1){
             if(sessoes[i] != null){
-                System.out.printf("%-15s | %-45s | %-12.2f\n", sessoes[i].getHorario(), sessoes[i].getFilme().getNome(), sessoes[i].getFilme().getValor());
+                System.out.printf("%-10d | %-15s | %-45s | %-12s\n", numero, sessoes[i].getHorario(), sessoes[i].getFilme().getNome(), sessoes[i].getFilme().getValor());
             }
 
         }
-        System.out.printf("=".repeat(79));
+        System.out.printf("=".repeat(91));
         System.out.println();
     }
 
