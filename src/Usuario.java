@@ -3,14 +3,14 @@ public class Usuario {
     private String cpf;
     private String senha;
     private int idade;
-    private String sexo;
+    private Sexo sexo;
     private String email;
     private String nomeCartao;
     private String numeroCartao;
     private String codigoVerificador;
 
     // Construtor
-    public Usuario(String user, String cpf, String senha, int idade, String sexo, String email, String nomeCartao, String numeroCartao, String codigoVerificador){
+    public Usuario(String user, String cpf, String senha, int idade, Sexo sexo, String email, String nomeCartao, String numeroCartao, String codigoVerificador){
         this.user = user;
         this.cpf = cpf;
         this.senha = senha;
@@ -55,11 +55,11 @@ public class Usuario {
         this.idade = idade;
     }
 
-    public String getSexo() {
+    public Sexo getSexo() {
         return sexo;
     }
 
-    public void setSexo(String sexo) {
+    public void setSexo(Sexo sexo) {
         this.sexo = sexo;
     }
 
