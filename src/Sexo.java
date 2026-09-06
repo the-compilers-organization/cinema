@@ -1,14 +1,14 @@
 public enum Sexo {
-    F(1),
-    M(2);
+    F("Feminino"),
+    M("Masculino");
 
-    private int sexo;
+    private String sexo;
 
-    Sexo(int sexo){
+    Sexo(String sexo){
         this.sexo = sexo;
     }
 
-    public int getSexo() {
+    public String getSexo() {
         return sexo;
     }
 }
