@@ -1,7 +1,7 @@
 public enum TipoSala {
 
     COMUM("Comum", 1.0),
-    _3D("3D", 1.2),
+    SALA3D("3D", 1.2),
     XD("XD", 1.3),
     XD_3D("XD/3D", 1.4);
 
