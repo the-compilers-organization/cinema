@@ -1,6 +1,8 @@
 public enum Sexo {
     F("Feminino"),
-    M("Masculino");
+    M("Masculino"),
+    NB("Não Binário"),
+    NF("Não Informado");
 
     private String sexo;
 
