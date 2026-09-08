@@ -53,7 +53,7 @@ public class Sala {
 
         for(i = 0; i < sessoes.length; i += 1){
             if(sessoes[i] != null){
-                System.out.printf("%-10d | %-10s | %-20s | %-45s | %-15s\n", numero, tipoSala.getTipo(), sessoes[i].getHorario(), sessoes[i].getFilme().getNome(), sessoes[i].getFilme().getValor());
+                System.out.printf("%-10d | %-10s | %-20s | %-45s | %-15s\n", numero, tipoSala, sessoes[i].getHorario(), sessoes[i].getFilme().getNome(), sessoes[i].getFilme().getValor());
             }
 
         }
