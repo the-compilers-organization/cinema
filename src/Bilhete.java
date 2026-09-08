@@ -4,17 +4,15 @@ public class Bilhete {
         private Sessao sessao;
         private Filme filme;
         private double valor;
-        private int linha;
-        private int coluna;
+        private Cadeira cadeira;
 
 
-        public Bilhete(Usuario usuario, Sessao sessao, Filme filme, int linha, int coluna){
+        public Bilhete(Usuario usuario, Sala sala, Sessao sessao, Cadeira cadeira){
             this.user = usuario.getUser();
             this.cpf = usuario.getCpf();
             this.sessao = sessao;
-            this.filme = filme;
-            this.valor = filme.getValor();
-            this.linha = linha;
-            this.coluna = coluna;
+            this.filme = sessao.getFilme();
+            this.valor = filme.getValor() * sala.getTipoSala().getMultiplicador();
+            this.cadeira = cadeira;
         }
 }
