@@ -1,16 +1,16 @@
 public enum Sexo {
-    F("Feminino"),
-    M("Masculino"),
-    NB("Não Binário"),
-    NF("Não Informado");
+    F(1),
+    M(2),
+    NB(3),
+    NI(4);
 
-    private String sexo;
+    private int sexo;
 
-    Sexo(String sexo){
+    Sexo(int sexo){
         this.sexo = sexo;
     }
 
-    public String getSexo() {
+    public int getSexo() {
         return sexo;
     }
 }
