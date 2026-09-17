@@ -19,55 +19,6 @@ public class Compra {
         this.qtdProdutos = 0;
     }
 
-    public Usuario getUsuario() {
-        return usuario;
-    }
-
-    public void setUsuario(Usuario usuario) {
-        this.usuario = usuario;
-    }
-
-    public Bilhete[] getBilhetes() {
-        return bilhetes;
-    }
-
-    public void setBilhetes(Bilhete[] bilhetes) {
-        this.bilhetes = bilhetes;
-    }
-
-    public int getQtdBilhetes() {
-        return qtdBilhetes;
-    }
-
-    public void setQtdBilhetes(int qtdBilhetes) {
-        this.qtdBilhetes = qtdBilhetes;
-    }
-
-    public Produtos[] getProdutos() {
-        return produtos;
-    }
-
-    public void setProdutos(Produtos[] produtos) {
-        this.produtos = produtos;
-    }
-
-    public int[] getQtdCadaProduto() {
-        return qtdCadaProduto;
-    }
-
-    public void setQtdCadaProduto(int[] qtdCadaProduto) {
-        this.qtdCadaProduto = qtdCadaProduto;
-    }
-
-    public int getQtdProdutos() {
-        return qtdProdutos;
-    }
-
-    public void setQtdProdutos(int qtdProdutos) {
-        this.qtdProdutos = qtdProdutos;
-    }
-
-    
 
     // bilhetes:
     // adiciona bilhete
@@ -117,5 +68,54 @@ public class Compra {
     // exibir:
     // exibir compra
     // + exibirCompra() : void 
+
+
+    public Usuario getUsuario() {
+        return usuario;
+    }
+
+    public void setUsuario(Usuario usuario) {
+        this.usuario = usuario;
+    }
+
+    public Bilhete[] getBilhetes() {
+        return bilhetes;
+    }
+
+    public void setBilhetes(Bilhete[] bilhetes) {
+        this.bilhetes = bilhetes;
+    }
+
+    public int getQtdBilhetes() {
+        return qtdBilhetes;
+    }
+
+    public void setQtdBilhetes(int qtdBilhetes) {
+        this.qtdBilhetes = qtdBilhetes;
+    }
+
+    public Produtos[] getProdutos() {
+        return produtos;
+    }
+
+    public void setProdutos(Produtos[] produtos) {
+        this.produtos = produtos;
+    }
+
+    public int[] getQtdCadaProduto() {
+        return qtdCadaProduto;
+    }
+
+    public void setQtdCadaProduto(int[] qtdCadaProduto) {
+        this.qtdCadaProduto = qtdCadaProduto;
+    }
+
+    public int getQtdProdutos() {
+        return qtdProdutos;
+    }
+
+    public void setQtdProdutos(int qtdProdutos) {
+        this.qtdProdutos = qtdProdutos;
+    }
 
 }
