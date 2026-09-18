@@ -2,22 +2,16 @@
 package enums;
 
 public enum Produtos {
-    PIPOCA("Pipoca", 12.00),
-    REFRIGERANTE("Refrigerante", 7.00),
-    CHOCOLATE("Chocolate", 5.00),
-    AGUA("Agua", 5.00),
-    BALA("Bala", 4.00);
+    PIPOCA(12.00),
+    REFRIGERANTE(7.00),
+    CHOCOLATE(5.00),
+    AGUA(5.00),
+    BALA(4.00);
 
-    private String nome;
     private double valor;
 
-    Produtos(String nome, double valor){
-        this.nome = nome;
+    Produtos(double valor){
         this.valor = valor;
-    }
-
-    public String getNome() {
-        return nome;
     }
 
     public double getValor() {
