@@ -1,10 +1,13 @@
 package model;
-
 public class Filme {
+    private static final int TAM = 100;
+    private double[] notas;
     private String nome;
     private int duracao;
     private String sinopse;
     private double valor;
+    private int quantidadeCriticas;
+    private Critica[] criticas;
 
     // CONSTRUTOR
     public Filme(String nome, int duracao,String sinopse, double valor){
@@ -12,7 +15,12 @@ public class Filme {
         this.duracao = duracao;
         this.sinopse = sinopse;
         this.valor = valor;
+        this.criticas = new Critica[TAM]; 
+        this.notas = new double[TAM];
+        this.quantidadeCriticas = 0;
     }
+
+    //criar metodo para calcularMedia das notas do vetor critica!!!
 
     // GETS E SETS
     public String getNome() {
@@ -39,6 +47,31 @@ public class Filme {
     public void setValor(double valor) {
         this.valor = valor;
     }
+
+    public Critica[] getCriticas() {
+        return criticas;
+    }
+
+    public void setCriticas(Critica[] criticas) {
+        this.criticas = criticas;
+    }
+
+    public double[] getNotas() {
+        return notas;
+    }
+
+    public void setNotas(double[] notas) {
+        this.notas = notas;
+    }
+
+    public int getQuantidadeCriticas() {
+        return quantidadeCriticas;
+    }
+
+    public void setQuantidadeCriticas(int quantidadeCriticas) {
+        this.quantidadeCriticas = quantidadeCriticas;
+    }
+
 
     
 }
