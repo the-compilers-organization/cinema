@@ -1,3 +1,5 @@
+package model;
+
 public class Filme {
     private String nome;
     private int duracao;

@@ -1,3 +1,12 @@
+import model.Filme;
+// import model.Bilhete;
+// import model.Compra;
+// import model.Cadeira;
+// import model.Filme;
+// import model.Sala;
+// import model.Sessao;
+// import model.Usuario;
+
 public class Main {
 
     // === FILMES ===

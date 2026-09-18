@@ -1,3 +1,5 @@
+package model;
+
 public class Bilhete {
     private String user;
     private String cpf;

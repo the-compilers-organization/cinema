@@ -1,3 +1,5 @@
+package enums;
+
 public enum TipoSala {
 
     COMUM(1.0),

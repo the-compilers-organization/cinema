@@ -1,4 +1,6 @@
 // talvez use em na classe compras para setar itens como pipoca, chocolate e refrigerante
+package enums;
+
 public enum Produtos {
     PIPOCA("Pipoca", 12.00),
     REFRIGERANTE("Refrigerante", 7.00),

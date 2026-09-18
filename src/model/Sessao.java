@@ -1,3 +1,5 @@
+package model;
+
 public class Sessao {
 
     private static final int TAM_LINHA = 10;
@@ -77,37 +79,7 @@ public class Sessao {
         return null;
     }
 
-    // exibir todas as cadeiras livres no caso da compra de apenas um bilhete
-    public void exibirCadeiras(){
-       int l, c;
-
-        System.out.println(" ".repeat(28) + "TELA" + " ".repeat(28));
-
-        System.out.printf("  ");
-        for(c = 0; c < TAM_COLUNA; c += 1){
-            System.out.printf("%02d  ", c);
-        }
-
-        System.out.println();
-
-        for(l = 0; l < TAM_LINHA; l += 1){
-            for(c = 0; c < TAM_COLUNA; c += 1){
-                System.out.printf("%02d", l);
-                if(cadeiraDisponivel(l, c)){
-                    System.out.printf("%02d  ", "O");
-                }else{
-                    System.out.printf("%02d  ", "X");
-                }
-            }
-            System.out.println();
-
-        }
-        System.out.println();
-
-        System.out.println("X = Cadeira Ocupada");
-        System.out.println("O = Cadeira Disponivel");
-        
-    }
+    
 
     
 
@@ -140,42 +112,7 @@ public class Sessao {
         return false;
     }
 
-    // exibir cadeiras livres juntas na mesma fileira quando a compra for de mais de um bilhete
-    public void exibirCadeirasJuntas(int quantidade){
-        int linha, coluna;
-
-        System.out.println(" ".repeat(28) + "TELA" + " ".repeat(28));
-
-        System.out.printf("  ");
-        for(coluna = 0; coluna < TAM_COLUNA; coluna += 1){
-            System.out.printf("%02d  ", coluna);
-        }
-
-        for(linha = 0; linha < TAM_LINHA; linha += 1){
-            System.out.printf("%02d  ", linha);
-
-            for(coluna = 0; coluna < TAM_COLUNA; coluna += 1){
-                if(!cadeiraDisponivel(linha, coluna)){
-                    System.out.printf("X  ");
-                }else{
-                    if(fazParteDeGrupo(linha, coluna, quantidade)){
-                        System.out.printf("O  ");
-                    }else{
-                        System.out.printf("-  ");
-                    }
-                }
-            }
-
-            System.out.println();
-        }
-        System.out.println();
-
-        System.out.println("LEGENDA:");
-        System.out.println("O = cadeira disponivel no grupo");
-        System.out.println("X = cadeira ocupada");
-        System.out.println("- = cadeira livre fora de grupo");
-
-    }
+    
 
     // buscar cadeiras livres juntas na mesma fileira
     public int[][] buscarCadeirasJuntas(int qtd){
@@ -219,6 +156,77 @@ public class Sessao {
        return opcoes;
     }
 
+    
+    // exibir todas as cadeiras livres no caso da compra de apenas um bilhete
+    public void exibirCadeiras(){
+       int l, c;
+
+        System.out.println(" ".repeat(28) + "TELA" + " ".repeat(28));
+
+        System.out.printf("  ");
+        for(c = 0; c < TAM_COLUNA; c += 1){
+            System.out.printf("%02d  ", c);
+        }
+
+        System.out.println();
+
+        for(l = 0; l < TAM_LINHA; l += 1){
+            for(c = 0; c < TAM_COLUNA; c += 1){
+                System.out.printf("%02d", l);
+                if(cadeiraDisponivel(l, c)){
+                    System.out.printf("%02d  ", "O");
+                }else{
+                    System.out.printf("%02d  ", "X");
+                }
+            }
+            System.out.println();
+
+        }
+        System.out.println();
+
+        System.out.println("X = Cadeira Ocupada");
+        System.out.println("O = Cadeira Disponivel");
+        
+    }
+
+    // exibir cadeiras livres juntas na mesma fileira quando a compra for de mais de um bilhete
+    public void exibirCadeirasJuntas(int quantidade){
+        int linha, coluna;
+
+        System.out.println(" ".repeat(28) + "TELA" + " ".repeat(28));
+
+        System.out.printf("  ");
+        for(coluna = 0; coluna < TAM_COLUNA; coluna += 1){
+            System.out.printf("%02d  ", coluna);
+        }
+
+        for(linha = 0; linha < TAM_LINHA; linha += 1){
+            System.out.printf("%02d  ", linha);
+
+            for(coluna = 0; coluna < TAM_COLUNA; coluna += 1){
+                if(!cadeiraDisponivel(linha, coluna)){
+                    System.out.printf("X  ");
+                }else{
+                    if(fazParteDeGrupo(linha, coluna, quantidade)){
+                        System.out.printf("O  ");
+                    }else{
+                        System.out.printf("-  ");
+                    }
+                }
+            }
+
+            System.out.println();
+        }
+        System.out.println();
+
+        System.out.println("LEGENDA:");
+        System.out.println("O = cadeira disponivel no grupo");
+        System.out.println("X = cadeira ocupada");
+        System.out.println("- = cadeira livre fora de grupo");
+
+    }
+
+
     public void exibirOpcoesCadeirasJuntas(int quantidade){
         int[][] opcoes = buscarCadeirasJuntas(quantidade);
 
@@ -245,6 +253,7 @@ public class Sessao {
             System.out.println();
         }
     }
+
 
 	public String getHorario() {
 		return horario;

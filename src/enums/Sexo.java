@@ -1,3 +1,5 @@
+package enums;
+
 public enum Sexo {
     F(1),
     M(2),

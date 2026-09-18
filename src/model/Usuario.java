@@ -1,3 +1,6 @@
+package model;
+import enums.Sexo;
+
 public class Usuario {
     private String user;
     private String cpf;

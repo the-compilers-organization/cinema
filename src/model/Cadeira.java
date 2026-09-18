@@ -1,3 +1,5 @@
+package model;
+
 public class Cadeira {
     private int linha;
     private int coluna;

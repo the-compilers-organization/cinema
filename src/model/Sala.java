@@ -1,3 +1,6 @@
+package model;
+import enums.TipoSala;
+
 public class Sala {
     private static final int TAM = 10;
 
