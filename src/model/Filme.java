@@ -1,12 +1,14 @@
 package model;
 public class Filme {
     private static final int TAM = 100;
-    private double[] notas;
+    
     private String nome;
     private int duracao;
     private String sinopse;
     private double valor;
-    private int quantidadeCriticas;
+    private double[] notas;
+    private double nota;
+    private int qtdCriticas;
     private Critica[] criticas;
 
     // CONSTRUTOR
@@ -17,7 +19,8 @@ public class Filme {
         this.valor = valor;
         this.criticas = new Critica[TAM]; 
         this.notas = new double[TAM];
-        this.quantidadeCriticas = 0;
+        this.qtdCriticas = 0;
+        this.nota = mediaDasNotas();
     }
 
     //criar metodo para calcularMedia das notas do vetor critica!!!
@@ -64,14 +67,31 @@ public class Filme {
         this.notas = notas;
     }
 
-    public int getQuantidadeCriticas() {
-        return quantidadeCriticas;
+    public int getQtdCriticas() {
+        return qtdCriticas;
     }
 
-    public void setQuantidadeCriticas(int quantidadeCriticas) {
-        this.quantidadeCriticas = quantidadeCriticas;
+    public void setQtdCriticas(int qtdCriticas) {
+        this.qtdCriticas = qtdCriticas;
     }
 
+    public double getNota() {
+        return nota;
+    }
 
-    
+    public double mediaDasNotas() {
+        if(qtdCriticas > 0){
+            int i;
+            double soma = 0.00;
+            for(i = 0; i < qtdCriticas; i += 1){
+                soma += notas[i];
+            }
+
+            return soma / qtdCriticas;
+
+        }
+        
+        return 0.00;
+    }
+  
 }
