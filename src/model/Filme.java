@@ -1,6 +1,6 @@
 package model;
 public class Filme {
-    private static final int TAM = 100;
+    private static final int TAM_CRITICAS = 100;
     
     private String nome;
     private int duracao;
@@ -17,8 +17,8 @@ public class Filme {
         this.duracao = duracao;
         this.sinopse = sinopse;
         this.valor = valor;
-        this.criticas = new Critica[TAM]; 
-        this.notas = new double[TAM];
+        this.criticas = new Critica[TAM_CRITICAS]; 
+        this.notas = new double[TAM_CRITICAS];
         this.qtdCriticas = 0;
         this.nota = mediaDasNotas();
     }
@@ -77,6 +77,27 @@ public class Filme {
 
     public double getNota() {
         return nota;
+    }
+
+
+    public boolean adicionarNota(double nota){
+        if(nota >= 0 && nota <= 10 && qtdCriticas < TAM_CRITICAS){
+            notas[qtdCriticas] = nota;
+            return true;
+        }
+
+
+        return false;
+    }
+
+    public boolean adicionarCritica(Critica critica){
+        if(critica != null && qtdCriticas < TAM_CRITICAS){
+            criticas[qtdCriticas] = critica;
+            qtdCriticas += 1;
+            return true;
+        }
+
+        return false;
     }
 
     public double mediaDasNotas() {

@@ -25,6 +25,12 @@ public class Usuario {
         this.codigoVerificador = codigoVerificador;
     }
 
+
+    public double calcularValorDoBilhete(Compra compra){
+
+        return compra.calcularTotalBilhetes();
+    }
+
     // Gets e Sets
     public String getUser() {
         return user;
