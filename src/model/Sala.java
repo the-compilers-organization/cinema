@@ -43,26 +43,27 @@ public class Sala {
         return -1;
     }
 
-    public void listarSessoes(){
-        int i;
+    // ficará no view public void listarSessoes()
+    // public void listarSessoes(){
+    //     int i;
 
-        // System.out.print("=".repeat(41));
-        // System.out.print(" SESSOES ");
-        // System.out.print("=".repeat(41));
-        // System.out.println();
+    //     // System.out.print("=".repeat(41));
+    //     // System.out.print(" SESSOES ");
+    //     // System.out.print("=".repeat(41));
+    //     // System.out.println();
         
-        System.out.printf("%-10d | %-10s | %-20s | %-45s | %-15s\n","Sala", "Tipo de Sala","Horario", "Filme", "Valor R$");
-        System.out.println("-".repeat(100));
+    //     System.out.printf("%-10d | %-10s | %-20s | %-45s | %-15s\n","Sala", "Tipo de Sala","Horario", "Filme", "Valor R$");
+    //     System.out.println("-".repeat(100));
 
-        for(i = 0; i < sessoes.length; i += 1){
-            if(sessoes[i] != null){
-                System.out.printf("%-10d | %-10s | %-20s | %-45s | %-15s\n", numero, tipoSala, sessoes[i].getHorario(), sessoes[i].getFilme().getNome(), sessoes[i].getFilme().getValor());
-            }
+    //     for(i = 0; i < sessoes.length; i += 1){
+    //         if(sessoes[i] != null){
+    //             System.out.printf("%-10d | %-10s | %-20s | %-45s | %-15s\n", numero, tipoSala, sessoes[i].getHorario(), sessoes[i].getFilme().getNome(), sessoes[i].getFilme().getValor());
+    //         }
 
-        }
-        // System.out.printf("=".repeat(91));
-        // System.out.println();
-    }
+    //     }
+    //     // System.out.printf("=".repeat(91));
+    //     // System.out.println();
+    // }
 
     public int getNumero() {
         return numero;

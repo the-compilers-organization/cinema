@@ -10,7 +10,10 @@ public class Estudante extends Usuario {
     }
 
     // sobrecrita do metodo public double calcularValorDoBilhete(Compra compra) da classe Usuario
+    @Override
+    public double calcularValorDoBilhete(Compra compra){
+        return compra.calcularTotalBilhetes() / 2;
 
-    //gets e settes
-    
+    }
+
 }

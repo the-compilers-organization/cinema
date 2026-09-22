@@ -157,102 +157,102 @@ public class Sessao {
     }
 
     
-    // exibir todas as cadeiras livres no caso da compra de apenas um bilhete
-    public void exibirCadeiras(){
-       int l, c;
+    // ficará no view public void exibirCadeiras() - exibir todas as cadeiras livres no caso da compra de apenas um bilhete
+    // public void exibirCadeiras(){
+    //    int l, c;
 
-        System.out.println(" ".repeat(28) + "TELA" + " ".repeat(28));
+    //     System.out.println(" ".repeat(28) + "TELA" + " ".repeat(28));
 
-        System.out.printf("  ");
-        for(c = 0; c < TAM_COLUNA; c += 1){
-            System.out.printf("%02d  ", c);
-        }
+    //     System.out.printf("  ");
+    //     for(c = 0; c < TAM_COLUNA; c += 1){
+    //         System.out.printf("%02d  ", c);
+    //     }
 
-        System.out.println();
+    //     System.out.println();
 
-        for(l = 0; l < TAM_LINHA; l += 1){
-            for(c = 0; c < TAM_COLUNA; c += 1){
-                System.out.printf("%02d", l);
-                if(cadeiraDisponivel(l, c)){
-                    System.out.printf("%02d  ", "O");
-                }else{
-                    System.out.printf("%02d  ", "X");
-                }
-            }
-            System.out.println();
+    //     for(l = 0; l < TAM_LINHA; l += 1){
+    //         for(c = 0; c < TAM_COLUNA; c += 1){
+    //             System.out.printf("%02d", l);
+    //             if(cadeiraDisponivel(l, c)){
+    //                 System.out.printf("%02d  ", "O");
+    //             }else{
+    //                 System.out.printf("%02d  ", "X");
+    //             }
+    //         }
+    //         System.out.println();
 
-        }
-        System.out.println();
+    //     }
+    //     System.out.println();
 
-        System.out.println("X = Cadeira Ocupada");
-        System.out.println("O = Cadeira Disponivel");
+    //     System.out.println("X = Cadeira Ocupada");
+    //     System.out.println("O = Cadeira Disponivel");
         
-    }
+    // }
 
-    // exibir cadeiras livres juntas na mesma fileira quando a compra for de mais de um bilhete
-    public void exibirCadeirasJuntas(int quantidade){
-        int linha, coluna;
+    // ficará no view public void exibirCadeirasJuntas(int quantidade) - exibir cadeiras livres juntas na mesma fileira quando a compra for de mais de um bilhete
+    // public void exibirCadeirasJuntas(int quantidade){
+    //     int linha, coluna;
 
-        System.out.println(" ".repeat(28) + "TELA" + " ".repeat(28));
+    //     System.out.println(" ".repeat(28) + "TELA" + " ".repeat(28));
 
-        System.out.printf("  ");
-        for(coluna = 0; coluna < TAM_COLUNA; coluna += 1){
-            System.out.printf("%02d  ", coluna);
-        }
+    //     System.out.printf("  ");
+    //     for(coluna = 0; coluna < TAM_COLUNA; coluna += 1){
+    //         System.out.printf("%02d  ", coluna);
+    //     }
 
-        for(linha = 0; linha < TAM_LINHA; linha += 1){
-            System.out.printf("%02d  ", linha);
+    //     for(linha = 0; linha < TAM_LINHA; linha += 1){
+    //         System.out.printf("%02d  ", linha);
 
-            for(coluna = 0; coluna < TAM_COLUNA; coluna += 1){
-                if(!cadeiraDisponivel(linha, coluna)){
-                    System.out.printf("X  ");
-                }else{
-                    if(fazParteDeGrupo(linha, coluna, quantidade)){
-                        System.out.printf("O  ");
-                    }else{
-                        System.out.printf("-  ");
-                    }
-                }
-            }
+    //         for(coluna = 0; coluna < TAM_COLUNA; coluna += 1){
+    //             if(!cadeiraDisponivel(linha, coluna)){
+    //                 System.out.printf("X  ");
+    //             }else{
+    //                 if(fazParteDeGrupo(linha, coluna, quantidade)){
+    //                     System.out.printf("O  ");
+    //                 }else{
+    //                     System.out.printf("-  ");
+    //                 }
+    //             }
+    //         }
 
-            System.out.println();
-        }
-        System.out.println();
+    //         System.out.println();
+    //     }
+    //     System.out.println();
 
-        System.out.println("LEGENDA:");
-        System.out.println("O = cadeira disponivel no grupo");
-        System.out.println("X = cadeira ocupada");
-        System.out.println("- = cadeira livre fora de grupo");
+    //     System.out.println("LEGENDA:");
+    //     System.out.println("O = cadeira disponivel no grupo");
+    //     System.out.println("X = cadeira ocupada");
+    //     System.out.println("- = cadeira livre fora de grupo");
 
-    }
+    // }
 
+    // ficará no view public void exibirOpcoesCadeirasJuntas(int quantidade)
+    // public void exibirOpcoesCadeirasJuntas(int quantidade){
+    //     int[][] opcoes = buscarCadeirasJuntas(quantidade);
 
-    public void exibirOpcoesCadeirasJuntas(int quantidade){
-        int[][] opcoes = buscarCadeirasJuntas(quantidade);
+    //     if(opcoes == null){
+    //         System.out.println("Nao existem cadeiras juntas disponiveis.");
+    //         return;
+    //     }
 
-        if(opcoes == null){
-            System.out.println("Nao existem cadeiras juntas disponiveis.");
-            return;
-        }
+    //     int i, j;
 
-        int i, j;
+    //     for(i = 0; i < opcoes.length; i += 1){
+    //         int linha = opcoes[i][0];
+    //         int coluna = opcoes[i][1];
 
-        for(i = 0; i < opcoes.length; i += 1){
-            int linha = opcoes[i][0];
-            int coluna = opcoes[i][1];
+    //         System.out.printf("%d. Linha %d | Cadeiras: ", i + 1, linha);
 
-            System.out.printf("%d. Linha %d | Cadeiras: ", i + 1, linha);
+    //         for(j = 0; j < quantidade; j += 1){
+    //             System.out.printf("%d", coluna + j);
 
-            for(j = 0; j < quantidade; j += 1){
-                System.out.printf("%d", coluna + j);
-
-                if(j < quantidade - 1){
-                    System.out.printf(", ");
-                }
-            }
-            System.out.println();
-        }
-    }
+    //             if(j < quantidade - 1){
+    //                 System.out.printf(", ");
+    //             }
+    //         }
+    //         System.out.println();
+    //     }
+    // }
 
 
 	public String getHorario() {

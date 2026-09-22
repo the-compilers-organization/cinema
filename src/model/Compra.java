@@ -323,10 +323,10 @@ public class Compra {
     // private double[] subtotaisProdutos;
     // private int qtdProdutos;
 
-    // FALTA IMPLEMENTAR O METODO EXIBIRCOMPRA
-    public void exibirCompra(){
+    // Ficara no view public void exibirCompra()
+    // public void exibirCompra(){
 
-    }
+    // }
 
 
     public Usuario getUsuario() {
