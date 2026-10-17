@@ -1,5 +1,8 @@
 package controller;
 
+import view.UsuarioView;
+import enums.Sexo;
+
 public class UsuarioController {
     // Implementar a classe seguindo as orientacoes.
 }
