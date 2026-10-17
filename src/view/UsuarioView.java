@@ -24,59 +24,59 @@ public class UsuarioView extends JFrame {
     private JButton voltar;
 
     //GETTERS
-    public JComboBox<String> getTipoUsuario() {
+    public JComboBox<String> getTipoUsuario(){
         return tipoUsuario;
     }
 
-    public JTextField getUser() {
+    public JTextField getUser(){
         return user;
     }
 
-    public JTextField getCpf() {
+    public JTextField getCpf(){
         return cpf;
     }
 
-    public JPasswordField getSenha() {
+    public JPasswordField getSenha(){
         return senha;
     }
 
-    public JTextField getIdade() {
+    public JTextField getIdade(){
         return idade;
     }
 
-    public JComboBox<Sexo> getSexo() {
+    public JComboBox<Sexo> getSexo(){
         return sexo;
     }
 
-    public JTextField getEmail() {
+    public JTextField getEmail(){
         return email;
     }
 
-    public JTextField getNomeCartao() {
+    public JTextField getNomeCartao(){
         return nomeCartao;
     }
 
-    public JTextField getNumeroCartao() {
+    public JTextField getNumeroCartao(){
         return numeroCartao;
     }
 
-    public JTextField getCodigoVerificador() {
+    public JTextField getCodigoVerificador(){
         return codigoVerificador;
     }
 
-    public JLabel getLabelOrigem() {
+    public JLabel getLabelOrigem(){
         return labelOrigem;
     }
 
-    public JTextField getTxtOrigem() {
+    public JTextField getTxtOrigem(){
         return txtOrigem;
     }
 
-    public JButton getCadastrar() {
+    public JButton getCadastrar(){
         return cadastrar;
     }
 
-    public JButton getVoltar() {
+    public JButton getVoltar(){
         return voltar;
     }
 
@@ -102,13 +102,12 @@ public class UsuarioView extends JFrame {
 
         labelOrigem = new JLabel("Origem");
         txtOrigem = new JTextField();
-
         labelOrigem.setVisible(false);
         txtOrigem.setVisible(false);
 
         cadastrar = new JButton("Cadastrar");
         voltar = new JButton("Voltar");
-
+        
         Color rosinha = Color.decode("#edc0df");
         cadastrar.setBackground(rosinha);
         voltar.setBackground(rosinha);
