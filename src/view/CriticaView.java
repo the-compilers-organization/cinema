@@ -5,9 +5,94 @@ import java.awt.*;
 
 public class CriticaView extends JFrame {
 
-    // Implementar seguindo as orientacoes.
+    private JComboBox<String> cbFilmes = new JComboBox<>();
 
+    private JSpinner spNota = new JSpinner(
+            new SpinnerNumberModel(0.0, 0.0, 10.0, 0.5)
+    );
+
+    private JTextArea txtCritica = new JTextArea(8, 30);
+
+    private JButton btnEnviar = new JButton("Enviar Avaliacao");
+
+    private JButton btnVoltar = new JButton("Voltar");
+
+    public CriticaView() {
+
+        setTitle("Avaliar Filme");
+
+        setSize(550, 450);
+
+        setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
+
+        setLocationRelativeTo(null);
+
+        txtCritica.setLineWrap(true);
+
+        txtCritica.setWrapStyleWord(true);
+
+        JPanel superior = new JPanel(
+                new GridLayout(2, 2, 10, 10)
+        );
+
+        superior.add(new JLabel("Filme:"));
+        superior.add(cbFilmes);
+
+        superior.add(new JLabel("Nota:"));
+        superior.add(spNota);
+
+        JPanel inferior = new JPanel();
+
+        inferior.add(btnVoltar);
+        inferior.add(btnEnviar);
+
+        add(superior, BorderLayout.NORTH);
+
+        add(
+                new JScrollPane(txtCritica),
+                BorderLayout.CENTER
+        );
+
+        add(inferior, BorderLayout.SOUTH);
+
+
+        // Configurar cores dos botoes
+        Color rosinha = Color.decode("#edc0df");
+
+        btnEnviar.setBackground(rosinha);
+        btnVoltar.setBackground(rosinha);
+
+        btnEnviar.setForeground(Color.BLACK);
+        btnVoltar.setForeground(Color.BLACK);
+    }
+
+    public JComboBox<String> getCbFilmes() {
+
+        return cbFilmes;
+    }
+
+    public JSpinner getSpNota() {
+
+        return spNota;
+    }
+
+    public JTextArea getTxtCritica() {
+
+        return txtCritica;
+    }
+
+    public JButton getBtnEnviar() {
+
+        return btnEnviar;
+    }
+
+    public JButton getBtnVoltar() {
+
+        return btnVoltar;
+    }
 }
+
+
 
 /*
  * ============================================================

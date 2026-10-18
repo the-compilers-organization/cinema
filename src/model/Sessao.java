@@ -91,12 +91,13 @@ public class Sessao {
             return false;
         }
 
-        for(inicio = 0; inicio < TAM_COLUNA - qtd; inicio += 1){
+        for(inicio = 0; inicio <= TAM_COLUNA - qtd; inicio += 1){
             grupoLivre = true;
 
-            for(i = inicio; i < qtd; i += 1){
+            for(i = inicio; i < inicio + qtd; i += 1){
                 if(!cadeiraDisponivel(linha, i)){
                     grupoLivre = false;
+                    break;
                 }
 
             }
@@ -116,44 +117,33 @@ public class Sessao {
 
     // buscar cadeiras livres juntas na mesma fileira
     public int[][] buscarCadeirasJuntas(int qtd){
-        int linha, coluna, i, maxOpcoes, qtdOpcoes = 0;
-        boolean livre;
-
         if(qtd <= 1 || qtd > TAM_COLUNA){
             return null;
         }
-
-        maxOpcoes = TAM_LINHA * (TAM_COLUNA - qtd + 1);
-        int[][] opcoesTemp = new int[maxOpcoes][2];
-
-
-        for(linha = 0; linha < TAM_LINHA; linha += 1){
-            for(coluna = 0; coluna < TAM_COLUNA - qtd; coluna += 1){
-                livre = true;
-
-                for(i = coluna; i < qtd; i += 1){
-                    if(!cadeiraDisponivel(linha, i)){
+        int[][] temporario = new int[TAM_LINHA * (TAM_COLUNA - qtd + 1)][2];
+        int quantidade = 0;
+        for(int linha = 0; linha < TAM_LINHA; linha += 1){
+            for(int inicio = 0; inicio <= TAM_COLUNA - qtd; inicio += 1){
+                boolean livre = true;
+                for(int coluna = inicio; coluna < inicio + qtd; coluna += 1){
+                    if(!cadeiraDisponivel(linha, coluna)){
                         livre = false;
+                        break;
                     }
                 }
-
                 if(livre){
-                    opcoesTemp[qtdOpcoes][0] = linha;
-                    opcoesTemp[qtdOpcoes][1] = coluna;
-                    qtdOpcoes += 1;
+                    temporario[quantidade][0] = linha;
+                    temporario[quantidade][1] = inicio;
+                    quantidade += 1;
                 }
             }
         }
-
-        int[][] opcoes = new int[qtdOpcoes][2];
-
-        for(i = 0; i < qtdOpcoes; i += 1){
-            opcoes[i][0] = opcoesTemp[i][0];
-            opcoes[i][1] = opcoesTemp[i][1];
-
+        int[][] opcoes = new int[quantidade][2];
+        for(int i = 0; i < quantidade; i += 1){
+            opcoes[i][0] = temporario[i][0];
+            opcoes[i][1] = temporario[i][1];
         }
-
-       return opcoes;
+        return opcoes;
     }
 
     

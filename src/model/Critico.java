@@ -21,19 +21,26 @@ public class Critico extends Usuario{
     }
 
 
-    public boolean atribuirNota(double nota, Filme filme){
-        if(nota >= 0 && nota <= 10 && filme != null){
+    public boolean atribuirNota(double nota, Filme filme) {
+
+        if(nota >= 0 && nota <= 10 && filme != null) {
             return filme.adicionarNota(nota);
-            
         }
+
         return false;
     }
 
 
-    public boolean atribuirCritica(String mensagem, Filme filme){
-        if(mensagem != null && filme != null){
-           Critica critica = new Critica(origem, super.getUser(), mensagem);
-           return filme.adicionarCritica(critica);
+    public boolean atribuirCritica(String mensagem, Filme filme) {
+
+        if(mensagem != null && filme != null) {
+            Critica critica = new Critica(
+                origem,
+                super.getUser(),
+                mensagem
+            );
+
+            return filme.adicionarCritica(critica);
         }
 
         return false;

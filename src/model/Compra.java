@@ -72,6 +72,10 @@ public class Compra {
         if(qtdBilhetes > 0){
             int indice = buscarBilhete(numero);
 
+            if(indice == -1){
+                return false;
+            }
+
             if(indice != -1){
                 Bilhete bilhete = bilhetes[indice];
                 bilhete.getSessao().liberarCadeira(bilhete.getCadeira().getLinha(), bilhete.getCadeira().getColuna());
@@ -133,18 +137,22 @@ public class Compra {
 
     // sobrecarga do metodo adiciona comprarProduto
     public boolean comprarProduto(Produtos produto, int quantidade, CupomPromocional cupom){
-        if(produto != null & quantidade > 0 && cupom != null){
-            double valorDesconto = produto.getValor() * cupom.getPercentualDesconto();
-            produtos[qtdProdutos] = produto;
-            qtdCadaProduto[qtdProdutos] = quantidade;
-            subtotaisProdutos[qtdProdutos] = (produto.getValor() - valorDesconto) * quantidade;
-            qtdProdutos += 1;
-            return true;
+        if(produto == null || quantidade <= 0 || cupom == null){
+            return false;
         }
-
-        
-
-        return false;
+        int indice = buscarProduto(produto);
+        if(indice == -1){
+            if(qtdProdutos >= TAM_PRODUTOS){
+                return false;
+            }
+            indice = qtdProdutos;
+            produtos[indice] = produto;
+            qtdProdutos += 1;
+        }
+        qtdCadaProduto[indice] += quantidade;
+        subtotaisProdutos[indice] = produto.getValor() *
+                (1 - cupom.getPercentualDesconto()) * qtdCadaProduto[indice];
+        return true;
     }
 
 
@@ -170,6 +178,9 @@ public class Compra {
     public boolean alterarQuantidadeProduto(Produtos produto, int novaQuantidade, CupomPromocional cupom){
         if(produto != null && novaQuantidade > 0 && cupom != null){
             int indice = buscarProduto(produto);
+            if(indice == -1){
+                return false;
+            }
                 qtdCadaProduto[indice] = novaQuantidade;
                 double valorDesconto = produto.getValor() * cupom.getPercentualDesconto();
                 subtotaisProdutos[indice] = (produto.getValor() - valorDesconto) * novaQuantidade;

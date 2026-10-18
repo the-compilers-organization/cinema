@@ -5,9 +5,88 @@ import java.awt.*;
 
 public class CadeiraView extends JFrame {
 
-    // Implementar seguindo as orientacoes.
+    private JButton[][] botoesCadeiras = new JButton[10][15];
 
+    private JButton btnConfirmar = new JButton("Confirmar");
+    private JButton btnVoltar = new JButton("Voltar");
+
+    public CadeiraView() {
+
+        setTitle("Escolher Cadeira");
+
+        setSize(1000, 650);
+
+        setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
+
+        setLocationRelativeTo(null);
+
+        add(
+                new JLabel("TELA", SwingConstants.CENTER),
+                BorderLayout.NORTH
+        );
+
+        JPanel painel = new JPanel(
+                new GridLayout(10, 15, 3, 3)
+        );
+
+        // Definir cor rosinha
+        Color rosinha = Color.decode("#edc0df");
+
+        int i;
+        int j;
+
+        for (i = 0; i < 10; i += 1) {
+
+            for (j = 0; j < 15; j += 1) {
+
+                botoesCadeiras[i][j] = new JButton(
+                        String.format("%02d", j + 1)
+                );
+
+                // Configurar cor da cadeira
+                botoesCadeiras[i][j].setBackground(rosinha);
+
+                botoesCadeiras[i][j].setForeground(Color.BLACK);
+
+                painel.add(botoesCadeiras[i][j]);
+            }
+        }
+
+        add(painel, BorderLayout.CENTER);
+
+        JPanel rodape = new JPanel();
+
+        rodape.add(btnVoltar);
+
+        rodape.add(btnConfirmar);
+
+        add(rodape, BorderLayout.SOUTH);
+
+        // Configurar cores dos botoes do rodape
+        btnConfirmar.setBackground(rosinha);
+        btnVoltar.setBackground(rosinha);
+
+        btnConfirmar.setForeground(Color.BLACK);
+        btnVoltar.setForeground(Color.BLACK);
+    }
+
+    public JButton[][] getBotoesCadeiras() {
+
+        return botoesCadeiras;
+    }
+
+    public JButton getBtnConfirmar() {
+
+        return btnConfirmar;
+    }
+
+    public JButton getBtnVoltar() {
+
+        return btnVoltar;
+    }
 }
+
+
 
 /*
  * ============================================================

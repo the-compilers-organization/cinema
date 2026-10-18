@@ -37,13 +37,113 @@
 
 
 
+
+import enums.TipoSala;
+
+import model.Filme;
+import model.Sala;
+import model.Sessao;
+
+import view.MenuView;
+
+import controller.MenuController;
+
 import javax.swing.SwingUtilities;
 
 public class Main {
 
-    // Implementar seguindo as orientacoes.
+    public static void main(String[] args) {
 
+        SwingUtilities.invokeLater(() -> {
+
+            Filme filme1 = new Filme(
+                    "Interestelar",
+                    169,
+                    "Viagem espacial.",
+                    30.00
+            );
+
+            Filme filme2 = new Filme(
+                    "Batman",
+                    176,
+                    "Filme do Batman.",
+                    25.00
+            );
+
+            Filme filme3 = new Filme(
+                    "Avatar",
+                    192,
+                    "Pandora.",
+                    35.00
+            );
+
+            Filme[] filmes = new Filme[10];
+
+            filmes[0] = filme1;
+            filmes[1] = filme2;
+            filmes[2] = filme3;
+
+            Sala sala1 = new Sala(
+                    1,
+                    TipoSala.COMUM
+            );
+
+            Sala sala2 = new Sala(
+                    2,
+                    TipoSala.SALA3D
+            );
+
+            Sala sala3 = new Sala(
+                    3,
+                    TipoSala.XD
+            );
+
+            Sessao sessao1 = new Sessao(
+                    "18:00",
+                    filme1
+            );
+
+            Sessao sessao2 = new Sessao(
+                    "20:00",
+                    filme2
+            );
+
+            Sessao sessao3 = new Sessao(
+                    "21:30",
+                    filme3
+            );
+
+            Sessao sessao4 = new Sessao(
+                    "22:00",
+                    filme1
+            );
+
+            sala1.adicionarSessao(sessao1);
+            sala1.adicionarSessao(sessao2);
+
+            sala2.adicionarSessao(sessao3);
+
+            sala3.adicionarSessao(sessao4);
+
+            Sala[] salas = new Sala[10];
+
+            salas[0] = sala1;
+            salas[1] = sala2;
+            salas[2] = sala3;
+
+            MenuView menu = new MenuView();
+
+            new MenuController(
+                    menu,
+                    filmes,
+                    salas
+            );
+
+            menu.setVisible(true);
+        });
+    }
 }
+
 
 /*
  * ============================================================

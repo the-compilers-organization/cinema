@@ -1,7 +1,67 @@
 package controller;
 
+import model.Filme;
+import view.FilmeView;
+
 public class FilmeController {
-    // Implementar a classe seguindo as orientacoes.
+
+    private FilmeView view;
+    private Filme[] filmes;
+    private MenuController menu;
+
+    public FilmeController(
+            FilmeView view,
+            Filme[] filmes,
+            MenuController menu) {
+
+        this.view = view;
+        this.filmes = filmes;
+        this.menu = menu;
+
+        carregarFilmes();
+
+        view.getBtnVoltar().addActionListener(e -> voltar());
+
+        view.addWindowListener(new java.awt.event.WindowAdapter() {
+
+            @Override
+            public void windowClosing(java.awt.event.WindowEvent e) {
+                voltar();
+            }
+        });
+    }
+
+    private void carregarFilmes() {
+
+        view.getModelo().setRowCount(0);
+
+        int i;
+
+        for (i = 0; i < filmes.length; i += 1) {
+
+            if (filmes[i] != null) {
+
+                Filme f = filmes[i];
+
+                view.getModelo().addRow(
+                        new Object[]{
+                                f.getNome(),
+                                f.getDuracao(),
+                                f.getSinopse(),
+                                String.format("R$ %.2f", f.getValor()),
+                                f.mediaDasNotas()
+                        }
+                );
+            }
+        }
+    }
+
+    private void voltar() {
+
+        menu.voltarMenu();
+
+        view.dispose();
+    }
 }
 
 

@@ -1,8 +1,83 @@
 package controller;
 
+import model.Sala;
+import model.Sessao;
+import view.SessaoView;
+
 public class SessaoController {
-    // Implementar a classe seguindo as orientacoes.
+
+    private SessaoView view;
+    private Sala[] salas;
+    private MenuController menu;
+
+    public SessaoController(
+            SessaoView view,
+            Sala[] salas,
+            MenuController menu) {
+
+        this.view = view;
+        this.salas = salas;
+        this.menu = menu;
+
+        carregarSessoes();
+
+        view.getBtnVoltar().addActionListener(e -> voltar());
+
+        view.addWindowListener(new java.awt.event.WindowAdapter() {
+
+            @Override
+            public void windowClosing(java.awt.event.WindowEvent e) {
+                voltar();
+            }
+        });
+    }
+
+    private void carregarSessoes() {
+
+        view.getModelo().setRowCount(0);
+
+        int i;
+        int j;
+
+        for (i = 0; i < salas.length; i += 1) {
+
+            if (salas[i] != null) {
+
+                Sessao[] sessoes = salas[i].getSessoes();
+
+                for (j = 0; j < sessoes.length; j += 1) {
+
+                    if (sessoes[j] != null) {
+
+                        Sessao s = sessoes[j];
+
+                        double valor =
+                                s.getFilme().getValor()
+                                * salas[i].getTipoSala().getMultiplicador();
+
+                        view.getModelo().addRow(
+                                new Object[]{
+                                        salas[i].getNumero(),
+                                        salas[i].getTipoSala(),
+                                        s.getHorario(),
+                                        s.getFilme().getNome(),
+                                        String.format("R$ %.2f", valor)
+                                }
+                        );
+                    }
+                }
+            }
+        }
+    }
+
+    private void voltar() {
+
+        menu.voltarMenu();
+
+        view.dispose();
+    }
 }
+
 
 
 /*

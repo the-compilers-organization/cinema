@@ -1,8 +1,174 @@
 package controller;
 
+import model.*;
+import view.CriticaView;
+
+import javax.swing.*;
+
 public class CriticaController {
-    // Implementar a classe seguindo as orientacoes.
+
+    private CriticaView view;
+    private Filme[] filmes;
+    private Usuario usuario;
+    private MenuController menu;
+
+    public CriticaController(
+            CriticaView view,
+            Filme[] filmes,
+            Usuario usuario,
+            MenuController menu) {
+
+        this.view = view;
+        this.filmes = filmes;
+        this.usuario = usuario;
+        this.menu = menu;
+
+        carregarFilmes();
+
+        view.getBtnEnviar().addActionListener(e -> enviar());
+
+        view.getBtnVoltar().addActionListener(e -> voltar());
+
+        view.addWindowListener(new java.awt.event.WindowAdapter() {
+
+            @Override
+            public void windowClosing(java.awt.event.WindowEvent e) {
+                voltar();
+            }
+        });
+    }
+
+    private void carregarFilmes() {
+
+        view.getCbFilmes().removeAllItems();
+
+        int i;
+
+        for (i = 0; i < filmes.length; i += 1) {
+
+            if (filmes[i] != null) {
+
+                view.getCbFilmes().addItem(filmes[i].getNome());
+            }
+        }
+    }
+
+    private Filme buscarFilmeSelecionado() {
+
+        int indice = view.getCbFilmes().getSelectedIndex();
+
+        if (indice < 0) {
+            return null;
+        }
+
+        int contador = 0;
+        int i;
+
+        for (i = 0; i < filmes.length; i += 1) {
+
+            if (filmes[i] != null) {
+
+                if (contador == indice) {
+                    return filmes[i];
+                }
+
+                contador += 1;
+            }
+        }
+
+        return null;
+    }
+
+    private void enviar() {
+
+        if (!(usuario instanceof Critico)) {
+
+            JOptionPane.showMessageDialog(
+                    view,
+                    "Somente um Critico cadastrado pode avaliar."
+            );
+
+            return;
+        }
+
+        Filme filme = buscarFilmeSelecionado();
+
+        if (filme == null) {
+
+            JOptionPane.showMessageDialog(
+                    view,
+                    "Selecione um filme."
+            );
+
+            return;
+        }
+
+        String mensagem = view.getTxtCritica().getText().trim();
+
+        if (mensagem.isEmpty()) {
+
+            JOptionPane.showMessageDialog(
+                    view,
+                    "Digite uma critica."
+            );
+
+            return;
+        }
+
+        double nota = ((Number) view.getSpNota().getValue()).doubleValue();
+
+        Critico critico = (Critico) usuario;
+
+        // Notas e comentarios possuem contadores independentes no Model.
+        // Conferir a capacidade antes de registrar para evitar uma
+        // avaliacao parcial.
+
+        if (filme.getQtdCriticas() >= filme.getNotas().length ||
+                filme.getQtdComentarios() >= filme.getCriticas().length) {
+
+            JOptionPane.showMessageDialog(
+                    view,
+                    "Limite de avaliacoes ou comentarios atingido."
+            );
+
+            return;
+        }
+
+        boolean notaOk = critico.atribuirNota(nota, filme);
+
+        boolean criticaOk = false;
+
+        if (notaOk) {
+
+            criticaOk = critico.atribuirCritica(mensagem, filme);
+        }
+
+        if (notaOk && criticaOk) {
+
+            JOptionPane.showMessageDialog(
+                    view,
+                    "Avaliacao enviada."
+            );
+
+            view.getTxtCritica().setText("");
+
+        } else {
+
+            JOptionPane.showMessageDialog(
+                    view,
+                    "Nao foi possivel concluir a avaliacao."
+            );
+        }
+    }
+
+    private void voltar() {
+
+        menu.voltarMenu();
+
+        view.dispose();
+    }
 }
+
 
 
 /*

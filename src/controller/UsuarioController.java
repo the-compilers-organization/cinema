@@ -1,10 +1,171 @@
 package controller;
 
-import view.UsuarioView;
 import enums.Sexo;
+import model.*;
+import view.UsuarioView;
+
+import javax.swing.*;
 
 public class UsuarioController {
-    // Implementar a classe seguindo as orientacoes.
+
+    private UsuarioView view;
+    private MenuController menu;
+
+    public UsuarioController(
+            UsuarioView view,
+            MenuController menu) {
+
+        this.view = view;
+        this.menu = menu;
+
+        view.getCbTipoUsuario().addActionListener(e -> alterarTipoUsuario());
+
+        view.getBtnCadastrar().addActionListener(e -> cadastrarUsuario());
+
+        view.getBtnVoltar().addActionListener(e -> voltar());
+
+        view.addWindowListener(new java.awt.event.WindowAdapter() {
+
+            @Override
+            public void windowClosing(java.awt.event.WindowEvent e) {
+                voltar();
+            }
+        });
+    }
+
+    private void alterarTipoUsuario() {
+
+        boolean critico = "Critico".equals(
+                view.getCbTipoUsuario().getSelectedItem()
+        );
+
+        view.getLblOrigem().setVisible(critico);
+
+        view.getTxtOrigem().setVisible(critico);
+    }
+
+    private void cadastrarUsuario() {
+
+        try {
+
+            String tipo = (String) view.getCbTipoUsuario().getSelectedItem();
+
+            String user = view.getTxtUser().getText().trim();
+
+            String cpf = view.getTxtCpf().getText().trim();
+
+            String senha = new String(view.getTxtSenha().getPassword());
+
+            int idade = Integer.parseInt(
+                    view.getTxtIdade().getText().trim()
+            );
+
+            Sexo sexo = (Sexo) view.getCbSexo().getSelectedItem();
+
+            String email = view.getTxtEmail().getText().trim();
+
+            String nomeCartao = view.getTxtNomeCartao().getText().trim();
+
+            String numeroCartao = view.getTxtNumeroCartao().getText().trim();
+
+            String codigo = view.getTxtCodigoVerificador().getText().trim();
+
+            if (user.isEmpty() ||
+                    cpf.isEmpty() ||
+                    senha.isEmpty() ||
+                    idade < 0 ||
+                    email.isEmpty()) {
+
+                JOptionPane.showMessageDialog(
+                        view,
+                        "Preencha os dados obrigatorios e informe idade valida."
+                );
+
+                return;
+            }
+
+            Usuario usuario;
+
+            if ("Estudante".equals(tipo)) {
+
+                usuario = new Estudante(
+                        user,
+                        cpf,
+                        senha,
+                        idade,
+                        sexo,
+                        email,
+                        nomeCartao,
+                        numeroCartao,
+                        codigo
+                );
+
+            } else if ("Critico".equals(tipo)) {
+
+                String origem = view.getTxtOrigem().getText().trim();
+
+                if (origem.isEmpty()) {
+
+                    JOptionPane.showMessageDialog(
+                            view,
+                            "Informe a origem do critico."
+                    );
+
+                    return;
+                }
+
+                usuario = new Critico(
+                        user,
+                        cpf,
+                        senha,
+                        idade,
+                        sexo,
+                        email,
+                        nomeCartao,
+                        numeroCartao,
+                        codigo,
+                        origem
+                );
+
+            } else {
+
+                usuario = new Usuario(
+                        user,
+                        cpf,
+                        senha,
+                        idade,
+                        sexo,
+                        email,
+                        nomeCartao,
+                        numeroCartao,
+                        codigo
+                );
+            }
+
+            menu.setUsuario(usuario);
+
+            JOptionPane.showMessageDialog(
+                    view,
+                    "Usuario cadastrado com sucesso."
+            );
+
+            voltar();
+
+        } catch (NumberFormatException ex) {
+
+            JOptionPane.showMessageDialog(
+                    view,
+                    "A idade deve ser um numero inteiro."
+            );
+        }
+    }
+
+    private void voltar() {
+
+        menu.voltarMenu();
+
+        view.dispose();
+    }
 }
 
 
