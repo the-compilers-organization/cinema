@@ -112,28 +112,19 @@ public class Compra {
 
 
 
-    // adiciona produto
-    public boolean comprarProduto(Produtos produto, int quantidade){
-        if(produto != null && quantidade > 0 && qtdProdutos < TAM_PRODUTOS){
-            int indice = buscarProduto(produto);
-
-            if(indice != -1){
-                qtdCadaProduto[indice] += quantidade;
-                subtotaisProdutos[indice] = produto.getValor() * quantidade;
-                return true;
-            }else{
-                produtos[qtdProdutos] = produto;
-                qtdCadaProduto[qtdProdutos] = quantidade;
-                subtotaisProdutos[qtdProdutos] = produto.getValor() * quantidade;
-                qtdProdutos += 1;
-                return true;
-
-            }
+    // Adiciona ou soma a quantidade de um produto sem cupom.
+    public boolean comprarProduto(Produtos produto, int quantidade) {
+        if (produto == null || quantidade <= 0) return false;
+        int indice = buscarProduto(produto);
+        if (indice < 0) {
+            if (qtdProdutos >= TAM_PRODUTOS) return false;
+            indice = qtdProdutos++;
+            produtos[indice] = produto;
         }
-
-        return false;
-    } 
-
+        qtdCadaProduto[indice] += quantidade;
+        subtotaisProdutos[indice] = produto.getValor() * qtdCadaProduto[indice];
+        return true;
+    }
 
     // sobrecarga do metodo adiciona comprarProduto
     public boolean comprarProduto(Produtos produto, int quantidade, CupomPromocional cupom){
@@ -315,6 +306,18 @@ public class Compra {
 
         return false;
     } 
+
+    // Limpa itens de um rascunho, sem alterar as cadeiras da sessao.
+    public void limparRascunho() {
+        for (int i = 0; i < qtdBilhetes; i++) bilhetes[i] = null;
+        qtdBilhetes = 0;
+        for (int i = 0; i < qtdProdutos; i++) {
+            produtos[i] = null;
+            qtdCadaProduto[i] = 0;
+            subtotaisProdutos[i] = 0;
+        }
+        qtdProdutos = 0;
+    }
 
     // BILHETE:
     // private String user;

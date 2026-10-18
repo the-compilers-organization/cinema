@@ -1,71 +1,118 @@
 package controller;
+
 import model.*;
 import view.*;
 import javax.swing.*;
 import java.awt.*;
+
 public class CadeiraController {
     private CadeiraView view;
     private Sessao sessao;
     private CompraController compra;
     private int quantidade;
-    private int linha = -1, coluna = -1;
-    public CadeiraController(CadeiraView view, Sessao sessao, CompraController compra, int quantidade){
-        this.view=view; this.sessao=sessao; this.compra=compra; this.quantidade=quantidade;
-        JButton[][] botoes=view.getBotoesCadeiras();
-        int i,j;
-        for(i=0;i<botoes.length;i+=1){
-            for(j=0;j<botoes[i].length;j+=1){
-                int l=i,c=j;
-                botoes[i][j].addActionListener(e->selecionar(l,c));
+    private int ingressoEditado = -1;
+    private int linha = -1;
+    private int coluna = -1;
+
+    public CadeiraController(CadeiraView view, Sessao sessao, CompraController compra, int quantidade) {
+        this.view = view;
+        this.sessao = sessao;
+        this.compra = compra;
+        this.quantidade = quantidade;
+        JButton[][] botoes = view.getBotoesCadeiras();
+        for (int i = 0; i < botoes.length; i++) {
+            for (int j = 0; j < botoes[i].length; j++) {
+                int l = i;
+                int c = j;
+                botoes[i][j].addActionListener(e -> selecionar(l, c));
             }
         }
-        view.getBtnConfirmar().addActionListener(e->confirmar());
-        view.getBtnVoltar().addActionListener(e->voltar());
-        view.addWindowListener(new java.awt.event.WindowAdapter(){
-            public void windowClosing(java.awt.event.WindowEvent e){voltar();}
+        view.getBtnConfirmar().addActionListener(e -> confirmar());
+        view.getBtnVoltar().addActionListener(e -> voltar());
+        view.addWindowListener(new java.awt.event.WindowAdapter() {
+            @Override public void windowClosing(java.awt.event.WindowEvent e) { voltar(); }
         });
         atualizar();
     }
-    private boolean grupoLivre(int l,int c){
-        if(c + quantidade > 15) return false;
-        int j;
-        for(j=c;j<c+quantidade;j+=1){
-            if(!sessao.cadeiraDisponivel(l,j)) return false;
+
+    public CadeiraController(CadeiraView view, Sessao sessao, CompraController compra,
+            int quantidade, int ingressoEditado) {
+        this(view, sessao, compra, quantidade);
+        this.ingressoEditado = ingressoEditado;
+        atualizar();
+    }
+
+    // Ao reabrir a selecao, destacar o grupo escolhido anteriormente.
+    // Nenhuma cadeira e ocupada definitivamente nesta etapa.
+    public void preSelecionarCadeiras(int[] linhas, int[] colunas, int qtd) {
+        if (qtd != quantidade || qtd <= 0) return;
+        int l = linhas[0];
+        int c = colunas[0];
+        for (int i = 0; i < qtd; i++) {
+            if (linhas[i] != l || colunas[i] != c + i) return;
+        }
+        if (grupoLivre(l, c)) {
+            linha = l;
+            coluna = c;
+            atualizar();
+        }
+    }
+
+    private boolean grupoLivre(int l, int c) {
+        if (c < 0 || c + quantidade > 15) return false;
+        for (int j = c; j < c + quantidade; j++) {
+            if ((!sessao.cadeiraDisponivel(l, j) && !compra.cadeiraDaCompraEmEdicao(sessao, l, j)) ||
+                    (ingressoEditado >= 0 && compra.cadeiraJaNoRascunho(l, j, ingressoEditado))) return false;
         }
         return true;
     }
-    private void selecionar(int l,int c){
-        if(!grupoLivre(l,c)){
-            JOptionPane.showMessageDialog(view,"Nao ha "+quantidade+" cadeira(s) livre(s) a partir desta posicao, na mesma fileira.");
+
+    private void selecionar(int l, int c) {
+        if (!grupoLivre(l, c)) {
+            JOptionPane.showMessageDialog(view, "Nao ha " + quantidade + " cadeiras juntas disponiveis.");
             return;
         }
-        linha=l; coluna=c; atualizar();
+        linha = l;
+        coluna = c;
+        atualizar();
     }
-    private void atualizar(){
-        JButton[][] botoes=view.getBotoesCadeiras();
-        int i,j;
-        for(i=0;i<botoes.length;i+=1){
-            for(j=0;j<botoes[i].length;j+=1){
-                boolean livre=sessao.cadeiraDisponivel(i,j);
+
+    private void atualizar() {
+        JButton[][] botoes = view.getBotoesCadeiras();
+        Color rosinha = Color.decode("#edc0df");
+        for (int i = 0; i < botoes.length; i++) {
+            for (int j = 0; j < botoes[i].length; j++) {
+                boolean livre = (sessao.cadeiraDisponivel(i, j) || compra.cadeiraDaCompraEmEdicao(sessao, i, j)) &&
+                        (ingressoEditado < 0 || !compra.cadeiraJaNoRascunho(i, j, ingressoEditado));
                 botoes[i][j].setEnabled(livre);
-                botoes[i][j].setText(livre?String.format("%02d",j+1):"X");
-                botoes[i][j].setBackground(null);
-                if(i==linha && j>=coluna && j<coluna+quantidade){
+                botoes[i][j].setText(livre ? String.format("%02d", j + 1) : "X");
+                botoes[i][j].setBackground(livre ? rosinha : Color.LIGHT_GRAY);
+                if (i == linha && j >= coluna && j < coluna + quantidade) {
                     botoes[i][j].setBackground(Color.GREEN);
                 }
             }
         }
-        view.setTitle("Escolher "+quantidade+" cadeira(s) juntas - clique na primeira");
+        view.setTitle("Escolher " + quantidade + " cadeira(s) juntas");
     }
-    private void confirmar(){
-        if(linha<0 || !grupoLivre(linha,coluna)){
-            JOptionPane.showMessageDialog(view,"Escolha um grupo de cadeiras livres."); return;
+
+    private void confirmar() {
+        if (linha < 0 || !grupoLivre(linha, coluna)) {
+            JOptionPane.showMessageDialog(view, "Selecione cadeiras disponiveis.");
+            return;
         }
-        compra.setCadeirasSelecionadas(linha,coluna,quantidade);
-        compra.mostrarView(); view.dispose();
+        if (ingressoEditado >= 0) compra.trocarCadeiraIngresso(ingressoEditado, linha, coluna);
+        else compra.setCadeirasSelecionadas(linha, coluna, quantidade);
+        compra.mostrarView();
+        view.dispose();
     }
-    private void voltar(){compra.mostrarView();view.dispose();}
+
+    private void voltar() {
+        compra.mostrarView();
+        view.dispose();
+    }
 }
+
+
 
 
 /*
