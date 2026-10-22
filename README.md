@@ -477,11 +477,15 @@ Antes de clonar e executar o projeto, é necessário ter instalado:
 
 - JDK instalado e configurado no computador.
 
-### 2. Git
+### 2.Maven
+
+- Maven instalado e configurado no computador.
+
+### 3. Git
 
 - Necessário para clonar e trabalhar com o repositório.
 
-### 3. IDE ou editor de código
+### 4. IDE ou editor de código
 
 O projeto pode ser desenvolvido utilizando, por exemplo:
 
@@ -515,13 +519,13 @@ Após clonar o repositório, abra o projeto em uma IDE compatível com Java.
 Compile os arquivos:
 
 ```bash
-javac src/*.java
+mvn clean compile
 ```
 
 Execute a classe principal:
 
 ```bash
-java -cp src Main
+mvn exec:java    
 ```
 
 > Os comandos de compilação e execução poderão ser atualizados de acordo com a organização final dos pacotes do projeto.
