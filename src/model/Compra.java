@@ -1,28 +1,23 @@
 package model;
 import enums.Produtos;
 import enums.CupomPromocional;
+import java.util.ArrayList;
 
 public class Compra {
-    private static final int TAM_BILHETES = 100;
-    private static final int TAM_PRODUTOS = 150;
 
     private Usuario usuario;
-    private Bilhete[] bilhetes;
-    private int qtdBilhetes;
-    private Produtos[] produtos;
-    private int[] qtdCadaProduto;
-    private double[] subtotaisProdutos;
-    private int qtdProdutos;
-    
-    
+    private ArrayList<Bilhete> bilhetes;
+    private ArrayList<Produtos> produtos;
+    private ArrayList<Integer> qtdCadaProduto;
+    private ArrayList<Double> subtotaisProdutos;
+
+
     public Compra(Usuario usuario){
         this.usuario = usuario;
-        this.bilhetes = new Bilhete[TAM_BILHETES];
-        this.qtdBilhetes = 0;
-        this.produtos = new Produtos[TAM_PRODUTOS];
-        this.qtdCadaProduto = new int[TAM_PRODUTOS];
-        this.subtotaisProdutos = new double[TAM_PRODUTOS];
-        this.qtdProdutos = 0;
+        this.bilhetes = new ArrayList<Bilhete>();
+        this.produtos = new ArrayList<Produtos>();
+        this.qtdCadaProduto = new ArrayList<Integer>();
+        this.subtotaisProdutos = new ArrayList<Double>();
     }
 
 
@@ -30,11 +25,8 @@ public class Compra {
     // adiciona bilhete
     public boolean comprarBilhete(Bilhete bilhete){
         if(bilhete != null){
-            if(qtdBilhetes < TAM_BILHETES){
-                bilhetes[qtdBilhetes] = bilhete;
-                qtdBilhetes += 1;
-                return true;
-            }
+            bilhetes.add(bilhete);
+            return true;
         }
         return false;
     }
@@ -42,13 +34,13 @@ public class Compra {
     // sobrecarga do metodo comprarBilhete
     public boolean comprarBilhete(Bilhete bilhete, CupomPromocional cupom){
         if(bilhete != null && cupom != null){
-            if(qtdBilhetes < TAM_BILHETES){
-                double valorDesconto = bilhete.getValor() * cupom.getPercentualDesconto();
-                bilhete.setValor(bilhete.getValor() - valorDesconto);
-                bilhetes[qtdBilhetes] = bilhete;
-                qtdBilhetes += 1;
-                return true;
-            }
+            
+            double valorDesconto = bilhete.getValor() * cupom.getPercentualDesconto();
+            bilhete.setValor(bilhete.getValor() - valorDesconto);
+            bilhetes.add(bilhete);
+
+            return true;
+            
         }
         return false;
     }
@@ -56,55 +48,47 @@ public class Compra {
 
     // busca um bilhete
     public int buscarBilhete(int num){
-        if(qtdBilhetes > 0){
-            int indice = num - 1;
+       
+        int indice = num - 1;
 
-            if(indice >= 0 && indice < qtdBilhetes){
-                return indice;
-            }
+        if(indice >= 0 && indice < bilhetes.size()){
+            return indice;
         }
+        
 
        return -1;
     }
 
     // remove bilhete e libera a cadeira
     public boolean removerBilhete(int numero){
-        if(qtdBilhetes > 0){
-            int indice = buscarBilhete(numero);
+        
+        int indice = buscarBilhete(numero);
 
-            if(indice == -1){
-                return false;
-            }
-
-            if(indice != -1){
-                Bilhete bilhete = bilhetes[indice];
-                bilhete.getSessao().liberarCadeira(bilhete.getCadeira().getLinha(), bilhete.getCadeira().getColuna());
-            }
-
-            int i;
-            for(i = indice; i < qtdBilhetes - 1; i += 1){
-                bilhetes[i] = bilhetes[i + 1];
-            }
-
-            bilhetes[qtdBilhetes - 1] = null;
-            qtdBilhetes -= 1;
-            return true;
+        if(indice == -1){
+            return false;
         }
 
-        return false;
+        
+        Bilhete bilhete = bilhetes.get(indice);
+        bilhete.getSessao().liberarCadeira(bilhete.getCadeira().getLinha(), bilhete.getCadeira().getColuna());
+    
+        bilhetes.remove(indice);
+
+        return true;
+           
     }
 
     // produtos:
     public int buscarProduto(Produtos produto){
         if(produto != null){
-            if(qtdProdutos > 0){
-                int i;
-                for(i = 0; i < qtdProdutos; i += 1){
-                    if(produtos[i] == produto){
-                        return i;
-                    }
+            int i;
+
+            for(i = 0; i < produtos.size(); i += 1){
+                if(produtos.get(i) == produto){
+                    return i;
                 }
             }
+            
         }
 
         return -1;
@@ -114,15 +98,25 @@ public class Compra {
 
     // Adiciona ou soma a quantidade de um produto sem cupom.
     public boolean comprarProduto(Produtos produto, int quantidade) {
-        if (produto == null || quantidade <= 0) return false;
-        int indice = buscarProduto(produto);
-        if (indice < 0) {
-            if (qtdProdutos >= TAM_PRODUTOS) return false;
-            indice = qtdProdutos++;
-            produtos[indice] = produto;
+        if (produto == null || quantidade <= 0){
+            return false;
         }
-        qtdCadaProduto[indice] += quantidade;
-        subtotaisProdutos[indice] = produto.getValor() * qtdCadaProduto[indice];
+
+        int indice = buscarProduto(produto);
+
+        if (indice == -1) {
+            produtos.add(produto);
+            qtdCadaProduto.add(quantidade);
+            subtotaisProdutos.add(produto.getValor() * quantidade);
+            
+        }else{
+            int novaQtd = qtdCadaProduto.get(indice) + quantidade;
+            qtdCadaProduto.set(indice, novaQtd);
+
+            subtotaisProdutos.set(indice, produto.getValor() * novaQtd);
+
+        }
+        
         return true;
     }
 
@@ -131,113 +125,116 @@ public class Compra {
         if(produto == null || quantidade <= 0 || cupom == null){
             return false;
         }
+
         int indice = buscarProduto(produto);
+
         if(indice == -1){
-            if(qtdProdutos >= TAM_PRODUTOS){
-                return false;
-            }
-            indice = qtdProdutos;
-            produtos[indice] = produto;
-            qtdProdutos += 1;
+            produtos.add(produto);
+            qtdCadaProduto.add(quantidade);
+            subtotaisProdutos.add(produto.getValor() *
+                (1 - cupom.getPercentualDesconto()) * quantidade);
+            
+        }else{
+            int novaQtd = qtdCadaProduto.get(indice) + quantidade;
+            qtdCadaProduto.set(indice, novaQtd);
+            
+            subtotaisProdutos.set(indice, produto.getValor() *
+                (1 - cupom.getPercentualDesconto()) * novaQtd);
         }
-        qtdCadaProduto[indice] += quantidade;
-        subtotaisProdutos[indice] = produto.getValor() *
-                (1 - cupom.getPercentualDesconto()) * qtdCadaProduto[indice];
         return true;
     }
 
 
 
     // alterar quantidade de produto
-    public boolean alterarQuantidadeProduto(Produtos produto, int novaQuantidade){
-        if(produto != null && novaQuantidade > 0){
-            int indice = buscarProduto(produto);
+    public boolean alterarQuantidadeProduto(Produtos produto, int novaQuantidade) {
 
-            if(indice != -1){
-                qtdCadaProduto[indice] = novaQuantidade;
-                subtotaisProdutos[indice] = produto.getValor() * novaQuantidade;
-                return true;
-            }
+        if (produto == null || novaQuantidade <= 0) {
+            return false;
         }
 
-        return false;
+        int indice = buscarProduto(produto);
+
+        if (indice == -1) {
+            return false;
+        }
+
+        qtdCadaProduto.set(indice, novaQuantidade);
+        double subtotal = produto.getValor() * novaQuantidade;
+        subtotaisProdutos.set(indice, subtotal);
+
+        return true;
     }
 
     
 
     // sobrecarga do metodo alterarQuantidadeProduto
-    public boolean alterarQuantidadeProduto(Produtos produto, int novaQuantidade, CupomPromocional cupom){
-        if(produto != null && novaQuantidade > 0 && cupom != null){
-            int indice = buscarProduto(produto);
-            if(indice == -1){
-                return false;
-            }
-                qtdCadaProduto[indice] = novaQuantidade;
-                double valorDesconto = produto.getValor() * cupom.getPercentualDesconto();
-                subtotaisProdutos[indice] = (produto.getValor() - valorDesconto) * novaQuantidade;
-                return true;
+    public boolean alterarQuantidadeProduto(Produtos produto, int novaQuantidade, CupomPromocional cupom) {
+
+        if (produto == null || novaQuantidade <= 0 || cupom == null) {
+            return false;
         }
 
-        return false;
+        int indice = buscarProduto(produto);
+
+        if (indice == -1) {
+            return false;
+        }
+
+        qtdCadaProduto.set(indice, novaQuantidade);
+
+        double valorDesconto = produto.getValor() * cupom.getPercentualDesconto();
+        double subtotal = (produto.getValor() - valorDesconto) * novaQuantidade;
+        subtotaisProdutos.set(indice, subtotal);
+
+        return true;
     }
 
 
+
     // remover produto
-    public boolean removerProduto(Produtos produto){
-        if(produtos != null && qtdProdutos > 0){
-            int indice = buscarProduto(produto);
+    public boolean removerProduto(Produtos produto) {
 
-            if(indice != -1){
-                int i;
-                for(i = indice; i < qtdProdutos - 1; i += 1){
-                    produtos[i] = produtos[i + 1];
-                    qtdCadaProduto[i] = qtdCadaProduto[i + 1];
-                    subtotaisProdutos[i] = subtotaisProdutos[i + 1];
-                    
-                }
+        int indice = buscarProduto(produto);
 
-                produtos[qtdProdutos - 1] = null;
-                qtdCadaProduto[qtdProdutos - 1] = 0;
-                subtotaisProdutos[qtdProdutos - 1] = 0.00;
-                qtdProdutos -= 1;
-                return true;
-            }
+        if (indice == -1) {
+            return false;
         }
-        return false;
-    } 
+
+        produtos.remove(indice);
+        qtdCadaProduto.remove(indice);
+        subtotaisProdutos.remove(indice);
+
+        return true;
+    }
+
 
     // totais:
     // total dos bilhetes
-    public double calcularTotalBilhetes(){
-        if(qtdBilhetes > 0){
-            double valorTotal = 0.00;
-            int i = 0;
+    public double calcularTotalBilhetes() {
 
-            for(i = 0; i < qtdBilhetes; i += 1){
-                valorTotal += bilhetes[i].getValor();
-            }
-            return valorTotal;
+        double valorTotal = 0.00;
+
+        for (int i = 0; i < bilhetes.size(); i++) {
+
+            valorTotal += bilhetes.get(i).getValor();
         }
 
-        return 0.00;
-    } 
+        return valorTotal;
+    }
 
     
     // total dos produtos
-    public double calcularTotalProdutos(){
-        if(qtdProdutos > 0){
-            double valorTotal = 0.00;
-            int i;
+    public double calcularTotalProdutos() {
 
-            for(i = 0; i < qtdProdutos; i += 1){
-                valorTotal += subtotaisProdutos[i];
-            }
+        double valorTotal = 0.00;
 
-            return valorTotal;
+        for (int i = 0; i < subtotaisProdutos.size(); i++) {
 
+            valorTotal += subtotaisProdutos.get(i);
         }
 
-        return 0.00;
+        return valorTotal;
     }
 
     // calcular total (bilhetes + produtos)
@@ -250,7 +247,7 @@ public class Compra {
     // compra:
     // realizar compra
     public boolean realizarCompra(){
-        if(usuario != null && qtdBilhetes > 0){
+        if(usuario != null && !bilhetes.isEmpty()){
             return true;
         }
         return false;
@@ -258,7 +255,7 @@ public class Compra {
 
     // alterar compra
     public boolean alterarCompra(){
-        if(usuario != null && qtdBilhetes > 0){
+        if(usuario != null && !bilhetes.isEmpty()){
             return true;
         }
         return false;
@@ -267,40 +264,35 @@ public class Compra {
     
 
     // libera todas as cadeiras
-    public void liberarCadeiras(){
-        if(qtdBilhetes > 0){
-            int i;
+    public void liberarCadeiras() {
 
-            for(i = 0; i < qtdBilhetes; i += 1){
-                int linha = bilhetes[i].getCadeira().getLinha();
-                int coluna = bilhetes[i].getCadeira().getColuna();
-                bilhetes[i].getSessao().liberarCadeira(linha, coluna);
-            }
+        for (int i = 0; i < bilhetes.size(); i++) {
 
+            Bilhete bilhete = bilhetes.get(i);
+
+            int linha = bilhete.getCadeira().getLinha();
+            int coluna = bilhete.getCadeira().getColuna();
+
+            bilhete.getSessao().liberarCadeira(
+                    linha, coluna
+            );
         }
     }
 
 
     // cancelar compra
-    public boolean cancelarCompra(){
-        if(qtdBilhetes > 0){
+    public boolean cancelarCompra() {
+
+        if (!bilhetes.isEmpty()) {
+
             liberarCadeiras();
 
-            int i;
-            for(i = 0; i < qtdBilhetes; i += 1){
-                bilhetes[i] = null;
-            }
-            qtdBilhetes = 0;
+            bilhetes.clear();
 
-            if(qtdProdutos > 0){
-                for(i = 0; i < qtdProdutos; i += 1){
-                    produtos[i] = null;
-                    qtdCadaProduto[i] = 0;
-                    subtotaisProdutos[i] = 0.00;
-                }
-            qtdProdutos = 0;    
+            produtos.clear();
+            qtdCadaProduto.clear();
+            subtotaisProdutos.clear();
 
-            }
             return true;
         }
 
@@ -309,15 +301,66 @@ public class Compra {
 
     // Limpa itens de um rascunho, sem alterar as cadeiras da sessao.
     public void limparRascunho() {
-        for (int i = 0; i < qtdBilhetes; i++) bilhetes[i] = null;
-        qtdBilhetes = 0;
-        for (int i = 0; i < qtdProdutos; i++) {
-            produtos[i] = null;
-            qtdCadaProduto[i] = 0;
-            subtotaisProdutos[i] = 0;
-        }
-        qtdProdutos = 0;
+
+        bilhetes.clear();
+
+        produtos.clear();
+        qtdCadaProduto.clear();
+        subtotaisProdutos.clear();
     }
+
+
+    public Usuario getUsuario() {
+        return usuario;
+    }
+
+
+    public void setUsuario(Usuario usuario) {
+        this.usuario = usuario;
+    }
+
+
+    public ArrayList<Bilhete> getBilhetes() {
+        return bilhetes;
+    }
+
+
+    public void setBilhetes(ArrayList<Bilhete> bilhetes) {
+        this.bilhetes = bilhetes;
+    }
+
+
+    public ArrayList<Produtos> getProdutos() {
+        return produtos;
+    }
+
+
+    public void setProdutos(ArrayList<Produtos> produtos) {
+        this.produtos = produtos;
+    }
+
+
+    public ArrayList<Integer> getQtdCadaProduto() {
+        return qtdCadaProduto;
+    }
+
+
+    public void setQtdCadaProduto(ArrayList<Integer> qtdCadaProduto) {
+        this.qtdCadaProduto = qtdCadaProduto;
+    }
+
+
+    public ArrayList<Double> getSubtotaisProdutos() {
+        return subtotaisProdutos;
+    }
+
+
+    public void setSubtotaisProdutos(ArrayList<Double> subtotaisProdutos) {
+        this.subtotaisProdutos = subtotaisProdutos;
+    }
+
+
+    
 
     // BILHETE:
     // private String user;
@@ -343,63 +386,7 @@ public class Compra {
     // }
 
 
-    public Usuario getUsuario() {
-        return usuario;
-    }
-
-    public void setUsuario(Usuario usuario) {
-        this.usuario = usuario;
-    }
-
-    public Bilhete[] getBilhetes() {
-        return bilhetes;
-    }
-
-    public void setBilhetes(Bilhete[] bilhetes) {
-        this.bilhetes = bilhetes;
-    }
-
-    public int getQtdBilhetes() {
-        return qtdBilhetes;
-    }
-
-    public void setQtdBilhetes(int qtdBilhetes) {
-        this.qtdBilhetes = qtdBilhetes;
-    }
-
-    public Produtos[] getProdutos() {
-        return produtos;
-    }
-
-    public void setProdutos(Produtos[] produtos) {
-        this.produtos = produtos;
-    }
-
-    public int[] getQtdCadaProduto() {
-        return qtdCadaProduto;
-    }
-
-    public void setQtdCadaProduto(int[] qtdCadaProduto) {
-        this.qtdCadaProduto = qtdCadaProduto;
-    }
-
-    public int getQtdProdutos() {
-        return qtdProdutos;
-    }
-
-    public void setQtdProdutos(int qtdProdutos) {
-        this.qtdProdutos = qtdProdutos;
-    }
-
-
-    public double[] getSubtotaisProdutos() {
-        return subtotaisProdutos;
-    }
-
-
-    public void setSubtotaisProdutos(double[] subtotaisProdutos) {
-        this.subtotaisProdutos = subtotaisProdutos;
-    }
+    
 
     
 

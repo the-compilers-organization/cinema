@@ -9,7 +9,11 @@ C:\Users\Francisco\Desktop\github\cinema\src\enums\CupomPromocional.java
 C:\Users\Francisco\Desktop\github\cinema\src\enums\Produtos.java
 C:\Users\Francisco\Desktop\github\cinema\src\enums\Sexo.java
 C:\Users\Francisco\Desktop\github\cinema\src\enums\TipoSala.java
+C:\Users\Francisco\Desktop\github\cinema\src\exceptions\VendasException.java
+C:\Users\Francisco\Desktop\github\cinema\src\interfaces\GerenciaFilmes.java
 C:\Users\Francisco\Desktop\github\cinema\src\Main.java
+C:\Users\Francisco\Desktop\github\cinema\src\model\Administrador.java
+C:\Users\Francisco\Desktop\github\cinema\src\model\Base.java
 C:\Users\Francisco\Desktop\github\cinema\src\model\Bilhete.java
 C:\Users\Francisco\Desktop\github\cinema\src\model\Cadeira.java
 C:\Users\Francisco\Desktop\github\cinema\src\model\Compra.java
@@ -17,9 +21,12 @@ C:\Users\Francisco\Desktop\github\cinema\src\model\Critica.java
 C:\Users\Francisco\Desktop\github\cinema\src\model\Critico.java
 C:\Users\Francisco\Desktop\github\cinema\src\model\Estudante.java
 C:\Users\Francisco\Desktop\github\cinema\src\model\Filme.java
+C:\Users\Francisco\Desktop\github\cinema\src\model\Funcionario.java
 C:\Users\Francisco\Desktop\github\cinema\src\model\Sala.java
 C:\Users\Francisco\Desktop\github\cinema\src\model\Sessao.java
 C:\Users\Francisco\Desktop\github\cinema\src\model\Usuario.java
+C:\Users\Francisco\Desktop\github\cinema\src\persistence\FilmeDAO.java
+C:\Users\Francisco\Desktop\github\cinema\src\persistence\UsuarioDAO.java
 C:\Users\Francisco\Desktop\github\cinema\src\view\CadeiraView.java
 C:\Users\Francisco\Desktop\github\cinema\src\view\CompraView.java
 C:\Users\Francisco\Desktop\github\cinema\src\view\CriticaView.java
