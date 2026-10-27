@@ -1,6 +1,10 @@
 package model;
 
-
+// A classe base é uma classe abstrata que deve possuir as seguintes
+// características:
+// ○ Atributos: nome, idade, email.
+// ○ Métodos: getters e setters para os atributos;
+// ○ Métodos abstratos: Adicionar usuário e alterar usuário;
 
 public abstract class Base {
     // Atributos: nome, idade, email.
