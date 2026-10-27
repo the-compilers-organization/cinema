@@ -2,7 +2,9 @@ package model;
 
 import java.util.ArrayList;
 
-public class Funcionario extends Base implements GerenciarFilmes{
+import interfaces.GerenciaFilmes;
+
+public class Funcionario extends Base implements GerenciaFilmes{
     // A classe Funcionario é uma classe concreta que deve possuir as seguintes
     // características:
     // ○ Atributos: salário.
