@@ -9,6 +9,8 @@ public class Administrador extends Base implements GerenciarFilmes{
     // ○ Métodos implementados na classe abstrata;
     // ○ Método: Excluir usuário;
     // ○ Implementar métodos de gerência de filmes.
-    // OBS: Usar ArrayList
+    // OBS: Usar ArrayList. Exemplos: 
+    // ArrayList<Usuario> usuarios
+    // ArrayList<Filme> filmes
         
 }
