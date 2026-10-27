@@ -1,5 +1,7 @@
 package model;
 
+import java.util.ArrayList;
+
 public class Funcionario extends Base implements GerenciarFilmes{
     // A classe Funcionario é uma classe concreta que deve possuir as seguintes
     // características:
@@ -7,6 +9,8 @@ public class Funcionario extends Base implements GerenciarFilmes{
     // ○ Métodos: getters e setters para os atributos;
     // ○ Métodos implementados na classe abstrata;
     // ○ Implementar métodos de interface gerência de filmes.
-    // OBS: Usar ArrayList
+    // OBS: Usar ArrayList. Exemplos: 
+    // ArrayList<Usuario> usuarios
+    // ArrayList<Filme> filmes
     
 }
