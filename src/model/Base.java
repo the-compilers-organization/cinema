@@ -6,6 +6,8 @@ public abstract class Base {
     // Atributos: nome, idade, email.
 
 
+    // construtor
+
     // ○ Métodos: getters e setters para os atributos;
 
 
