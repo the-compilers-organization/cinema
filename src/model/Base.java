@@ -63,10 +63,10 @@ public abstract class Base {
 
 
     // ○ Métodos abstratos: Adicionar usuário e alterar usuário;
+    public abstract int buscarUsuario(String cpf);
+
     public abstract boolean adicionarUsuario(Usuario usuario);
 
     public abstract boolean alterarUsuario(Usuario usuarioAtualizado);
-
-    public abstract int buscarUsuario(String cpf);
         
 }
