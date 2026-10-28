@@ -67,6 +67,6 @@ public abstract class Base {
 
     public abstract boolean adicionarUsuario(Usuario usuario);
 
-    public abstract boolean alterarUsuario(String cpf, Usuario usuarioAtualizado);
+    public abstract boolean alterarUsuario(Usuario usuarioAtualizado);
         
 }
