@@ -14,7 +14,7 @@ public interface GerenciaFilmes {
 
     boolean excluirFilme(Filme filme);
 
-    boolean alterarFilme(Filme filme);
+    boolean alterarFilme(String nome, Filme filme);
 
     
 }
