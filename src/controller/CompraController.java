@@ -6,6 +6,7 @@ import enums.*;
 import model.*;
 import view.*;
 import javax.swing.*;
+import java.util.ArrayList;
 
 
 
@@ -19,8 +20,8 @@ public class CompraController {
     private Sessao sessaoSelecionada;
     private Compra rascunho;
     private int indiceEdicao = -1;
-    private final int[] linhasIngressos = new int[100];
-    private final int[] colunasIngressos = new int[100];
+    private final ArrayList<Integer> linhasIngressos = new ArrayList<>();
+    private final ArrayList<Integer> colunasIngressos = new ArrayList<>();
     private int qtdIngressos = 0;
     private boolean atualizando = false;
 
@@ -241,6 +242,8 @@ public class CompraController {
         view.getSpQtdProduto().setValue(1);
         view.getTabelaProdutos().clearSelection();
         qtdIngressos = 0;
+        linhasIngressos.clear();
+        colunasIngressos.clear();
 
         if (view.getCbSessao().getItemCount() > 0) view.getCbSessao().setSelectedIndex(0);
         view.getSpQtdBilhetes().setValue(0);
@@ -292,11 +295,13 @@ public class CompraController {
 
         view.getCbCupom().setSelectedIndex(desconto);
         qtdIngressos = original.getBilhetes().size();
+        linhasIngressos.clear();
+        colunasIngressos.clear();
 
         for (int i = 0; i < qtdIngressos; i++) {
             Bilhete b = original.getBilhetes().get(i);
-            linhasIngressos[i] = b.getCadeira().getLinha();
-            colunasIngressos[i] = b.getCadeira().getColuna();
+            linhasIngressos.add(b.getCadeira().getLinha());
+            colunasIngressos.add(b.getCadeira().getColuna());
         }
 
 
@@ -314,6 +319,8 @@ public class CompraController {
     private void limparCadeiras() {
 
         qtdIngressos = 0;
+        linhasIngressos.clear();
+        colunasIngressos.clear();
         atualizarTotal();
 
     }
@@ -338,6 +345,8 @@ public class CompraController {
 
         atualizando = true;
         qtdIngressos = 0;
+        linhasIngressos.clear();
+        colunasIngressos.clear();
         view.getSpQtdBilhetes().setValue(0);
         atualizando = false;
         atualizarTotal();
@@ -368,7 +377,9 @@ public class CompraController {
 
 
         if (qtdIngressos == quantidade()) {
-            controlador.preSelecionarCadeiras(linhasIngressos, colunasIngressos, qtdIngressos);
+            controlador.preSelecionarCadeiras(
+                linhasIngressos.stream().mapToInt(Integer::intValue).toArray(),
+                colunasIngressos.stream().mapToInt(Integer::intValue).toArray(), qtdIngressos);
 
         }
 
@@ -397,7 +408,7 @@ public class CompraController {
 
     public boolean cadeiraJaNoRascunho(int l, int c, int exceto) {
         for (int i = 0; i < qtdIngressos; i++) {
-            if (i != exceto && linhasIngressos[i] == l && colunasIngressos[i] == c) return true;
+            if (i != exceto && linhasIngressos.get(i) == l && colunasIngressos.get(i) == c) return true;
 
         }
         return false;
@@ -405,7 +416,7 @@ public class CompraController {
 
 
     public void setCadeirasSelecionadas(int l, int c, int qtd) {
-        if (!buscarSessao() || qtd < 1 || qtd != quantidade() || qtd > linhasIngressos.length || c < 0 || c + qtd > 15) {
+        if (!buscarSessao() || qtd < 1 || qtd != quantidade() || qtd > 15 || c < 0 || c + qtd > 15) {
 
             JOptionPane.showMessageDialog(view, "Quantidade ou selecao de cadeiras invalida.");
             return;
@@ -421,10 +432,12 @@ public class CompraController {
         }
 
         qtdIngressos = qtd;
+        linhasIngressos.clear();
+        colunasIngressos.clear();
 
         for (int i = 0; i < qtd; i++) {
-            linhasIngressos[i] = l;
-            colunasIngressos[i] = c + i;
+            linhasIngressos.add(l);
+            colunasIngressos.add(c + i);
         }
 
         atualizarTotal();
@@ -440,14 +453,14 @@ public class CompraController {
         if (!sessaoSelecionada.cadeiraValida(l, c) || (!sessaoSelecionada.cadeiraDisponivel(l, c) && !cadeiraDaCompraEmEdicao(sessaoSelecionada, l, c))) return;
 
 
-        int linhaAnterior = linhasIngressos[indice];
-        int colunaAnterior = colunasIngressos[indice];
-        linhasIngressos[indice] = l;
-        colunasIngressos[indice] = c;
+        int linhaAnterior = linhasIngressos.get(indice);
+        int colunaAnterior = colunasIngressos.get(indice);
+        linhasIngressos.set(indice, l);
+        colunasIngressos.set(indice, c);
 
         if (!cadeirasConsecutivas()) {
-            linhasIngressos[indice] = linhaAnterior;
-            colunasIngressos[indice] = colunaAnterior;
+            linhasIngressos.set(indice, linhaAnterior);
+            colunasIngressos.set(indice, colunaAnterior);
             JOptionPane.showMessageDialog(view,
                 "Os ingressos precisam ficar lado a lado na mesma linha. Use Editar cadeiras para trocar o grupo.");
             return;
@@ -464,14 +477,14 @@ public class CompraController {
 
         if (qtdIngressos <= 1) return true;
 
-        int linha = linhasIngressos[0];
-        int menor = colunasIngressos[0];
+        int linha = linhasIngressos.get(0);
+        int menor = colunasIngressos.get(0);
         int maior = menor;
 
         for (int i = 1; i < qtdIngressos; i++) {
-            if (linhasIngressos[i] != linha) return false;
-            menor = Math.min(menor, colunasIngressos[i]);
-            maior = Math.max(maior, colunasIngressos[i]);
+            if (linhasIngressos.get(i) != linha) return false;
+            menor = Math.min(menor, colunasIngressos.get(i));
+            maior = Math.max(maior, colunasIngressos.get(i));
         }
 
 
@@ -482,7 +495,7 @@ public class CompraController {
 
             for (int j = i + 1; j < qtdIngressos; j++) {
 
-                if (colunasIngressos[i] == colunasIngressos[j]) return false;
+                if (colunasIngressos.get(i) == colunasIngressos.get(j)) return false;
             }
         }
         return true;
@@ -561,12 +574,12 @@ public class CompraController {
 
 
         for (int i = 0; i < qtdIngressos; i++) {
-            int l = linhasIngressos[i], c = colunasIngressos[i];
+            int l = linhasIngressos.get(i), c = colunasIngressos.get(i);
             if (!sessaoSelecionada.cadeiraValida(l, c)) return null;
             if (!sessaoSelecionada.cadeiraDisponivel(l, c) && !cadeiraDaCompraEmEdicao(sessaoSelecionada, l, c)) return null;
 
             for (int j = 0; j < i; j++) {
-                if (linhasIngressos[j] == l && colunasIngressos[j] == c) return null;
+                if (linhasIngressos.get(j) == l && colunasIngressos.get(j) == c) return null;
             }
 
             Bilhete bilhete = new Bilhete(usuario, salaSelecionada, sessaoSelecionada,
@@ -618,8 +631,8 @@ public class CompraController {
 
                 if (i > 0) descricao.append(" | ");
 
-                descricao.append("L").append(linhasIngressos[i] + 1)
-                    .append(" C").append(colunasIngressos[i] + 1);
+                descricao.append("L").append(linhasIngressos.get(i) + 1)
+                    .append(" C").append(colunasIngressos.get(i) + 1);
             }
         }
 
@@ -634,7 +647,7 @@ public class CompraController {
 
             for (int i = 0; i < qtdIngressos; i++) {
                 Bilhete b = new Bilhete(usuario, salaSelecionada, sessaoSelecionada,
-                    new Cadeira(linhasIngressos[i], colunasIngressos[i]));
+                    new Cadeira(linhasIngressos.get(i), colunasIngressos.get(i)));
 
                 if (cupom() == null) simulacao.comprarBilhete(b);
                 else simulacao.comprarBilhete(b, cupom());
@@ -774,7 +787,8 @@ public class CompraController {
 
         Compra original = menu.getCompra(selecionada);
 
-        if (original != null && original.cancelarCompra() && menu.excluirCompra(selecionada)) {
+        if (original != null && menu.excluirCompra(selecionada)) {
+            original.cancelarCompra();
             JOptionPane.showMessageDialog(view, "Compra cancelada.");
             novaCompra();
             view.getAbas().setSelectedIndex(1);

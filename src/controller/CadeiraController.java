@@ -45,7 +45,8 @@ public class CadeiraController {
     // Ao reabrir a selecao, destacar o grupo escolhido anteriormente.
     // Nenhuma cadeira e ocupada definitivamente nesta etapa.
     public void preSelecionarCadeiras(int[] linhas, int[] colunas, int qtd) {
-        if (qtd != quantidade || qtd <= 0) return;
+        if (linhas == null || colunas == null || qtd != quantidade || qtd <= 0 ||
+                linhas.length < qtd || colunas.length < qtd) return;
         int l = linhas[0];
         int c = colunas[0];
         for (int i = 0; i < qtd; i++) {
@@ -59,7 +60,9 @@ public class CadeiraController {
     }
 
     private boolean grupoLivre(int l, int c) {
-        if (c < 0 || c + quantidade > 15) return false;
+        if (sessao == null || quantidade < 1 || !sessao.cadeiraValida(l, c)) return false;
+        Cadeira[][] cadeiras = sessao.getCadeiras();
+        if (c + quantidade > cadeiras[l].length) return false;
         for (int j = c; j < c + quantidade; j++) {
             if ((!sessao.cadeiraDisponivel(l, j) && !compra.cadeiraDaCompraEmEdicao(sessao, l, j)) ||
                     (ingressoEditado >= 0 && compra.cadeiraJaNoRascunho(l, j, ingressoEditado))) return false;
@@ -87,7 +90,7 @@ public class CadeiraController {
                 botoes[i][j].setEnabled(livre);
                 botoes[i][j].setText(livre ? String.format("%02d", j + 1) : "X");
                 botoes[i][j].setBackground(livre ? rosinha : Color.LIGHT_GRAY);
-                if (i == linha && j >= coluna && j < coluna + quantidade) {
+                if (livre && i == linha && j >= coluna && j < coluna + quantidade) {
                     botoes[i][j].setBackground(Color.GREEN);
                 }
             }
@@ -100,8 +103,11 @@ public class CadeiraController {
             JOptionPane.showMessageDialog(view, "Selecione cadeiras disponiveis.");
             return;
         }
-        if (ingressoEditado >= 0) compra.trocarCadeiraIngresso(ingressoEditado, linha, coluna);
-        else compra.setCadeirasSelecionadas(linha, coluna, quantidade);
+        if (ingressoEditado >= 0) {
+            compra.trocarCadeiraIngresso(ingressoEditado, linha, coluna);
+        } else {
+            compra.setCadeirasSelecionadas(linha, coluna, quantidade);
+        }
         compra.mostrarView();
         view.dispose();
     }
