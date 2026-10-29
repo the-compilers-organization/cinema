@@ -65,6 +65,7 @@ public class Administrador extends Base implements GerenciaFilmes{
         return false;
     }
 
+    // regra de negocio: não pode alterar cpf do usuario
     public boolean alterarUsuario(Usuario usuarioAtualizado){
         if(usuarioAtualizado != null){
             int indice = buscarUsuario(usuarioAtualizado.getCpf());
@@ -128,7 +129,7 @@ public class Administrador extends Base implements GerenciaFilmes{
     }
 
     
-
+    // regra de negocio: não pode alterar nome do filme
     public boolean alterarFilme(Filme filmeAtualizado){
         if(filmeAtualizado != null){
             int indice = buscarFilme(filmeAtualizado.getNome());
