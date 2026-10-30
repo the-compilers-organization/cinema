@@ -1,5 +1,9 @@
 package model;
 
+import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
+
+
 public class Sessao {
 
     private static final int TAM_LINHA = 10;
@@ -244,34 +248,30 @@ public class Sessao {
     //     }
     // }
 
-
+    // gets e sets
 	public String getHorario() {
 		return horario;
 	}
-
 	public void setHorario(String horario) {
 		this.horario = horario;
 	}
-
 	public Filme getFilme() {
 		return filme;
 	}
-
 	public void setFilme(Filme filme) {
 		this.filme = filme;
 	}
-
 	public Cadeira[][] getCadeiras() {
 		return cadeiras;
 	}
-
 	public void setCadeiras(Cadeira[][] cadeiras) {
 		this.cadeiras = cadeiras;
 	}
 
-    // gets e sets
-    
-    
-
+    //============================ MÉTODO NOVO FILME QUE JA COEÇOU NA SESSAO
+    public boolean jaComecou(){
+        LocalTime hora = LocalTime.parse(horario, DateTimeFormatter.ofPattern("HH:mm"));
+        return hora.isBefore(LocalTime.now());
+    }
     
 }
