@@ -3,6 +3,8 @@ import enums.Produtos;
 import enums.CupomPromocional;
 import java.util.ArrayList;
 
+import exceptions.VendasException; //29/10
+
 public class Compra {
 
     private Usuario usuario;
@@ -10,6 +12,47 @@ public class Compra {
     private ArrayList<Produtos> produtos;
     private ArrayList<Integer> qtdCadaProduto;
     private ArrayList<Double> subtotaisProdutos;
+
+    //gets e sets
+    public Usuario getUsuario() {
+        return usuario;
+    }
+
+    public void setUsuario(Usuario usuario) {
+        this.usuario = usuario;
+    }
+
+    public ArrayList<Bilhete> getBilhetes() {
+        return bilhetes;
+    }
+
+    public void setBilhetes(ArrayList<Bilhete> bilhetes) {
+        this.bilhetes = bilhetes;
+    }
+
+    public ArrayList<Produtos> getProdutos() {
+        return produtos;
+    }
+
+    public void setProdutos(ArrayList<Produtos> produtos) {
+        this.produtos = produtos;
+    }
+
+    public ArrayList<Integer> getQtdCadaProduto() {
+        return qtdCadaProduto;
+    }
+
+    public void setQtdCadaProduto(ArrayList<Integer> qtdCadaProduto) {
+        this.qtdCadaProduto = qtdCadaProduto;
+    }
+
+    public ArrayList<Double> getSubtotaisProdutos() {
+        return subtotaisProdutos;
+    }
+
+    public void setSubtotaisProdutos(ArrayList<Double> subtotaisProdutos) {
+        this.subtotaisProdutos = subtotaisProdutos;
+    }
 
 
     public Compra(Usuario usuario){
@@ -310,55 +353,6 @@ public class Compra {
     }
 
 
-    public Usuario getUsuario() {
-        return usuario;
-    }
-
-
-    public void setUsuario(Usuario usuario) {
-        this.usuario = usuario;
-    }
-
-
-    public ArrayList<Bilhete> getBilhetes() {
-        return bilhetes;
-    }
-
-
-    public void setBilhetes(ArrayList<Bilhete> bilhetes) {
-        this.bilhetes = bilhetes;
-    }
-
-
-    public ArrayList<Produtos> getProdutos() {
-        return produtos;
-    }
-
-
-    public void setProdutos(ArrayList<Produtos> produtos) {
-        this.produtos = produtos;
-    }
-
-
-    public ArrayList<Integer> getQtdCadaProduto() {
-        return qtdCadaProduto;
-    }
-
-
-    public void setQtdCadaProduto(ArrayList<Integer> qtdCadaProduto) {
-        this.qtdCadaProduto = qtdCadaProduto;
-    }
-
-
-    public ArrayList<Double> getSubtotaisProdutos() {
-        return subtotaisProdutos;
-    }
-
-
-    public void setSubtotaisProdutos(ArrayList<Double> subtotaisProdutos) {
-        this.subtotaisProdutos = subtotaisProdutos;
-    }
-
 
     
 
@@ -385,8 +379,22 @@ public class Compra {
 
     // }
 
+    //=============================== MÉTODO PARA VILDACÃO DE BILHETE
+    // private void validarBilhete(Bilhete bilhete) throws VendasException{
+    //     Filme filme = bilhete.getFilme();
+    //     Sessao sessao = bilhete.getSessao();
+    //     Cadeira cadeira = bilhete.getCadeira();
 
-    
+    //     if(!filme.isEmCartaz()){
+    //         throw VendasException.filmeForaDeCartaz(filme.getNome());
+    //     }
+    //     if(sessao.jaComecou()){
+    //         throw VendasException.sessaoJaIniciada(filme.getNome(), sessao.getHorario());
+    //     }
+    //     if(!sessao.cadeiraDisponivel(cadeira.getLinha(), cadeira.getColuna())){
+    //         throw VendasException.poltronaOcupada(cadeira.getLinha(), cadeira.getColuna());
+    //     }
+    // }
 
     
 

@@ -1,7 +1,6 @@
 package model;
 public class Filme {
     private static final int TAM_CRITICAS = 100;
-    
     private String nome;
     private int duracao;
     private String sinopse;
@@ -11,25 +10,6 @@ public class Filme {
     private int qtdCriticas;
     private int qtdComentarios;
     private Critica[] criticas;
-
-    // CONSTRUTOR
-    public Filme(String nome, int duracao, String sinopse, double valor) {
-
-        this.nome = nome;
-        this.duracao = duracao;
-        this.sinopse = sinopse;
-        this.valor = valor;
-
-        this.criticas = new Critica[TAM_CRITICAS];
-        this.notas = new double[TAM_CRITICAS];
-
-        this.qtdCriticas = 0;
-        this.qtdComentarios = 0;
-
-        this.nota = mediaDasNotas();
-    }
-
-    //criar metodo para calcularMedia das notas do vetor critica!!!
 
     // GETS E SETS
     public String getNome() {
@@ -85,7 +65,6 @@ public class Filme {
         return nota;
     }
 
-
     public void setNota(double nota) {
         this.nota = nota;
     }
@@ -93,6 +72,27 @@ public class Filme {
     public int getQtdComentarios() {
         return qtdComentarios;
     }
+
+    // CONSTRUTOR
+    public Filme(String nome, int duracao, String sinopse, double valor) {
+        this.nome = nome;
+        this.duracao = duracao;
+        this.sinopse = sinopse;
+        this.valor = valor;
+
+        this.criticas = new Critica[TAM_CRITICAS];
+        this.notas = new double[TAM_CRITICAS];
+
+        this.qtdCriticas = 0;
+        this.qtdComentarios = 0;
+
+        this.nota = mediaDasNotas();
+    }
+
+
+    //criar metodo para calcularMedia das notas do vetor critica!!!
+
+    //======================================================================= MÉTODOS
 
     public void setQtdComentarios(int qtdComentarios) {
         if(qtdComentarios >= 0 && qtdComentarios <= TAM_CRITICAS) {
@@ -136,6 +136,22 @@ public class Filme {
         }
         
         return 0.00;
+    }
+
+    //===================================ADICIONADO - EXCP.
+    private boolean emCartaz;
+
+    //get e set
+    public boolean isEmCartaz() {
+        return emCartaz;
+    }
+    public void setEmCartaz(boolean emCartaz) {
+        this.emCartaz = emCartaz;
+    }
+
+    //construtor
+    public Filme(boolean emCartaz) {
+        this.emCartaz = emCartaz;
     }
   
 }
