@@ -2,7 +2,7 @@ package model;
 
 import java.util.ArrayList;
 
-import controller.interfaces.GerenciaFilmes;
+import model.interfaces.GerenciaFilmes;
 
 public class Funcionario extends Base implements GerenciaFilmes{
     // A classe Funcionario é uma classe concreta que deve possuir as seguintes

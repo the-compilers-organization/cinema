@@ -1,4 +1,4 @@
-package controller.interfaces;
+package model.interfaces;
 import model.Filme;
 
 public interface GerenciaFilmes {
