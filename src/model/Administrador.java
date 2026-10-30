@@ -1,7 +1,8 @@
 package model;
 
-import interfaces.GerenciaFilmes;
 import java.util.ArrayList;
+
+import controller.interfaces.GerenciaFilmes;
 
 // A classe Administrador é uma classe concreta que deve possuir as seguintes
     // características:

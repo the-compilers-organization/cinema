@@ -1,6 +1,6 @@
 package controller;
 
-import enums.Sexo;
+import model.enums.Sexo;
 import model.*;
 import view.UsuarioView;
 

@@ -38,7 +38,7 @@
 
 
 
-import enums.TipoSala;
+import model.enums.TipoSala;
 
 import model.Filme;
 import model.Sala;

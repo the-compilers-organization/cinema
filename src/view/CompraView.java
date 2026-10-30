@@ -1,7 +1,7 @@
 package view;
 
-import enums.Produtos;
-import enums.CupomPromocional;
+import model.enums.Produtos;
+import model.enums.CupomPromocional;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableCellRenderer;

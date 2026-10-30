@@ -2,7 +2,7 @@ package controller;
 
 
 
-import enums.*;
+import model.enums.*;
 import model.*;
 import view.*;
 import javax.swing.*;

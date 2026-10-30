@@ -1,5 +1,5 @@
 // talvez use em na classe compras para setar itens como pipoca, chocolate e refrigerante
-package enums;
+package model.enums;
 
 public enum Produtos {
     PIPOCA(12.00),

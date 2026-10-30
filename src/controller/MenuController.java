@@ -1,7 +1,7 @@
 package controller;
 
 import model.*;
-import enums.*;
+import model.enums.*;
 import view.*;
 import javax.swing.*;
 import java.util.ArrayList;

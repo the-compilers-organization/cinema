@@ -1,6 +1,6 @@
 package model;
-import enums.Produtos;
-import enums.CupomPromocional;
+import model.enums.Produtos;
+import model.enums.CupomPromocional;
 import java.util.ArrayList;
 
 public class Compra {

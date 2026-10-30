@@ -1,7 +1,7 @@
 package model;
 
-import enums.Sexo;
-import enums.CupomPromocional;
+import model.enums.Sexo;
+import model.enums.CupomPromocional;
 
 public class Critico extends Usuario{
     private String origem;

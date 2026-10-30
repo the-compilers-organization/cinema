@@ -1,6 +1,6 @@
 package view;
 
-import enums.Sexo;
+import model.enums.Sexo;
 
 import javax.swing.*;
 import java.awt.*;

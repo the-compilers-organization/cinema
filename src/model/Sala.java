@@ -1,5 +1,5 @@
 package model;
-import enums.TipoSala;
+import model.enums.TipoSala;
 
 public class Sala {
     private static final int TAM = 10;

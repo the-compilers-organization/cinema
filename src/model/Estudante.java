@@ -1,6 +1,6 @@
 package model;
 
-import enums.Sexo;
+import model.enums.Sexo;
 
 public class Estudante extends Usuario {
 

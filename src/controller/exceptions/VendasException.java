@@ -1,4 +1,4 @@
-package exceptions;
+package controller.exceptions;
 
 // Compra de um bilhete que já tenha passado a hora do filme;
 // ○ Compra de um bilhete associado a uma poltrona que já foi selecionada;
