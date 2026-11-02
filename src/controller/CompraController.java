@@ -1,3 +1,80 @@
+/**
+ * ROTEIRO PARA CompraController.java
+ * Arquivo sem implementacao: completar os metodos conforme comentarios.
+ * Nao substituir o controller funcional ate concluir a implementacao.
+ *
+ * **Construtor:**
+ *
+ *
+ * public CompraController(CompraView view, Sala[] salas, Usuario usuario, MenuController menu);
+ *
+ *
+ * **Assinaturas dos métodos existentes:**
+ *
+ *
+ * private void configurarEventos();
+ * private void carregarSessoes();
+ * private boolean buscarSessao();
+ * private int indiceSessao(Sessao procurada);
+ * private int quantidade();
+ * private boolean usarPerfil();
+ * private CupomPromocional cupom();
+ * private void atualizarListaCompras();
+ * private void atualizarDetalhesCompra();
+ * private int indiceSelecionado();
+ * private void novaCompra();
+ * private void carregarCompra();
+ * private void limparCadeiras();
+ * private void excluirSelecaoCadeiras();
+ * private void abrirCadeiras();
+ * public boolean cadeiraDaCompraEmEdicao(Sessao sessao, int l, int c);
+ * public boolean cadeiraJaNoRascunho(int l, int c, int exceto);
+ * public void setCadeirasSelecionadas(int l, int c, int qtd);
+ * public void trocarCadeiraIngresso(int indice, int l, int c);
+ * private boolean cadeirasConsecutivas();
+ * private void adicionarProduto();
+ * private void editarProduto(int indice);
+ * private void removerProduto(int indice);
+ * private Compra montarCompra();
+ * private double totalBilhetes(Compra compra, boolean perfil);
+ * private void atualizarTotal();
+ * private void confirmarCompra();
+ * private void cancelarCompra();
+ * private void falhaNaCompra(String mensagem) throws CompraException;
+ * private void validarSelecaoParaCompra() throws ValidacaoException, VendasException;
+ * private void voltar();
+ * public void mostrarView();
+ *
+ *
+ * **Orientações:**
+ *
+ * 1. `configurarEventos`: conectar botões da `CompraView` aos métodos do controller; não colocar regras na View.
+ * 2. `buscarSessao` e `carregarSessoes`: trabalhar com as sessões existentes nas salas e com os filmes carregados do JSON.
+ * 3. `cadeirasConsecutivas`, `setCadeirasSelecionadas`, `trocarCadeiraIngresso`: respeitar a regra de cadeiras contíguas na mesma fileira; manter lógica de edição e de cadeiras já pertencentes à compra original.
+ * 4. `montarCompra`: montar objeto e bilhetes/produtos; não ocultar erro de venda com simples `null` quando se deve lançar `VendasException`.
+ * 5. `validarSelecaoParaCompra`: verificar quantidade, sessão e cadeiras; chamar `menu.validarVenda` para cada cadeira nova; não rejeitar indevidamente cadeira já pertencente à compra em edição.
+ * 6. `confirmarCompra`: `try` para validar, montar, registrar ou atualizar; `catch (VendasException | ValidacaoException | CompraException | PersistenciaException ex)` para apresentar mensagem. Só confirmar sucesso após persistência bem-sucedida.
+ * 7. `cancelarCompra`: chamar `menu.excluirCompra`; tratar `CompraException` e `PersistenciaException` e manter cadeiras/estado coerentes se falhar.
+ * 8. `atualizarTotal`: respeitar desconto de perfil **ou** cupom, sem acumular ambos.
+ *
+ * **Exemplo de tratamento no controller (ilustrativo):**
+ *
+ *
+ * try {
+ *     validarSelecaoParaCompra();
+ *     // Montar compra e solicitar registro no MenuController.
+ * } catch (VendasException | ValidacaoException ex) {
+ *     JOptionPane.showMessageDialog(view, ex.getMessage(),
+ *         "Venda nao permitida", JOptionPane.WARNING_MESSAGE);
+ * } catch (CompraException | PersistenciaException ex) {
+ *     JOptionPane.showMessageDialog(view, ex.getMessage(),
+ *         "Erro na compra", JOptionPane.ERROR_MESSAGE);
+ * }
+ *
+ *
+ * **Atenção:** as assinaturas de `montarCompra()` e `confirmarCompra()` acima refletem a versão de referência; se o grupo decidir fazer `montarCompra() throws ValidacaoException, VendasException`, atualizar os chamadores e o tratamento correspondente.
+ */
+
 package controller;
 
 

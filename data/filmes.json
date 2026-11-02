@@ -1,0 +1,56 @@
+[
+  {
+    "nome": "O Auto da Compadecida",
+    "sinopse": "Dois amigos nordestinos enfrentam situações de pobreza, esperteza e confusão enquanto tentam sobreviver e conseguir dinheiro.",
+    "duracao": 104,
+    "valor": 20.0,
+    "emCartaz": true,
+    "notas": [],
+    "criticas": []
+  },
+  {
+    "nome": "O Senhor dos Anéis: O Retorno do Rei",
+    "sinopse": "Frodo e Sam seguem em direção à Montanha da Perdição enquanto seus aliados enfrentam a batalha final contra as forças de Sauron.",
+    "duracao": 201,
+    "valor": 20.0,
+    "emCartaz": true,
+    "notas": [],
+    "criticas": []
+  },
+  {
+    "nome": "O Fabuloso Destino de Amélie Poulain",
+    "sinopse": "Amélie é uma jovem parisiense que decide ajudar secretamente as pessoas ao seu redor enquanto busca transformar sua própria vida.",
+    "duracao": 122,
+    "valor": 20.0,
+    "emCartaz": true,
+    "notas": [],
+    "criticas": []
+  },
+  {
+    "nome": "Bacurau",
+    "sinopse": "Os moradores de uma pequena cidade do sertão percebem que sua comunidade desapareceu dos mapas e precisam se unir diante de uma ameaça misteriosa.",
+    "duracao": 131,
+    "valor": 20.0,
+    "emCartaz": true,
+    "notas": [],
+    "criticas": []
+  },
+  {
+    "nome": "A Sociedade dos Poetas Mortos",
+    "sinopse": "Um professor de literatura inspira seus alunos a enxergar a vida de uma maneira diferente e a buscar seus próprios caminhos.",
+    "duracao": 128,
+    "valor": 20.0,
+    "emCartaz": true,
+    "notas": [],
+    "criticas": []
+  },
+  {
+    "nome": "Ainda Estou Aqui",
+    "sinopse": "Uma família enfrenta as consequências da ditadura militar brasileira enquanto busca preservar sua memória e sua história.",
+    "duracao": 135,
+    "valor": 20.0,
+    "emCartaz": true,
+    "notas": [],
+    "criticas": []
+  }
+]

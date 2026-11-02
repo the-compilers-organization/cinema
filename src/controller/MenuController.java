@@ -1,3 +1,60 @@
+/**
+ * ROTEIRO PARA MenuController.java
+ * Arquivo sem implementacao: completar os metodos conforme comentarios.
+ * Nao substituir o controller funcional ate concluir a implementacao.
+ *
+ * **Atributos principais existentes:** `MenuView view`, `Filme[] filmes`, `Sala[] salas`, `OperacoesCinema operacoes`, `Usuario usuario`, `ArrayList<Compra> compras`, `ArrayList<Boolean> perfilPorCompra`, `ArrayList<CupomPromocional> cupomPorCompra`.
+ *
+ * **Construtores:**
+ *
+ *
+ * public MenuController(MenuView view, Filme[] filmes, Sala[] salas);
+ * public MenuController(MenuView view, Filme[] filmes, Sala[] salas, OperacoesCinema operacoes);
+ *
+ *
+ * O primeiro delega ao segundo criando `new Facade()`. O segundo guarda dependências, carrega compras e associa `ActionListener` dos botões; **não** mover listeners para `Main`.
+ *
+ * **Assinaturas dos métodos a preservar:**
+ *
+ *
+ * private void loginUsuario();
+ * private void sairConta();
+ * public boolean cadastrarUsuario(Usuario novo);
+ * private void abrirUsuario();
+ * private void abrirFilmes();
+ * private void abrirSessoes();
+ * private void abrirCompra();
+ * private void abrirCritica();
+ * public void validarVenda(Sessao sessao, int linha, int coluna)
+ *     throws VendasException, ValidacaoException;
+ * public boolean podeRegistrarCompra();
+ * public boolean registrarCompra(Compra compra, boolean perfil, CupomPromocional cupom)
+ *     throws CompraException, PersistenciaException;
+ * public int getQtdCompras();
+ * public Compra getCompra(int indice);
+ * public boolean getPerfilCompra(int indice);
+ * public CupomPromocional getCupomCompra(int indice);
+ * public boolean atualizarCompra(int indice, Compra nova, boolean perfil, CupomPromocional cupom)
+ *     throws CompraException, PersistenciaException;
+ * public boolean excluirCompra(int indice) throws CompraException, PersistenciaException;
+ * private void salvarCompras() throws PersistenciaException;
+ * private void carregarCompras();
+ * public void voltarMenu();
+ * public void setUsuario(Usuario usuario);
+ * public Usuario getUsuario();
+ *
+ *
+ * **Orientações:**
+ *
+ * 1. `loginUsuario`: solicitar CPF e senha, chamar `operacoes.autenticarUsuario`, tratar `PersistenciaException`, atualizar usuário logado e estado do menu. Não ler JSON diretamente.
+ * 2. `cadastrarUsuario`: chamar `operacoes.cadastrarUsuario`; capturar `UsuarioException`, `ValidacaoException`, `PersistenciaException`; exibir `getMessage()`.
+ * 3. `abrirFilmes`, `abrirSessoes`, `abrirCompra`, `abrirCritica`: abrir as telas/controllers correspondentes, respeitando autenticação quando necessária.
+ * 4. `validarVenda`: delegar a `operacoes.validarVenda`, sem duplicar regra de cadeira.
+ * 5. `registrarCompra`, `atualizarCompra`, `excluirCompra`: modificar coleções em memória e persistir; se a persistência falhar, restaurar estado anterior. Propagar `CompraException` e `PersistenciaException` para o `CompraController` tratar.
+ * 6. `salvarCompras`: usar `operacoes.converterCompras(...)` e `operacoes.salvarCompras(...)`.
+ * 7. `carregarCompras`: ler `CompraRegistro`, reconstruir compras associando CPF, sala e sessão existentes; tratar arquivo ausente como lista vazia, mas erro real de JSON como `PersistenciaException`. Verificar compatibilidade com o carregamento de usuários e filmes.
+ */
+
 package controller;
 
 import model.*;

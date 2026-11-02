@@ -1,0 +1,12 @@
+[
+  {
+    "tipo": "Usuario",
+    "user": "teste1 teste",
+    "cpf": "123456789",
+    "email": "teste1@teste.com",
+    "senhaHash": "JDEZjeU039AeGo82Imh5fqZstlSFYq5PHM6Qhp11Nz8\u003d",
+    "senhaSalt": "6nAMGPd7bXn2g6b9fX5zWA\u003d\u003d",
+    "idade": 30,
+    "sexo": "F"
+  }
+]
