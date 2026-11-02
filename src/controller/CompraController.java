@@ -1,79 +1,155 @@
 /**
- * ROTEIRO PARA CompraController.java
- * Arquivo sem implementacao: completar os metodos conforme comentarios.
- * Nao substituir o controller funcional ate concluir a implementacao.
+ * ROTEIRO DE IMPLEMENTAÇÃO — CompraController.java
  *
- * **Construtor:**
+ * OBJETIVO: Controller da tela de compras. Receber OperacoesCinema diretamente, nunca MenuController. Usar Runnable aoVoltar para navegação. Chamar operacoes para validações, cadastro, alteração e exclusão; tratar exceções com try/catch e exibir mensagens pela View. Não duplicar regras de negócio da Facade.
  *
- *
- * public CompraController(CompraView view, Sala[] salas, Usuario usuario, MenuController menu);
- *
- *
- * **Assinaturas dos métodos existentes:**
- *
- *
- * private void configurarEventos();
- * private void carregarSessoes();
- * private boolean buscarSessao();
- * private int indiceSessao(Sessao procurada);
- * private int quantidade();
- * private boolean usarPerfil();
- * private CupomPromocional cupom();
- * private void atualizarListaCompras();
- * private void atualizarDetalhesCompra();
- * private int indiceSelecionado();
- * private void novaCompra();
- * private void carregarCompra();
- * private void limparCadeiras();
- * private void excluirSelecaoCadeiras();
- * private void abrirCadeiras();
- * public boolean cadeiraDaCompraEmEdicao(Sessao sessao, int l, int c);
- * public boolean cadeiraJaNoRascunho(int l, int c, int exceto);
- * public void setCadeirasSelecionadas(int l, int c, int qtd);
- * public void trocarCadeiraIngresso(int indice, int l, int c);
- * private boolean cadeirasConsecutivas();
- * private void adicionarProduto();
- * private void editarProduto(int indice);
- * private void removerProduto(int indice);
- * private Compra montarCompra();
- * private double totalBilhetes(Compra compra, boolean perfil);
- * private void atualizarTotal();
- * private void confirmarCompra();
- * private void cancelarCompra();
- * private void falhaNaCompra(String mensagem) throws CompraException;
- * private void validarSelecaoParaCompra() throws ValidacaoException, VendasException;
- * private void voltar();
- * public void mostrarView();
- *
- *
- * **Orientações:**
- *
- * 1. `configurarEventos`: conectar botões da `CompraView` aos métodos do controller; não colocar regras na View.
- * 2. `buscarSessao` e `carregarSessoes`: trabalhar com as sessões existentes nas salas e com os filmes carregados do JSON.
- * 3. `cadeirasConsecutivas`, `setCadeirasSelecionadas`, `trocarCadeiraIngresso`: respeitar a regra de cadeiras contíguas na mesma fileira; manter lógica de edição e de cadeiras já pertencentes à compra original.
- * 4. `montarCompra`: montar objeto e bilhetes/produtos; não ocultar erro de venda com simples `null` quando se deve lançar `VendasException`.
- * 5. `validarSelecaoParaCompra`: verificar quantidade, sessão e cadeiras; chamar `menu.validarVenda` para cada cadeira nova; não rejeitar indevidamente cadeira já pertencente à compra em edição.
- * 6. `confirmarCompra`: `try` para validar, montar, registrar ou atualizar; `catch (VendasException | ValidacaoException | CompraException | PersistenciaException ex)` para apresentar mensagem. Só confirmar sucesso após persistência bem-sucedida.
- * 7. `cancelarCompra`: chamar `menu.excluirCompra`; tratar `CompraException` e `PersistenciaException` e manter cadeiras/estado coerentes se falhar.
- * 8. `atualizarTotal`: respeitar desconto de perfil **ou** cupom, sem acumular ambos.
- *
- * **Exemplo de tratamento no controller (ilustrativo):**
- *
- *
- * try {
- *     validarSelecaoParaCompra();
- *     // Montar compra e solicitar registro no MenuController.
- * } catch (VendasException | ValidacaoException ex) {
- *     JOptionPane.showMessageDialog(view, ex.getMessage(),
- *         "Venda nao permitida", JOptionPane.WARNING_MESSAGE);
- * } catch (CompraException | PersistenciaException ex) {
- *     JOptionPane.showMessageDialog(view, ex.getMessage(),
- *         "Erro na compra", JOptionPane.ERROR_MESSAGE);
- * }
- *
- *
- * **Atenção:** as assinaturas de `montarCompra()` e `confirmarCompra()` acima refletem a versão de referência; se o grupo decidir fazer `montarCompra() throws ValidacaoException, VendasException`, atualizar os chamadores e o tratamento correspondente.
+ * ORIENTAÇÕES GERAIS:
+ * - Este arquivo é um roteiro, não uma implementação funcional.
+ * - As assinaturas abaixo são comentários; o colega deve escrever o código.
+ * - Não usar IllegalArgumentException; seguir as exceções personalizadas do projeto.
+ * - Seguir o exemplo do professor: extends Exception, super(mensagem),
+ *   throws na assinatura, throw na origem e try/catch no local apropriado.
+ * - Não substituir a versão funcional antes de concluir e testar a implementação.
  */
+
+/* INTEGRAÇÃO MVC:
+ * Main cria a Facade -> MenuController recebe OperacoesCinema ->
+ * CompraController recebe a mesma OperacoesCinema diretamente.
+ * Repository faz JSON; Facade aplica regras; Controller trata eventos;
+ * View apresenta as mensagens. Ao voltar: Runnable aoVoltar.
+ */
+
+/* DECLARAÇÃO DA CLASSE/INTERFACE:
+ * public class CompraController {
+ *     // Implementar os itens listados abaixo.
+ * }
+ */
+
+/* ATRIBUTOS / ESTADO:
+ * private CompraView view;
+ * private Sala[] salas;
+ * private Usuario usuario;
+ * private final OperacoesCinema operacoes;
+ * private final Runnable aoVoltar;
+ * private Sala salaSelecionada;
+ * private Sessao sessaoSelecionada;
+ * private Compra rascunho;
+ * private int indiceEdicao = -1;
+ * private int qtdIngressos = 0;
+ * private boolean atualizando = false;
+ */
+
+/* CONSTRUTORES E MÉTODOS — ASSINATURAS:
+ *
+ * 1. private final ArrayList<Integer> linhasIngressos = new ArrayList<>();
+ *    ORIENTAÇÃO: Método auxiliar interno; implementar apenas a responsabilidade indicada pelo nome.
+ *
+ * 2. private final ArrayList<Integer> colunasIngressos = new ArrayList<>();
+ *    ORIENTAÇÃO: Método auxiliar interno; implementar apenas a responsabilidade indicada pelo nome.
+ *
+ * 3. public CompraController(CompraView view, Sala[] salas, Usuario usuario, OperacoesCinema operacoes, Runnable aoVoltar);
+ *    ORIENTAÇÃO: Método da API da classe; preservar parâmetros e retorno.
+ *
+ * 4. private void configurarEventos();
+ *    ORIENTAÇÃO: Método auxiliar interno; implementar apenas a responsabilidade indicada pelo nome.
+ *
+ * 5. private void carregarSessoes();
+ *    ORIENTAÇÃO: Método auxiliar interno; implementar apenas a responsabilidade indicada pelo nome.
+ *
+ * 6. private boolean buscarSessao();
+ *    ORIENTAÇÃO: Método auxiliar interno; implementar apenas a responsabilidade indicada pelo nome.
+ *
+ * 7. private int indiceSessao(Sessao procurada);
+ *    ORIENTAÇÃO: Método auxiliar interno; implementar apenas a responsabilidade indicada pelo nome.
+ *
+ * 8. private int quantidade();
+ *    ORIENTAÇÃO: Método auxiliar interno; implementar apenas a responsabilidade indicada pelo nome.
+ *
+ * 9. private boolean usarPerfil();
+ *    ORIENTAÇÃO: Método auxiliar interno; implementar apenas a responsabilidade indicada pelo nome.
+ *
+ * 10. private CupomPromocional cupom();
+ *    ORIENTAÇÃO: Método auxiliar interno; implementar apenas a responsabilidade indicada pelo nome.
+ *
+ * 11. private void atualizarListaCompras();
+ *    ORIENTAÇÃO: Método auxiliar interno; implementar apenas a responsabilidade indicada pelo nome.
+ *
+ * 12. private void atualizarDetalhesCompra();
+ *    ORIENTAÇÃO: Método auxiliar interno; implementar apenas a responsabilidade indicada pelo nome.
+ *
+ * 13. private int indiceSelecionado();
+ *    ORIENTAÇÃO: Método auxiliar interno; implementar apenas a responsabilidade indicada pelo nome.
+ *
+ * 14. private void novaCompra();
+ *    ORIENTAÇÃO: Método auxiliar interno; implementar apenas a responsabilidade indicada pelo nome.
+ *
+ * 15. private void carregarCompra();
+ *    ORIENTAÇÃO: Método auxiliar interno; implementar apenas a responsabilidade indicada pelo nome.
+ *
+ * 16. private void limparCadeiras();
+ *    ORIENTAÇÃO: Método auxiliar interno; implementar apenas a responsabilidade indicada pelo nome.
+ *
+ * 17. private void excluirSelecaoCadeiras();
+ *    ORIENTAÇÃO: Método auxiliar interno; implementar apenas a responsabilidade indicada pelo nome.
+ *
+ * 18. private void abrirCadeiras();
+ *    ORIENTAÇÃO: Método auxiliar interno; implementar apenas a responsabilidade indicada pelo nome.
+ *
+ * 19. public boolean cadeiraDaCompraEmEdicao(Sessao sessao, int l, int c);
+ *    ORIENTAÇÃO: Método da API da classe; preservar parâmetros e retorno.
+ *
+ * 20. public boolean cadeiraJaNoRascunho(int l, int c, int exceto);
+ *    ORIENTAÇÃO: Método da API da classe; preservar parâmetros e retorno.
+ *
+ * 21. public void setCadeirasSelecionadas(int l, int c, int qtd);
+ *    ORIENTAÇÃO: Método da API da classe; preservar parâmetros e retorno.
+ *
+ * 22. public void trocarCadeiraIngresso(int indice, int l, int c);
+ *    ORIENTAÇÃO: Método da API da classe; preservar parâmetros e retorno.
+ *
+ * 23. private boolean cadeirasConsecutivas();
+ *    ORIENTAÇÃO: Método auxiliar interno; implementar apenas a responsabilidade indicada pelo nome.
+ *
+ * 24. private void adicionarProduto();
+ *    ORIENTAÇÃO: Método auxiliar interno; implementar apenas a responsabilidade indicada pelo nome.
+ *
+ * 25. private void editarProduto(int indice);
+ *    ORIENTAÇÃO: Método auxiliar interno; implementar apenas a responsabilidade indicada pelo nome.
+ *
+ * 26. private void removerProduto(int indice);
+ *    ORIENTAÇÃO: Método auxiliar interno; implementar apenas a responsabilidade indicada pelo nome.
+ *
+ * 27. private Compra montarCompra();
+ *    ORIENTAÇÃO: Método auxiliar interno; implementar apenas a responsabilidade indicada pelo nome.
+ *
+ * 28. private double totalBilhetes(Compra c, boolean perfil);
+ *    ORIENTAÇÃO: Método auxiliar interno; implementar apenas a responsabilidade indicada pelo nome.
+ *
+ * 29. private void atualizarTotal();
+ *    ORIENTAÇÃO: Método auxiliar interno; implementar apenas a responsabilidade indicada pelo nome.
+ *
+ * 30. private void confirmarCompra();
+ *    ORIENTAÇÃO: Método auxiliar interno; implementar apenas a responsabilidade indicada pelo nome.
+ *
+ * 31. private void cancelarCompra();
+ *    ORIENTAÇÃO: Método auxiliar interno; implementar apenas a responsabilidade indicada pelo nome.
+ *
+ * 32. private void validarSelecaoParaCompra() throws SessaoException, VendasException, ValidacaoException;
+ *    ORIENTAÇÃO: Declarar e propagar as exceções indicadas; tratar no ponto de interação quando aplicável.
+ *
+ * 33. private void voltar();
+ *    ORIENTAÇÃO: Método auxiliar interno; implementar apenas a responsabilidade indicada pelo nome.
+ *
+ * 34. public void mostrarView();
+ *    ORIENTAÇÃO: Método da API da classe; preservar parâmetros e retorno.
+ */
+
+/* ATENÇÃO: o construtor deve receber (CompraView, Sala[], Usuario, OperacoesCinema, Runnable).
+ * Não declarar campo MenuController nem usar menu.registrarCompra(), menu.getCompra() etc.
+ * Os métodos de compra chamam operacoes.* e capturam CompraException,
+ * VendasException, ValidacaoException e PersistenciaException conforme cada operação.
+ */
+
 
 package controller;
 

@@ -1,25 +1,38 @@
 package repository;
 
 /**
- * ROTEIRO DE IMPLEMENTACAO — repository/CompraDAO.java
+ * ROTEIRO DE IMPLEMENTAÇÃO — CompraDAO.java
  *
- * Este arquivo e um esqueleto para a equipe.
- * As assinaturas abaixo sao ORIENTACOES EM COMENTARIOS, nao implementacoes.
- * Preencha os atributos, construtores, metodos e imports conforme a especificacao.
- * Preserve as assinaturas acordadas com as demais camadas.
+ * OBJETIVO: Persistir e recuperar registros de compras em compras.json. Não serializar diretamente objetos com referências circulares; usar CompraRegistro.
  *
- *
- * public class CompraDAO implements RepositorioCompra {
- *     private final Path arquivo;
- *     public CompraDAO();
- *     public CompraDAO(Path arquivo);
- *     @Override public synchronized List<CompraRegistro> listar() throws PersistenciaException;
- *     @Override public synchronized void salvarTodas(List<CompraRegistro> compras) throws PersistenciaException;
- * }
- *
- *
- * **Implementar:** caminho `data/compras.json`; ler lista tipada com `TypeToken<List<CompraRegistro>>`; gravar lista inteira pelo `ArquivoJson`.
+ * ORIENTAÇÕES GERAIS:
+ * - Este arquivo é um roteiro, não uma implementação funcional.
+ * - As assinaturas abaixo são comentários; o colega deve escrever o código.
+ * - Não usar IllegalArgumentException; seguir as exceções personalizadas do projeto.
+ * - Seguir o exemplo do professor: extends Exception, super(mensagem),
+ *   throws na assinatura, throw na origem e try/catch no local apropriado.
+ * - Não substituir a versão funcional antes de concluir e testar a implementação.
  */
+
+/* DECLARAÇÃO DA CLASSE/INTERFACE:
+ * public class CompraDAO implements RepositorioCompra {
+ *     // Implementar os itens listados abaixo.
+ * }
+ */
+
+/* ATRIBUTOS / ESTADO:
+ * private final Path arquivo;
+ */
+
+/* CONSTRUTORES E MÉTODOS — ASSINATURAS:
+ *
+ * 1. public CompraDAO();
+ *    ORIENTAÇÃO: Método da API da classe; preservar parâmetros e retorno.
+ *
+ * 2. public CompraDAO(Path arquivo);
+ *    ORIENTAÇÃO: Método da API da classe; preservar parâmetros e retorno.
+ */
+
 public class CompraDAO {
     // TODO: implementar conforme as assinaturas e orientacoes acima.
 }

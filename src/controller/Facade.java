@@ -1,65 +1,69 @@
 package controller;
 
 /**
- * ROTEIRO DE IMPLEMENTACAO — controller/Facade.java
+ * ROTEIRO DE IMPLEMENTAÇÃO — Facade.java
  *
- * Este arquivo e um esqueleto para a equipe.
- * As assinaturas abaixo sao ORIENTACOES EM COMENTARIOS, nao implementacoes.
- * Preencha os atributos, construtores, metodos e imports conforme a especificacao.
- * Preserve as assinaturas acordadas com as demais camadas.
+ * OBJETIVO: Implementar OperacoesCinema; concentrar regras de negócio, autenticação, CRUD e compra; delegar persistência aos repositórios. Manter compras em ArrayList sem limite fixo; propagar ou converter exceções conforme contratos. Preservar regras de descontos, assentos contíguos e restauração em falha de persistência.
  *
- *
- * public class Facade implements OperacoesCinema {
- *     private final RepositorioUsuario usuarios;
- *     private final RepositorioFilme filmes;
- *     private final RepositorioCompra compras;
- *
- *     public Facade();
- *     public Facade(RepositorioUsuario usuarios, RepositorioFilme filmes);
- *     public Facade(RepositorioUsuario usuarios, RepositorioFilme filmes, RepositorioCompra compras);
- *
- *     // Implementar TODOS os métodos de OperacoesCinema com @Override.
- *     private static boolean vazio(String texto);
- * }
- *
- *
- * **Responsabilidades por método:**
- *
- * | Métodos | Orientação de implementação |
- * |---|---|
- * | `cadastrarUsuario` | Validar obrigatórios; verificar CPF duplicado; `usuarios.salvar`; lançar `ValidacaoException`, `UsuarioException` ou propagar `PersistenciaException` |
- * | `buscarUsuario`, `listarUsuarios` | Delegar ao repositório |
- * | `autenticarUsuario` | Autenticar via contrato do repositório; na versão atual usa `instanceof UsuarioDAO` (ver melhoria sugerida) |
- * | `atualizarUsuario`, `excluirUsuario` | Validar entrada e delegar; preservar distinção entre falha e registro não encontrado |
- * | `cadastrarFilme` | Validar dados e duplicidade; `filmes.salvar` |
- * | `buscarFilme`, `listarFilmes`, `atualizarFilme`, `excluirFilme` | Delegar, com validações apropriadas |
- * | `filmesEmExibicao` | Converter `Filme[]` em `List<Filme>` ignorando posições nulas; **na versão atual não filtra `emCartaz` apesar do nome** |
- * | `sessoesDisponiveis` | Percorrer `Sala[]` e as sessões existentes |
- * | `avaliarFilme` | Validar nota/comentário/limites; registrar nota e crítica; atualizar filme persistido quando aplicável |
- * | `listarComprasPersistidas`, `salvarCompras` | Delegar a `RepositorioCompra` |
- * | `converterCompras` | Converter compras e metadados para `CompraRegistro`, incluindo ingressos, produtos, sala e índice da sessão |
- * | `validarVenda` | Validar sessão, filme em cartaz, horário, cadeira válida e cadeira disponível; lançar `VendasException` ou `ValidacaoException` |
- *
- * **Exemplo didático do professor:**
- *
- *
- * @Override
- * public void cadastrarFilme(Filme filme)
- *         throws FilmeException, ValidacaoException, PersistenciaException {
- *     if (filme == null) {
- *         ValidacaoException ve = new ValidacaoException("Filme invalido.");
- *         throw ve;
- *     }
- *     if (filmes.buscarPorNome(filme.getNome()) != null) {
- *         FilmeException fe = new FilmeException("Filme ja cadastrado.");
- *         throw fe;
- *     }
- *     filmes.salvar(filme);
- * }
- *
- *
- * O exemplo é ilustrativo: na implementação real manter validações de nome, duração e preço já existentes.
+ * ORIENTAÇÕES GERAIS:
+ * - Este arquivo é um roteiro, não uma implementação funcional.
+ * - As assinaturas abaixo são comentários; o colega deve escrever o código.
+ * - Não usar IllegalArgumentException; seguir as exceções personalizadas do projeto.
+ * - Seguir o exemplo do professor: extends Exception, super(mensagem),
+ *   throws na assinatura, throw na origem e try/catch no local apropriado.
+ * - Não substituir a versão funcional antes de concluir e testar a implementação.
  */
+
+/* INTEGRAÇÃO MVC:
+ * Main cria a Facade -> MenuController recebe OperacoesCinema ->
+ * CompraController recebe a mesma OperacoesCinema diretamente.
+ * Repository faz JSON; Facade aplica regras; Controller trata eventos;
+ * View apresenta as mensagens. Ao voltar: Runnable aoVoltar.
+ */
+
+/* DECLARAÇÃO DA CLASSE/INTERFACE:
+ * public class Facade implements OperacoesCinema {
+ *     // Implementar os itens listados abaixo.
+ * }
+ */
+
+/* ATRIBUTOS / ESTADO:
+ * private final RepositorioUsuario usuarios;
+ * private final RepositorioFilme filmes;
+ * private final RepositorioCompra compras;
+ * private Sala[] salasAtivas;
+ */
+
+/* CONSTRUTORES E MÉTODOS — ASSINATURAS:
+ *
+ * 1. private final ArrayList<Compra> comprasAtivas = new ArrayList<>();
+ *    ORIENTAÇÃO: Método auxiliar interno; implementar apenas a responsabilidade indicada pelo nome.
+ *
+ * 2. private final ArrayList<Boolean> perfilPorCompra = new ArrayList<>();
+ *    ORIENTAÇÃO: Método auxiliar interno; implementar apenas a responsabilidade indicada pelo nome.
+ *
+ * 3. private final ArrayList<CupomPromocional> cupomPorCompra = new ArrayList<>();
+ *    ORIENTAÇÃO: Método auxiliar interno; implementar apenas a responsabilidade indicada pelo nome.
+ *
+ * 4. public Facade();
+ *    ORIENTAÇÃO: Método da API da classe; preservar parâmetros e retorno.
+ *
+ * 5. public Facade(RepositorioUsuario usuarios, RepositorioFilme filmes);
+ *    ORIENTAÇÃO: Método da API da classe; preservar parâmetros e retorno.
+ *
+ * 6. public Facade(RepositorioUsuario usuarios, RepositorioFilme filmes, RepositorioCompra compras);
+ *    ORIENTAÇÃO: Método da API da classe; preservar parâmetros e retorno.
+ *
+ * 7. private void persistirCompras() throws PersistenciaException, CompraException;
+ *    ORIENTAÇÃO: Declarar e propagar as exceções indicadas; tratar no ponto de interação quando aplicável.
+ *
+ * 8. public void inicializarCompras(Sala[] salas) throws PersistenciaException;
+ *    ORIENTAÇÃO: Declarar e propagar as exceções indicadas; tratar no ponto de interação quando aplicável.
+ *
+ * 9. private static boolean vazio(String s);
+ *    ORIENTAÇÃO: Método auxiliar interno; implementar apenas a responsabilidade indicada pelo nome.
+ */
+
 public class Facade {
     // TODO: implementar conforme as assinaturas e orientacoes acima.
 }

@@ -1,35 +1,42 @@
 package repository;
 
 /**
- * ROTEIRO DE IMPLEMENTACAO — repository/CompraRegistro.java
+ * ROTEIRO DE IMPLEMENTAÇÃO — CompraRegistro.java
  *
- * Este arquivo e um esqueleto para a equipe.
- * As assinaturas abaixo sao ORIENTACOES EM COMENTARIOS, nao implementacoes.
- * Preencha os atributos, construtores, metodos e imports conforme a especificacao.
- * Preserve as assinaturas acordadas com as demais camadas.
+ * OBJETIVO: Definir DTOs para os dados persistidos de uma compra; não implementar regras de negócio. Manter correspondência com conversão feita na Facade.
  *
- *
- * public class CompraRegistro {
- *     public String cpf;
- *     public boolean perfil;
- *     public String cupom;
- *     public ArrayList<Ingresso> ingressos = new ArrayList<>();
- *     public ArrayList<Item> produtos = new ArrayList<>();
- *     public static class Ingresso {
- *         public int sala, sessao, linha, coluna;
- *         public String filme, horario;
- *         public double valor;
- *     }
- *     public static class Item {
- *         public String produto;
- *         public int quantidade;
- *         public double subtotal;
- *     }
- * }
- *
- *
- * **Função:** DTO para persistência de compras. `sessao` é o índice da sessão na sala; `sala` é o número da sala. Não persistir diretamente grafos completos de `Compra`/`Sessao` com referências circulares.
+ * ORIENTAÇÕES GERAIS:
+ * - Este arquivo é um roteiro, não uma implementação funcional.
+ * - As assinaturas abaixo são comentários; o colega deve escrever o código.
+ * - Não usar IllegalArgumentException; seguir as exceções personalizadas do projeto.
+ * - Seguir o exemplo do professor: extends Exception, super(mensagem),
+ *   throws na assinatura, throw na origem e try/catch no local apropriado.
+ * - Não substituir a versão funcional antes de concluir e testar a implementação.
  */
+
+/* DECLARAÇÃO DA CLASSE/INTERFACE:
+ * public class CompraRegistro {
+ *     // Implementar os itens listados abaixo.
+ * }
+ */
+
+/* ATRIBUTOS / ESTADO:
+ * public String cpf;
+ * public boolean perfil;
+ * public String cupom;
+ * public ArrayList<Ingresso> ingressos;
+ * public ArrayList<Item> produtos;
+ */
+
+/* CONSTRUTORES E MÉTODOS — ASSINATURAS:
+ *
+ * 1. public static class Ingresso { public int sala, sessao, linha, coluna; public String filme, horario; public double valor; };
+ *    ORIENTAÇÃO: Método da API da classe; preservar parâmetros e retorno.
+ *
+ * 2. public static class Item { public String produto; public int quantidade; public double subtotal; };
+ *    ORIENTAÇÃO: Método da API da classe; preservar parâmetros e retorno.
+ */
+
 public class CompraRegistro {
     // TODO: implementar conforme as assinaturas e orientacoes acima.
 }

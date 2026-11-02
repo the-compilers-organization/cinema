@@ -1,35 +1,57 @@
 package repository;
 
+
 /**
- * ROTEIRO DE IMPLEMENTACAO — repository/FilmeDAO.java
+ * ROTEIRO DE IMPLEMENTAÇÃO — FilmeDAO.java
  *
- * Este arquivo e um esqueleto para a equipe.
- * As assinaturas abaixo sao ORIENTACOES EM COMENTARIOS, nao implementacoes.
- * Preencha os atributos, construtores, metodos e imports conforme a especificacao.
- * Preserve as assinaturas acordadas com as demais camadas.
+ * OBJETIVO: Implementar operações CRUD em filmes.json. Preservar campos nome, sinopse, duracao, valor, emCartaz, notas e criticas. Evitar IllegalArgumentException e definir tratamento consistente para filme duplicado.
  *
- *
- * public class FilmeDAO implements RepositorioFilme {
- *     private final Path arquivo;
- *     public FilmeDAO();
- *     public FilmeDAO(Path arquivo);
- *     private static class Registro {
- *         // nome, sinopse, duracao, valor, emCartaz, notas, criticas
- *         Registro();
- *         Registro(Filme filme);
- *         Filme filme();
- *     }
- *     private List<Registro> registros() throws PersistenciaException;
- *     public synchronized void salvar(Filme filme) throws PersistenciaException;
- *     public synchronized Filme buscarPorNome(String nome) throws PersistenciaException;
- *     public synchronized List<Filme> listar() throws PersistenciaException;
- *     public synchronized boolean atualizar(Filme filme) throws PersistenciaException;
- *     public synchronized boolean excluir(String nome) throws PersistenciaException;
- * }
- *
- *
- * **Implementar:** caminho `data/filmes.json`; converter `Filme ↔ Registro`, preservando notas e críticas; salvar, buscar por nome, listar, atualizar e excluir; devolver `false` se registro não encontrado. O JSON acordado contém `nome`, `sinopse`, `duracao`, `valor`, `emCartaz`, `notas`, `criticas`. Não colocar filmes iniciais fixos dentro do DAO; o arquivo JSON é a fonte de dados.
+ * ORIENTAÇÕES GERAIS:
+ * - Este arquivo é um roteiro, não uma implementação funcional.
+ * - As assinaturas abaixo são comentários; o colega deve escrever o código.
+ * - Não usar IllegalArgumentException; seguir as exceções personalizadas do projeto.
+ * - Seguir o exemplo do professor: extends Exception, super(mensagem),
+ *   throws na assinatura, throw na origem e try/catch no local apropriado.
+ * - Não substituir a versão funcional antes de concluir e testar a implementação.
  */
+
+/* DECLARAÇÃO DA CLASSE/INTERFACE:
+ * public class FilmeDAO implements RepositorioFilme {
+ *     // Implementar os itens listados abaixo.
+ * }
+ */
+
+/* ATRIBUTOS / ESTADO:
+ * private final Path arquivo;
+ */
+
+/* CONSTRUTORES E MÉTODOS — ASSINATURAS:
+ *
+ * 1. public FilmeDAO();
+ *    ORIENTAÇÃO: Método da API da classe; preservar parâmetros e retorno.
+ *
+ * 2. public FilmeDAO(Path arquivo);
+ *    ORIENTAÇÃO: Método da API da classe; preservar parâmetros e retorno.
+ *
+ * 3. private List<Registro> registros() throws PersistenciaException;
+ *    ORIENTAÇÃO: Declarar e propagar as exceções indicadas; tratar no ponto de interação quando aplicável.
+ *
+ * 4. public synchronized void salvar(Filme filme) throws PersistenciaException;
+ *    ORIENTAÇÃO: Declarar e propagar as exceções indicadas; tratar no ponto de interação quando aplicável.
+ *
+ * 5. public synchronized Filme buscarPorNome(String nome) throws PersistenciaException;
+ *    ORIENTAÇÃO: Declarar e propagar as exceções indicadas; tratar no ponto de interação quando aplicável.
+ *
+ * 6. public synchronized List<Filme> listar() throws PersistenciaException;
+ *    ORIENTAÇÃO: Declarar e propagar as exceções indicadas; tratar no ponto de interação quando aplicável.
+ *
+ * 7. public synchronized boolean atualizar(Filme filme) throws PersistenciaException;
+ *    ORIENTAÇÃO: Declarar e propagar as exceções indicadas; tratar no ponto de interação quando aplicável.
+ *
+ * 8. public synchronized boolean excluir(String nome) throws PersistenciaException;
+ *    ORIENTAÇÃO: Declarar e propagar as exceções indicadas; tratar no ponto de interação quando aplicável.
+ */
+
 public class FilmeDAO {
     // TODO: implementar conforme as assinaturas e orientacoes acima.
 }

@@ -1,59 +1,85 @@
+
 /**
- * ROTEIRO PARA MenuController.java
- * Arquivo sem implementacao: completar os metodos conforme comentarios.
- * Nao substituir o controller funcional ate concluir a implementacao.
+ * ROTEIRO DE IMPLEMENTAÇÃO — MenuController.java
  *
- * **Atributos principais existentes:** `MenuView view`, `Filme[] filmes`, `Sala[] salas`, `OperacoesCinema operacoes`, `Usuario usuario`, `ArrayList<Compra> compras`, `ArrayList<Boolean> perfilPorCompra`, `ArrayList<CupomPromocional> cupomPorCompra`.
+ * OBJETIVO: Controller do menu e login. Receber OperacoesCinema e passar a MESMA instância ao CompraController; usar this::voltarMenu. Não criar métodos intermediários de compra nem manter listas de compras. Controlar apenas eventos, sessão de usuário e navegação.
  *
- * **Construtores:**
- *
- *
- * public MenuController(MenuView view, Filme[] filmes, Sala[] salas);
- * public MenuController(MenuView view, Filme[] filmes, Sala[] salas, OperacoesCinema operacoes);
- *
- *
- * O primeiro delega ao segundo criando `new Facade()`. O segundo guarda dependências, carrega compras e associa `ActionListener` dos botões; **não** mover listeners para `Main`.
- *
- * **Assinaturas dos métodos a preservar:**
- *
- *
- * private void loginUsuario();
- * private void sairConta();
- * public boolean cadastrarUsuario(Usuario novo);
- * private void abrirUsuario();
- * private void abrirFilmes();
- * private void abrirSessoes();
- * private void abrirCompra();
- * private void abrirCritica();
- * public void validarVenda(Sessao sessao, int linha, int coluna)
- *     throws VendasException, ValidacaoException;
- * public boolean podeRegistrarCompra();
- * public boolean registrarCompra(Compra compra, boolean perfil, CupomPromocional cupom)
- *     throws CompraException, PersistenciaException;
- * public int getQtdCompras();
- * public Compra getCompra(int indice);
- * public boolean getPerfilCompra(int indice);
- * public CupomPromocional getCupomCompra(int indice);
- * public boolean atualizarCompra(int indice, Compra nova, boolean perfil, CupomPromocional cupom)
- *     throws CompraException, PersistenciaException;
- * public boolean excluirCompra(int indice) throws CompraException, PersistenciaException;
- * private void salvarCompras() throws PersistenciaException;
- * private void carregarCompras();
- * public void voltarMenu();
- * public void setUsuario(Usuario usuario);
- * public Usuario getUsuario();
- *
- *
- * **Orientações:**
- *
- * 1. `loginUsuario`: solicitar CPF e senha, chamar `operacoes.autenticarUsuario`, tratar `PersistenciaException`, atualizar usuário logado e estado do menu. Não ler JSON diretamente.
- * 2. `cadastrarUsuario`: chamar `operacoes.cadastrarUsuario`; capturar `UsuarioException`, `ValidacaoException`, `PersistenciaException`; exibir `getMessage()`.
- * 3. `abrirFilmes`, `abrirSessoes`, `abrirCompra`, `abrirCritica`: abrir as telas/controllers correspondentes, respeitando autenticação quando necessária.
- * 4. `validarVenda`: delegar a `operacoes.validarVenda`, sem duplicar regra de cadeira.
- * 5. `registrarCompra`, `atualizarCompra`, `excluirCompra`: modificar coleções em memória e persistir; se a persistência falhar, restaurar estado anterior. Propagar `CompraException` e `PersistenciaException` para o `CompraController` tratar.
- * 6. `salvarCompras`: usar `operacoes.converterCompras(...)` e `operacoes.salvarCompras(...)`.
- * 7. `carregarCompras`: ler `CompraRegistro`, reconstruir compras associando CPF, sala e sessão existentes; tratar arquivo ausente como lista vazia, mas erro real de JSON como `PersistenciaException`. Verificar compatibilidade com o carregamento de usuários e filmes.
+ * ORIENTAÇÕES GERAIS:
+ * - Este arquivo é um roteiro, não uma implementação funcional.
+ * - As assinaturas abaixo são comentários; o colega deve escrever o código.
+ * - Não usar IllegalArgumentException; seguir as exceções personalizadas do projeto.
+ * - Seguir o exemplo do professor: extends Exception, super(mensagem),
+ *   throws na assinatura, throw na origem e try/catch no local apropriado.
+ * - Não substituir a versão funcional antes de concluir e testar a implementação.
  */
+
+/* INTEGRAÇÃO MVC:
+ * Main cria a Facade -> MenuController recebe OperacoesCinema ->
+ * CompraController recebe a mesma OperacoesCinema diretamente.
+ * Repository faz JSON; Facade aplica regras; Controller trata eventos;
+ * View apresenta as mensagens. Ao voltar: Runnable aoVoltar.
+ */
+
+/* DECLARAÇÃO DA CLASSE/INTERFACE:
+ * public class MenuController {
+ *     // Implementar os itens listados abaixo.
+ * }
+ */
+
+/* ATRIBUTOS / ESTADO:
+ * private MenuView view;
+ * private Filme[] filmes;
+ * private Sala[] salas;
+ * private Usuario usuario;
+ * private final OperacoesCinema operacoes;
+ */
+
+/* CONSTRUTORES E MÉTODOS — ASSINATURAS:
+ *
+ * 1. public MenuController(MenuView view, Filme[] filmes, Sala[] salas);
+ *    ORIENTAÇÃO: Método da API da classe; preservar parâmetros e retorno.
+ *
+ * 2. public MenuController(MenuView view, Filme[] filmes, Sala[] salas, OperacoesCinema operacoes);
+ *    ORIENTAÇÃO: Método da API da classe; preservar parâmetros e retorno.
+ *
+ * 3. private void loginUsuario();
+ *    ORIENTAÇÃO: Método auxiliar interno; implementar apenas a responsabilidade indicada pelo nome.
+ *
+ * 4. private void sairConta();
+ *    ORIENTAÇÃO: Método auxiliar interno; implementar apenas a responsabilidade indicada pelo nome.
+ *
+ * 5. public boolean cadastrarUsuario(Usuario novo);
+ *    ORIENTAÇÃO: Método da API da classe; preservar parâmetros e retorno.
+ *
+ * 6. private void abrirUsuario();
+ *    ORIENTAÇÃO: Método auxiliar interno; implementar apenas a responsabilidade indicada pelo nome.
+ *
+ * 7. private void abrirFilmes();
+ *    ORIENTAÇÃO: Método auxiliar interno; implementar apenas a responsabilidade indicada pelo nome.
+ *
+ * 8. private void abrirSessoes();
+ *    ORIENTAÇÃO: Método auxiliar interno; implementar apenas a responsabilidade indicada pelo nome.
+ *
+ * 9. private void abrirCompra();
+ *    ORIENTAÇÃO: Método auxiliar interno; implementar apenas a responsabilidade indicada pelo nome.
+ *
+ * 10. private void abrirCritica();
+ *    ORIENTAÇÃO: Método auxiliar interno; implementar apenas a responsabilidade indicada pelo nome.
+ *
+ * 11. public void voltarMenu();
+ *    ORIENTAÇÃO: Método da API da classe; preservar parâmetros e retorno.
+ *
+ * 12. public void setUsuario(Usuario usuario);
+ *    ORIENTAÇÃO: Método da API da classe; preservar parâmetros e retorno.
+ *
+ * 13. public Usuario getUsuario();
+ *    ORIENTAÇÃO: Método da API da classe; preservar parâmetros e retorno.
+ */
+
+/* ATENÇÃO: ao abrir CompraView, criar CompraController(tela, salas, usuario, operacoes, this::voltarMenu).
+ * Não delegar compras por métodos intermediários deste Controller.
+ */
+
 
 package controller;
 

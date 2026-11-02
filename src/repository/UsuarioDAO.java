@@ -1,39 +1,65 @@
 package repository;
 
 /**
- * ROTEIRO DE IMPLEMENTACAO — repository/UsuarioDAO.java
+ * ROTEIRO DE IMPLEMENTAÇÃO — UsuarioDAO.java
  *
- * Este arquivo e um esqueleto para a equipe.
- * As assinaturas abaixo sao ORIENTACOES EM COMENTARIOS, nao implementacoes.
- * Preencha os atributos, construtores, metodos e imports conforme a especificacao.
- * Preserve as assinaturas acordadas com as demais camadas.
+ * OBJETIVO: Implementar cadastro, busca, autenticação, listagem, atualização e exclusão de usuários em usuarios.json. Preservar hash/salt ao atualizar dados sem nova senha. Duplicidade de CPF deve usar exceção personalizada, não IllegalArgumentException.
  *
- *
- * public class UsuarioDAO implements RepositorioUsuario {
- *     private final Path arquivo;
- *     public UsuarioDAO();
- *     public UsuarioDAO(Path arquivo);
- *     private static class Registro {
- *         String tipo, user, cpf, email, origem, senhaHash, senhaSalt;
- *         int idade;
- *         Sexo sexo;
- *         Registro();
- *         Registro(Usuario usuario);
- *         Usuario usuario();
- *     }
- *     public synchronized Usuario autenticar(String cpf, String senha) throws PersistenciaException;
- *     private List<Registro> registros() throws PersistenciaException;
- *     private void gravar(List<Registro> dados) throws PersistenciaException;
- *     public synchronized void salvar(Usuario usuario) throws PersistenciaException;
- *     public synchronized Usuario buscarPorCpf(String cpf) throws PersistenciaException;
- *     public synchronized List<Usuario> listar() throws PersistenciaException;
- *     public synchronized boolean atualizar(Usuario usuario) throws PersistenciaException;
- *     public synchronized boolean excluir(String cpf) throws PersistenciaException;
- * }
- *
- *
- * **Implementar:** construtor padrão aponta para `data/usuarios.json`; `Registro` é DTO JSON; reconstruir `Usuario`, `Estudante`, `Critico` conforme `tipo`; autenticar por CPF e hash/salt, sem salvar senha em texto puro; preservar hash/salt quando editar usuário sem informar senha nova; devolver `null` para busca/autenticação sem resultado e `false` para alteração/exclusão não encontrada. Usar `ArquivoJson` para I/O. `Senhas` auxilia hashes.
+ * ORIENTAÇÕES GERAIS:
+ * - Este arquivo é um roteiro, não uma implementação funcional.
+ * - As assinaturas abaixo são comentários; o colega deve escrever o código.
+ * - Não usar IllegalArgumentException; seguir as exceções personalizadas do projeto.
+ * - Seguir o exemplo do professor: extends Exception, super(mensagem),
+ *   throws na assinatura, throw na origem e try/catch no local apropriado.
+ * - Não substituir a versão funcional antes de concluir e testar a implementação.
  */
+
+/* DECLARAÇÃO DA CLASSE/INTERFACE:
+ * public class UsuarioDAO implements RepositorioUsuario {
+ *     // Implementar os itens listados abaixo.
+ * }
+ */
+
+/* ATRIBUTOS / ESTADO:
+ * private final Path arquivo;
+ */
+
+/* CONSTRUTORES E MÉTODOS — ASSINATURAS:
+ *
+ * 1. public UsuarioDAO();
+ *    ORIENTAÇÃO: Método da API da classe; preservar parâmetros e retorno.
+ *
+ * 2. public UsuarioDAO(Path arquivo);
+ *    ORIENTAÇÃO: Método da API da classe; preservar parâmetros e retorno.
+ *
+ * 3. public synchronized Usuario autenticar(String cpf, String senha) throws PersistenciaException;
+ *    ORIENTAÇÃO: Declarar e propagar as exceções indicadas; tratar no ponto de interação quando aplicável.
+ *
+ * 4. private List<Registro> registros() throws PersistenciaException;
+ *    ORIENTAÇÃO: Declarar e propagar as exceções indicadas; tratar no ponto de interação quando aplicável.
+ *
+ * 5. private void gravar(List<Registro> dados) throws PersistenciaException;
+ *    ORIENTAÇÃO: Declarar e propagar as exceções indicadas; tratar no ponto de interação quando aplicável.
+ *
+ * 6. public synchronized void salvar(Usuario usuario) throws PersistenciaException;
+ *    ORIENTAÇÃO: Declarar e propagar as exceções indicadas; tratar no ponto de interação quando aplicável.
+ *
+ * 7. public synchronized Usuario buscarPorCpf(String cpf) throws PersistenciaException;
+ *    ORIENTAÇÃO: Declarar e propagar as exceções indicadas; tratar no ponto de interação quando aplicável.
+ *
+ * 8. public synchronized List<Usuario> listar() throws PersistenciaException;
+ *    ORIENTAÇÃO: Declarar e propagar as exceções indicadas; tratar no ponto de interação quando aplicável.
+ *
+ * 9. public synchronized boolean atualizar(Usuario usuario) throws PersistenciaException;
+ *    ORIENTAÇÃO: Declarar e propagar as exceções indicadas; tratar no ponto de interação quando aplicável.
+ *
+ * 10. private String datosCpf(Registro r);
+ *    ORIENTAÇÃO: Método auxiliar interno; implementar apenas a responsabilidade indicada pelo nome.
+ *
+ * 11. public synchronized boolean excluir(String cpf) throws PersistenciaException;
+ *    ORIENTAÇÃO: Declarar e propagar as exceções indicadas; tratar no ponto de interação quando aplicável.
+ */
+
 public class UsuarioDAO {
     // TODO: implementar conforme as assinaturas e orientacoes acima.
 }
