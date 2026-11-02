@@ -142,11 +142,14 @@ public class UsuarioController {
                 );
             }
 
-            menu.setUsuario(usuario);
+            if (!menu.cadastrarUsuario(usuario)) {
+                JOptionPane.showMessageDialog(view, "CPF ja cadastrado.");
+                return;
+            }
 
             JOptionPane.showMessageDialog(
                     view,
-                    "Usuario cadastrado com sucesso."
+                    "Usuario cadastrado com sucesso. Faca login no menu principal."
             );
 
             voltar();

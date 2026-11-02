@@ -5,12 +5,15 @@ import model.enums.*;
 import view.*;
 import javax.swing.*;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 public class MenuController {
     private MenuView view;
     private Filme[] filmes;
     private Sala[] salas;
     private Usuario usuario;
+    private final Map<String, Usuario> usuariosCadastrados = new HashMap<>();
     // As tres listas usam o mesmo indice para cada compra registrada.
     private final ArrayList<Compra> compras = new ArrayList<>();
     private final ArrayList<Boolean> perfilPorCompra = new ArrayList<>();
@@ -21,11 +24,42 @@ public class MenuController {
         this.filmes = filmes;
         this.salas = salas;
         view.getBtnCadastrarUsuario().addActionListener(e -> abrirUsuario());
+        view.getBtnLoginUsuario().addActionListener(e -> loginUsuario());
+        view.getBtnSairConta().addActionListener(e -> sairConta());
         view.getBtnFilmes().addActionListener(e -> abrirFilmes());
         view.getBtnSessoes().addActionListener(e -> abrirSessoes());
         view.getBtnRealizarCompra().addActionListener(e -> abrirCompra());
         view.getBtnAvaliarFilme().addActionListener(e -> abrirCritica());
         view.getBtnSair().addActionListener(e -> System.exit(0));
+    }
+
+    private void loginUsuario() {
+        JTextField campoCpf = new JTextField();
+        JPasswordField campoSenha = new JPasswordField();
+        Object[] campos = {"CPF:", campoCpf, "Senha:", campoSenha};
+        int opcao = JOptionPane.showConfirmDialog(view, campos, "Login Usuario",
+                JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
+        if (opcao != JOptionPane.OK_OPTION) return;
+
+        Usuario encontrado = usuariosCadastrados.get(campoCpf.getText().trim());
+        String senha = new String(campoSenha.getPassword());
+        if (encontrado == null || !encontrado.getSenha().equals(senha)) {
+            JOptionPane.showMessageDialog(view, "CPF ou senha invalidos.");
+            return;
+        }
+        usuario = encontrado;
+        view.mostrarCliente(usuario.getUser());
+    }
+
+    private void sairConta() {
+        usuario = null;
+        view.mostrarPrincipal();
+    }
+
+    public boolean cadastrarUsuario(Usuario novo) {
+        if (novo == null || usuariosCadastrados.containsKey(novo.getCpf())) return false;
+        usuariosCadastrados.put(novo.getCpf(), novo);
+        return true;
     }
 
     private void abrirUsuario() {
@@ -51,7 +85,7 @@ public class MenuController {
 
     private void abrirCompra() {
         if (usuario == null) {
-            JOptionPane.showMessageDialog(view, "Cadastre um usuario antes de comprar.");
+            JOptionPane.showMessageDialog(view, "Faca login antes de comprar.");
             return;
         }
         CompraView tela = new CompraView();
