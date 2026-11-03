@@ -9,12 +9,8 @@ public interface GerenciaFilmes {
 // Alterar filme;
 
     int buscarFilme(String nome);
-
     boolean incluirFilme(Filme filme);
-
     boolean excluirFilme(Filme filmeExcluido);
-
     boolean alterarFilme(Filme filmeAtualizado);
 
-    
 }
