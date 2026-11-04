@@ -1,956 +1,178 @@
-/**
- * ROTEIRO DE IMPLEMENTAÇÃO — CompraController.java
- *
- * OBJETIVO: Controller da tela de compras. Receber OperacoesCinema diretamente, nunca MenuController. Usar Runnable aoVoltar para navegação. Chamar operacoes para validações, cadastro, alteração e exclusão; tratar exceções com try/catch e exibir mensagens pela View. Não duplicar regras de negócio da Facade.
- *
- * ORIENTAÇÕES GERAIS:
- * - Este arquivo é um roteiro, não uma implementação funcional.
- * - As assinaturas abaixo são comentários; o colega deve escrever o código.
- * - Não usar IllegalArgumentException; seguir as exceções personalizadas do projeto.
- * - Seguir o exemplo do professor: extends Exception, super(mensagem),
- *   throws na assinatura, throw na origem e try/catch no local apropriado.
- * - Não substituir a versão funcional antes de concluir e testar a implementação.
- */
-
-/* INTEGRAÇÃO MVC:
- * Main cria a Facade -> MenuController recebe OperacoesCinema ->
- * CompraController recebe a mesma OperacoesCinema diretamente.
- * Repository faz JSON; Facade aplica regras; Controller trata eventos;
- * View apresenta as mensagens. Ao voltar: Runnable aoVoltar.
- */
-
-/* DECLARAÇÃO DA CLASSE/INTERFACE:
- * public class CompraController {
- *     // Implementar os itens listados abaixo.
- * }
- */
-
-/* ATRIBUTOS / ESTADO:
- * private CompraView view;
- * private Sala[] salas;
- * private Usuario usuario;
- * private final OperacoesCinema operacoes;
- * private final Runnable aoVoltar;
- * private Sala salaSelecionada;
- * private Sessao sessaoSelecionada;
- * private Compra rascunho;
- * private int indiceEdicao = -1;
- * private int qtdIngressos = 0;
- * private boolean atualizando = false;
- */
-
-/* CONSTRUTORES E MÉTODOS — ASSINATURAS:
- *
- * 1. private final ArrayList<Integer> linhasIngressos = new ArrayList<>();
- *    ORIENTAÇÃO: Método auxiliar interno; implementar apenas a responsabilidade indicada pelo nome.
- *
- * 2. private final ArrayList<Integer> colunasIngressos = new ArrayList<>();
- *    ORIENTAÇÃO: Método auxiliar interno; implementar apenas a responsabilidade indicada pelo nome.
- *
- * 3. public CompraController(CompraView view, Sala[] salas, Usuario usuario, OperacoesCinema operacoes, Runnable aoVoltar);
- *    ORIENTAÇÃO: Método da API da classe; preservar parâmetros e retorno.
- *
- * 4. private void configurarEventos();
- *    ORIENTAÇÃO: Método auxiliar interno; implementar apenas a responsabilidade indicada pelo nome.
- *
- * 5. private void carregarSessoes();
- *    ORIENTAÇÃO: Método auxiliar interno; implementar apenas a responsabilidade indicada pelo nome.
- *
- * 6. private boolean buscarSessao();
- *    ORIENTAÇÃO: Método auxiliar interno; implementar apenas a responsabilidade indicada pelo nome.
- *
- * 7. private int indiceSessao(Sessao procurada);
- *    ORIENTAÇÃO: Método auxiliar interno; implementar apenas a responsabilidade indicada pelo nome.
- *
- * 8. private int quantidade();
- *    ORIENTAÇÃO: Método auxiliar interno; implementar apenas a responsabilidade indicada pelo nome.
- *
- * 9. private boolean usarPerfil();
- *    ORIENTAÇÃO: Método auxiliar interno; implementar apenas a responsabilidade indicada pelo nome.
- *
- * 10. private CupomPromocional cupom();
- *    ORIENTAÇÃO: Método auxiliar interno; implementar apenas a responsabilidade indicada pelo nome.
- *
- * 11. private void atualizarListaCompras();
- *    ORIENTAÇÃO: Método auxiliar interno; implementar apenas a responsabilidade indicada pelo nome.
- *
- * 12. private void atualizarDetalhesCompra();
- *    ORIENTAÇÃO: Método auxiliar interno; implementar apenas a responsabilidade indicada pelo nome.
- *
- * 13. private int indiceSelecionado();
- *    ORIENTAÇÃO: Método auxiliar interno; implementar apenas a responsabilidade indicada pelo nome.
- *
- * 14. private void novaCompra();
- *    ORIENTAÇÃO: Método auxiliar interno; implementar apenas a responsabilidade indicada pelo nome.
- *
- * 15. private void carregarCompra();
- *    ORIENTAÇÃO: Método auxiliar interno; implementar apenas a responsabilidade indicada pelo nome.
- *
- * 16. private void limparCadeiras();
- *    ORIENTAÇÃO: Método auxiliar interno; implementar apenas a responsabilidade indicada pelo nome.
- *
- * 17. private void excluirSelecaoCadeiras();
- *    ORIENTAÇÃO: Método auxiliar interno; implementar apenas a responsabilidade indicada pelo nome.
- *
- * 18. private void abrirCadeiras();
- *    ORIENTAÇÃO: Método auxiliar interno; implementar apenas a responsabilidade indicada pelo nome.
- *
- * 19. public boolean cadeiraDaCompraEmEdicao(Sessao sessao, int l, int c);
- *    ORIENTAÇÃO: Método da API da classe; preservar parâmetros e retorno.
- *
- * 20. public boolean cadeiraJaNoRascunho(int l, int c, int exceto);
- *    ORIENTAÇÃO: Método da API da classe; preservar parâmetros e retorno.
- *
- * 21. public void setCadeirasSelecionadas(int l, int c, int qtd);
- *    ORIENTAÇÃO: Método da API da classe; preservar parâmetros e retorno.
- *
- * 22. public void trocarCadeiraIngresso(int indice, int l, int c);
- *    ORIENTAÇÃO: Método da API da classe; preservar parâmetros e retorno.
- *
- * 23. private boolean cadeirasConsecutivas();
- *    ORIENTAÇÃO: Método auxiliar interno; implementar apenas a responsabilidade indicada pelo nome.
- *
- * 24. private void adicionarProduto();
- *    ORIENTAÇÃO: Método auxiliar interno; implementar apenas a responsabilidade indicada pelo nome.
- *
- * 25. private void editarProduto(int indice);
- *    ORIENTAÇÃO: Método auxiliar interno; implementar apenas a responsabilidade indicada pelo nome.
- *
- * 26. private void removerProduto(int indice);
- *    ORIENTAÇÃO: Método auxiliar interno; implementar apenas a responsabilidade indicada pelo nome.
- *
- * 27. private Compra montarCompra();
- *    ORIENTAÇÃO: Método auxiliar interno; implementar apenas a responsabilidade indicada pelo nome.
- *
- * 28. private double totalBilhetes(Compra c, boolean perfil);
- *    ORIENTAÇÃO: Método auxiliar interno; implementar apenas a responsabilidade indicada pelo nome.
- *
- * 29. private void atualizarTotal();
- *    ORIENTAÇÃO: Método auxiliar interno; implementar apenas a responsabilidade indicada pelo nome.
- *
- * 30. private void confirmarCompra();
- *    ORIENTAÇÃO: Método auxiliar interno; implementar apenas a responsabilidade indicada pelo nome.
- *
- * 31. private void cancelarCompra();
- *    ORIENTAÇÃO: Método auxiliar interno; implementar apenas a responsabilidade indicada pelo nome.
- *
- * 32. private void validarSelecaoParaCompra() throws SessaoException, VendasException, ValidacaoException;
- *    ORIENTAÇÃO: Declarar e propagar as exceções indicadas; tratar no ponto de interação quando aplicável.
- *
- * 33. private void voltar();
- *    ORIENTAÇÃO: Método auxiliar interno; implementar apenas a responsabilidade indicada pelo nome.
- *
- * 34. public void mostrarView();
- *    ORIENTAÇÃO: Método da API da classe; preservar parâmetros e retorno.
- */
-
-/* ATENÇÃO: o construtor deve receber (CompraView, Sala[], Usuario, OperacoesCinema, Runnable).
- * Não declarar campo MenuController nem usar menu.registrarCompra(), menu.getCompra() etc.
- * Os métodos de compra chamam operacoes.* e capturam CompraException,
- * VendasException, ValidacaoException e PersistenciaException conforme cada operação.
- */
-
-
 package controller;
 
-
-
-import model.enums.*;
-import model.*;
-import view.*;
-import javax.swing.*;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 
+import exceptions.CompraException;
+import exceptions.PersistenciaException;
+import exceptions.ValidacaoException;
+import exceptions.VendasException;
+import model.Bilhete;
+import model.Compra;
+import model.Sala;
+import model.Sessao;
+import model.Usuario;
+import model.enums.CupomPromocional;
+import model.enums.Produtos;
+import repository.IRepositorioCompra;
 
+
+// Camada de NEGÓCIO (controller) - realizar, alterar e cancelar compras
+// Acessa os dados somente pela interface IRepositorioCompra
 
 public class CompraController {
 
-    private CompraView view;
-    private Sala[] salas;
-    private Usuario usuario;
-    private MenuController menu;
-    private Sala salaSelecionada;
-    private Sessao sessaoSelecionada;
-    private Compra rascunho;
-    private int indiceEdicao = -1;
-    private final ArrayList<Integer> linhasIngressos = new ArrayList<>();
-    private final ArrayList<Integer> colunasIngressos = new ArrayList<>();
-    private int qtdIngressos = 0;
-    private boolean atualizando = false;
+    private IRepositorioCompra repositorio;
+    private SessaoController sessaoController;
 
+    public CompraController(IRepositorioCompra repositorio, SessaoController sessaoController) {
+        this.repositorio = repositorio;
+        this.sessaoController = sessaoController;
 
-    public CompraController(CompraView view, Sala[] salas, Usuario usuario, MenuController menu) {
-        this.view = view;
-        this.salas = salas;
-        this.usuario = usuario;
-        this.menu = menu;
-        carregarSessoes();
-        configurarEventos();
-        novaCompra();
-
-        view.addWindowListener(new java.awt.event.WindowAdapter() {
-            @Override public void windowClosing(java.awt.event.WindowEvent e) { voltar(); }
-        });
+        // Poltronas das compras já gravadas começam ocupadas
+        sessaoController.ocuparCadeiras(repositorio.listar());
     }
 
-
-
-
-
-    private void configurarEventos() {
-        view.getCbSessao().addActionListener(e -> { if (!atualizando) limparCadeiras(); });
-        view.getSpQtdBilhetes().addChangeListener(e -> { if (!atualizando) limparCadeiras(); });
-        view.getCbCupom().addActionListener(e -> { if (!atualizando) atualizarTotal(); });
-        view.getBtnEscolherCadeiras().addActionListener(e -> abrirCadeiras());
-        view.getBtnExcluirCadeiras().addActionListener(e -> excluirSelecaoCadeiras());
-        view.getBtnAdicionarProduto().addActionListener(e -> adicionarProduto());
-        view.configurarAcoesProdutos(this::editarProduto, this::removerProduto);
-        view.getBtnNovaCompra().addActionListener(e -> {
-            if (JOptionPane.showConfirmDialog(view, "Limpar os dados nao salvos?", 
-            "Limpar formulario", JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) novaCompra();
-        });
-
-        view.getBtnCarregarCompra().addActionListener(e -> carregarCompra());
-        view.getBtnFinalizar().addActionListener(e -> confirmarCompra());
-        view.getBtnCancelar().addActionListener(e -> cancelarCompra());
-        view.getCbCompras().addActionListener(e -> atualizarDetalhesCompra());
-        view.getAbas().addChangeListener(e -> { if (view.getAbas().getSelectedIndex() == 1) { atualizarListaCompras(); atualizarDetalhesCompra(); } });
-        view.getBtnVoltar().addActionListener(e -> voltar());
+    public Compra novaCompra(Usuario usuario) {
+        return new Compra(usuario);
     }
 
+    
+    // Adiciona ao carrinho um bilhete para cada cadeira escolhida
+    // Primeiro cria todos os bilhetes (validando); só depois coloca no carrinho
+    // Assim, se uma cadeira der erro, nenhuma é adicionada
+   
+    public void adicionarIngressos(Compra carrinho, Usuario usuario, Sala sala, Sessao sessao,
+                                   ArrayList<int[]> cadeiras, int quantidadePessoas, CupomPromocional cupom)
+            throws VendasException, ValidacaoException {
 
-
-
-
-
-
-    private void carregarSessoes() {
-        for (Sala sala : salas) {
-            if (sala == null) continue;
-            for (Sessao sessao : sala.getSessoes()) {
-                if (sessao != null) {
-                    view.getCbSessao().addItem("Sala " + sala.getNumero() + " | " + sessao.getHorario() + " | " + sessao.getFilme().getNome());
-                }
-            }
+        if (cadeiras == null || cadeiras.isEmpty()) {
+            throw new ValidacaoException("Selecione pelo menos uma poltrona no mapa.");
         }
-    }
-
-
-
-
-
-
-
-    private boolean buscarSessao() {
-        int indice = view.getCbSessao().getSelectedIndex();
-        int contador = 0;
-        salaSelecionada = null;
-        sessaoSelecionada = null;
-
-        if (indice < 0) return false;
-
-        for (Sala sala : salas) {
-
-            if (sala == null) continue;
-
-            for (Sessao sessao : sala.getSessoes()) {
-
-                if (sessao == null) continue;
-
-                if (contador == indice) {
-                    salaSelecionada = sala;
-                    sessaoSelecionada = sessao;
-                    return true;
-                }
-
-                contador++;
-            }
+        if (quantidadePessoas < 1) {
+            throw new ValidacaoException("A quantidade de pessoas deve ser pelo menos 1.");
+        }
+        // Regra: deve haver exatamente uma poltrona para cada pessoa informada
+        if (cadeiras.size() != quantidadePessoas) {
+            throw new ValidacaoException("Você informou " + quantidadePessoas + " pessoa(s), mas selecionou "
+                    + cadeiras.size() + " poltrona(s). Selecione " + quantidadePessoas
+                    + " poltrona(s) ou altere a quantidade de pessoas.");
         }
 
-        return false;
-    }
-
-
-
-
-
-
-
-    private int indiceSessao(Sessao procurada) {
-        int contador = 0;
-
-        for (Sala sala : salas) {
-            if (sala == null) continue;
-            for (Sessao sessao : sala.getSessoes()) {
-                if (sessao == null) continue;
-                if (sessao == procurada) return contador;
-                contador++;
-
+        ArrayList<Bilhete> novos = new ArrayList<Bilhete>();
+        for (int[] cadeira : cadeiras) {
+            Bilhete bilhete;
+            if (cupom == null) {
+                bilhete = usuario.comprarBilhete(sala, sessao, cadeira[0], cadeira[1]);
+            } else {
+                bilhete = usuario.comprarBilhete(sala, sessao, cadeira[0], cadeira[1], cupom); // sobrecarga
             }
 
-        }
-
-        return -1;
-    }
-
-
-
-    private int quantidade() { return ((Number) view.getSpQtdBilhetes().getValue()).intValue(); }
-    private boolean usarPerfil() { return view.getCbCupom().getSelectedIndex() == 0; }
-
-    private CupomPromocional cupom() {
-        int indice = view.getCbCupom().getSelectedIndex();
-        return indice <= 1 ? null : CupomPromocional.values()[indice - 2];
-    }
-
-
-    private void atualizarListaCompras() {
-        int anterior = view.getCbCompras().getSelectedIndex();
-        view.getCbCompras().removeAllItems();
-        for (int i = 0; i < menu.getQtdCompras(); i++) {
-            Compra c = menu.getCompra(i);
-            if (c != null && c.getUsuario() == usuario) {
-                view.getCbCompras().addItem("Compra " + (i + 1) + " | " + c.getBilhetes().size() + " ingresso(s)");
+            if (carrinho.contemCadeira(sala.getNumero(), sessao.getHorario(), cadeira[0], cadeira[1])) {
+                throw new VendasException(VendasException.POLTRONA_OCUPADA, sessao.getFilme().getNome(),
+                        "A poltrona " + bilhete.getNomeCadeira() + " já está no seu carrinho.");
             }
+            novos.add(bilhete);
         }
 
-        if (anterior >= 0 && anterior < view.getCbCompras().getItemCount()) view.getCbCompras().setSelectedIndex(anterior);
-        atualizarDetalhesCompra();
+        for (Bilhete bilhete : novos) {
+            carrinho.adicionarBilhete(bilhete);
+        }
+        carrinho.setCupom(cupom);
     }
 
-
-
-
-
-
-
-    private void atualizarDetalhesCompra() {
-        int indice = indiceSelecionado();
-        if (indice < 0) {
-            view.getTxtDetalhesCompra().setText("Nenhuma compra registrada para este usuario.");
-            return;
-
-        }
-
-
-
-        Compra c = menu.getCompra(indice);
-        StringBuilder sb = new StringBuilder("COMPRA " + (indice + 1) + " - CONFIRMADA\n\n");
-
-        for (int i = 0; i < c.getBilhetes().size(); i++) {
-            Bilhete b = c.getBilhetes().get(i);
-            sb.append("Ingresso ").append(i + 1).append(": ")
-              .append(b.getFilme().getNome()).append(" | Sala ").append(b.getSala().getNumero())
-              .append(" | ").append(b.getSessao().getHorario())
-              .append(" | L").append(b.getCadeira().getLinha() + 1)
-              .append(" C").append(b.getCadeira().getColuna() + 1).append("\n");
-        }
-
-        sb.append("\nPRODUTOS\n");
-
-        for (int i = 0; i < c.getProdutos().size(); i++) {
-            sb.append(c.getProdutos().get(i)).append(" x ").append(c.getQtdCadaProduto().get(i))
-              .append(String.format(" = R$ %.2f\n", c.getSubtotaisProdutos().get(i)));
-        }
-
-
-
-        sb.append("\nDesconto: ").append(menu.getPerfilCompra(indice) ? "Perfil" :
-            (menu.getCupomCompra(indice) == null ? "Nenhum" : menu.getCupomCompra(indice)));
-
-
-
-        double bilhetes = menu.getPerfilCompra(indice) ? usuario.calcularValorDoBilhete(c) : c.calcularTotalBilhetes();
-        sb.append(String.format("\nTOTAL: R$ %.2f", bilhetes + c.calcularTotalProdutos()));
-        view.getTxtDetalhesCompra().setText(sb.toString());
-    }
-
-
-    private int indiceSelecionado() {
-        int escolhido = view.getCbCompras().getSelectedIndex();
-        int contador = 0;
-
-        for (int i = 0; i < menu.getQtdCompras(); i++) {
-            Compra c = menu.getCompra(i);
-            if (c != null && c.getUsuario() == usuario) {
-                if (contador == escolhido) return i;
-                contador++;
-            }
-        }
-
-        return -1;
-
-    }
-
-
-
-
-
-
-
-    private void novaCompra() {
-        atualizando = true;
-        indiceEdicao = -1;
-        rascunho = new Compra(usuario);
-        view.getSpQtdProduto().setValue(1);
-        view.getTabelaProdutos().clearSelection();
-        qtdIngressos = 0;
-        linhasIngressos.clear();
-        colunasIngressos.clear();
-
-        if (view.getCbSessao().getItemCount() > 0) view.getCbSessao().setSelectedIndex(0);
-        view.getSpQtdBilhetes().setValue(0);
-        view.getCbCupom().setSelectedIndex(0);
-        view.getLblEstado().setText("NOVA COMPRA - ainda nao confirmada");
-        view.getAbas().setTitleAt(0, "Nova compra");
-        view.getBtnFinalizar().setText("Confirmar compra");
-
-        atualizando = false;
-        atualizarListaCompras();
-        atualizarTotal();
-        view.getAbas().setSelectedIndex(0);
-    }
-
-
-    private void carregarCompra() {
-        int indice = indiceSelecionado();
-        if (indice < 0) {
-            JOptionPane.showMessageDialog(view, "Selecione uma compra registrada.");
-            return;
-        }
-
-
-        Compra original = menu.getCompra(indice);
-        if (original.getBilhetes().size() == 0) return;
-        Bilhete primeiro = original.getBilhetes().get(0);
-        int sessaoIndice = indiceSessao(primeiro.getSessao());
-
-        if (sessaoIndice < 0) {
-            JOptionPane.showMessageDialog(view, "A sessao da compra nao foi encontrada.");
-            return;
-        }
-
-
-
-        atualizando = true;
-        indiceEdicao = indice;
-
-        rascunho = new Compra(usuario);
-
-        for (int i = 0; i < original.getProdutos().size(); i++) {
-            rascunho.comprarProduto(original.getProdutos().get(i), original.getQtdCadaProduto().get(i));
-        }
-
-        view.getCbSessao().setSelectedIndex(sessaoIndice);
-        view.getSpQtdBilhetes().setValue(original.getBilhetes().size());
-        int desconto = menu.getPerfilCompra(indice) ? 0 :
-                (menu.getCupomCompra(indice) == null ? 1 : 2 + menu.getCupomCompra(indice).ordinal());
-
-        view.getCbCupom().setSelectedIndex(desconto);
-        qtdIngressos = original.getBilhetes().size();
-        linhasIngressos.clear();
-        colunasIngressos.clear();
-
-        for (int i = 0; i < qtdIngressos; i++) {
-            Bilhete b = original.getBilhetes().get(i);
-            linhasIngressos.add(b.getCadeira().getLinha());
-            colunasIngressos.add(b.getCadeira().getColuna());
-        }
-
-
-
-        view.getLblEstado().setText("EDITANDO COMPRA " + (indice + 1) + " - salve para aplicar");
-        view.getAbas().setTitleAt(0, "Editar compra");
-
-        view.getBtnFinalizar().setText("Salvar alteracoes");
-        atualizando = false;
-        atualizarTotal();
-        view.getAbas().setSelectedIndex(0);
-    }
-
-
-    private void limparCadeiras() {
-
-        qtdIngressos = 0;
-        linhasIngressos.clear();
-        colunasIngressos.clear();
-        atualizarTotal();
-
-    }
-
-
-
-
-    private void excluirSelecaoCadeiras() {
-        if (qtdIngressos == 0) return;
-
-        int resposta = JOptionPane.showConfirmDialog(
-                view,
-                "Excluir todas as cadeiras selecionadas deste rascunho?",
-                "Excluir cadeiras",
-                JOptionPane.YES_NO_OPTION,
-                JOptionPane.QUESTION_MESSAGE
-        );
-
-
-
-        if (resposta != JOptionPane.YES_OPTION) return;
-
-        atualizando = true;
-        qtdIngressos = 0;
-        linhasIngressos.clear();
-        colunasIngressos.clear();
-        view.getSpQtdBilhetes().setValue(0);
-        atualizando = false;
-        atualizarTotal();
-    }
-
-
-
-    private void abrirCadeiras() {
-        if (!buscarSessao()) {
-           JOptionPane.showMessageDialog(view, "Selecione uma sessao.");
-            return;
-        }
-
-
-
-        if (quantidade() < 1) {
-            JOptionPane.showMessageDialog(view,
-                "Informe pelo menos 1 ingresso antes de escolher cadeiras.");
-
-            return;
-        }
-
-
-        CadeiraView tela = new CadeiraView();
-        CadeiraController controlador = new CadeiraController(
-            tela, sessaoSelecionada, this, quantidade());
-
-
-
-        if (qtdIngressos == quantidade()) {
-            controlador.preSelecionarCadeiras(
-                linhasIngressos.stream().mapToInt(Integer::intValue).toArray(),
-                colunasIngressos.stream().mapToInt(Integer::intValue).toArray(), qtdIngressos);
-
-        }
-
-        tela.setVisible(true);
-        view.setVisible(false);
-
-    }
-
-    public boolean cadeiraDaCompraEmEdicao(Sessao sessao, int l, int c) {
-
-        if (indiceEdicao < 0) return false;
-
-        Compra original = menu.getCompra(indiceEdicao);
-
-        if (original == null) return false;
-
-        for (int i = 0; i < original.getBilhetes().size(); i++) {
-            Bilhete b = original.getBilhetes().get(i);
-            if (b.getSessao() == sessao && b.getCadeira().getLinha() == l && b.getCadeira().getColuna() == c) return true;
-        }
-
-        return false;
-
-    }
-
-
-    public boolean cadeiraJaNoRascunho(int l, int c, int exceto) {
-        for (int i = 0; i < qtdIngressos; i++) {
-            if (i != exceto && linhasIngressos.get(i) == l && colunasIngressos.get(i) == c) return true;
-
-        }
-        return false;
-    }
-
-
-    public void setCadeirasSelecionadas(int l, int c, int qtd) {
-        if (!buscarSessao() || qtd < 1 || qtd != quantidade() || qtd > 15 || c < 0 || c + qtd > 15) {
-
-            JOptionPane.showMessageDialog(view, "Quantidade ou selecao de cadeiras invalida.");
-            return;
-        }
-
-
-
-        for (int i = 0; i < qtd; i++) {
-            if (!sessaoSelecionada.cadeiraValida(l, c + i) || (!sessaoSelecionada.cadeiraDisponivel(l, c + i) && !cadeiraDaCompraEmEdicao(sessaoSelecionada, l, c + i))) {
-                JOptionPane.showMessageDialog(view, "As cadeiras devem estar livres, juntas e na mesma linha.");
-                return;
-            }
-        }
-
-        qtdIngressos = qtd;
-        linhasIngressos.clear();
-        colunasIngressos.clear();
-
-        for (int i = 0; i < qtd; i++) {
-            linhasIngressos.add(l);
-            colunasIngressos.add(c + i);
-        }
-
-        atualizarTotal();
-
-    }
-
-
-
-    public void trocarCadeiraIngresso(int indice, int l, int c) {
-        if (indice < 0 || indice >= qtdIngressos || !buscarSessao()) return;
-
-
-        if (!sessaoSelecionada.cadeiraValida(l, c) || (!sessaoSelecionada.cadeiraDisponivel(l, c) && !cadeiraDaCompraEmEdicao(sessaoSelecionada, l, c))) return;
-
-
-        int linhaAnterior = linhasIngressos.get(indice);
-        int colunaAnterior = colunasIngressos.get(indice);
-        linhasIngressos.set(indice, l);
-        colunasIngressos.set(indice, c);
-
-        if (!cadeirasConsecutivas()) {
-            linhasIngressos.set(indice, linhaAnterior);
-            colunasIngressos.set(indice, colunaAnterior);
-            JOptionPane.showMessageDialog(view,
-                "Os ingressos precisam ficar lado a lado na mesma linha. Use Editar cadeiras para trocar o grupo.");
-            return;
-
-        }
-
-        atualizarTotal();
-    }
-
-
-
-
-    private boolean cadeirasConsecutivas() {
-
-        if (qtdIngressos <= 1) return true;
-
-        int linha = linhasIngressos.get(0);
-        int menor = colunasIngressos.get(0);
-        int maior = menor;
-
-        for (int i = 1; i < qtdIngressos; i++) {
-            if (linhasIngressos.get(i) != linha) return false;
-            menor = Math.min(menor, colunasIngressos.get(i));
-            maior = Math.max(maior, colunasIngressos.get(i));
-        }
-
-
-
-        if (maior - menor + 1 != qtdIngressos) return false;
-
-        for (int i = 0; i < qtdIngressos; i++) {
-
-            for (int j = i + 1; j < qtdIngressos; j++) {
-
-                if (colunasIngressos.get(i) == colunasIngressos.get(j)) return false;
-            }
-        }
-        return true;
-    }
-
-
-
-
-    private void adicionarProduto() {
-
-        Produtos produto = (Produtos) view.getCbProduto().getSelectedItem();
-        int qtd = ((Number) view.getSpQtdProduto().getValue()).intValue();
-        if (!rascunho.comprarProduto(produto, qtd)) {
-            JOptionPane.showMessageDialog(view, "Nao foi possivel adicionar o produto.");
-            return;
-        }
-
-        atualizarTotal();
-    }
-
-
-
-    private void editarProduto(int indice) {
-
-        if (indice < 0 || indice >= rascunho.getProdutos().size()) return;
-
-        Produtos produto = rascunho.getProdutos().get(indice);
-        int atual = rascunho.getQtdCadaProduto().get(indice);
-        JSpinner quantidade = new JSpinner(new SpinnerNumberModel(atual, 1, 1000, 1));
-        JPanel formulario = new JPanel(new java.awt.GridLayout(2, 1, 5, 5));
-        formulario.add(new JLabel("Nova quantidade de " + produto.name() + ":"));
-        formulario.add(quantidade);
-
-        int resposta = JOptionPane.showConfirmDialog(view, formulario, "Editar produto",
-            JOptionPane.OK_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE);
-
-        if (resposta != JOptionPane.OK_OPTION) return;
-
-        int novaQtd = ((Number) quantidade.getValue()).intValue();
-
-        if (!rascunho.alterarQuantidadeProduto(produto, novaQtd)) {
-            JOptionPane.showMessageDialog(view, "Nao foi possivel alterar a quantidade.");
-            return;
-        }
-
-        atualizarTotal();
-    }
-
-
-
-    private void removerProduto(int indice) {
-
-        if (indice < 0 || indice >= rascunho.getProdutos().size()) return;
-        Produtos produto = rascunho.getProdutos().get(indice);
-        int resposta = JOptionPane.showConfirmDialog(view,
-            "Excluir " + produto.name() + " da compra?", "Excluir produto",
-            JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE);
-
-        if (resposta != JOptionPane.YES_OPTION) return;
-
-        if (!rascunho.removerProduto(produto)) {
-            JOptionPane.showMessageDialog(view, "Produto nao encontrado no resumo.");
-            return;
-        }
-
-        atualizarTotal();
-    }
-
-
-
-    private Compra montarCompra() {
-
-        if (!buscarSessao() || qtdIngressos == 0 || qtdIngressos != quantidade() || !cadeirasConsecutivas()) return null;
-
-        Compra nova = new Compra(usuario);
-
-
-        for (int i = 0; i < qtdIngressos; i++) {
-            int l = linhasIngressos.get(i), c = colunasIngressos.get(i);
-            if (!sessaoSelecionada.cadeiraValida(l, c)) return null;
-            if (!sessaoSelecionada.cadeiraDisponivel(l, c) && !cadeiraDaCompraEmEdicao(sessaoSelecionada, l, c)) return null;
-
-            for (int j = 0; j < i; j++) {
-                if (linhasIngressos.get(j) == l && colunasIngressos.get(j) == c) return null;
-            }
-
-            Bilhete bilhete = new Bilhete(usuario, salaSelecionada, sessaoSelecionada,
-                sessaoSelecionada.buscarCadeira(l, c));
-
-            boolean ok = cupom() == null ? nova.comprarBilhete(bilhete) :
-                nova.comprarBilhete(bilhete, cupom());
-
-            if (!ok) return null;
-        }
-
-
-
-        for (int i = 0; i < rascunho.getProdutos().size(); i++) {
-
-            Produtos p = rascunho.getProdutos().get(i);
-            int qtd = rascunho.getQtdCadaProduto().get(i);
-            boolean ok = cupom() == null ? nova.comprarProduto(p, qtd) :
-                nova.comprarProduto(p, qtd, cupom());
-            if (!ok) return null;
-        }
-        return nova;
-    }
-
-
-
-    private double totalBilhetes(Compra c, boolean perfil) {
-        return perfil ? usuario.calcularValorDoBilhete(c) : c.calcularTotalBilhetes();
-    }
-
-
-
-    private void atualizarTotal() {
-
-        buscarSessao();
-        view.getBtnEscolherCadeiras().setText(
-            qtdIngressos == 0 ? "Escolher cadeiras" : "Editar cadeiras");
-
-        view.getBtnExcluirCadeiras().setEnabled(qtdIngressos > 0);
-
-
-        StringBuilder descricao = new StringBuilder("Cadeiras: ");
-
-        if (qtdIngressos == 0) {
-            descricao.append("nenhuma selecionada");
+    public void adicionarProduto(Compra carrinho, Produtos produto, int quantidade, CupomPromocional cupom)
+            throws ValidacaoException {
+        if (cupom == null) {
+            carrinho.comprarProduto(produto, quantidade);
         } else {
-
-            for (int i = 0; i < qtdIngressos; i++) {
-
-                if (i > 0) descricao.append(" | ");
-
-                descricao.append("L").append(linhasIngressos.get(i) + 1)
-                    .append(" C").append(colunasIngressos.get(i) + 1);
-            }
+            carrinho.comprarProduto(produto, quantidade, cupom); // sobrecarga
         }
-
-
-        view.getLblCadeira().setText(descricao.toString());
-        double bilhetes = 0;
-
-
-        if (sessaoSelecionada != null && salaSelecionada != null) {
-
-            Compra simulacao = new Compra(usuario);
-
-            for (int i = 0; i < qtdIngressos; i++) {
-                Bilhete b = new Bilhete(usuario, salaSelecionada, sessaoSelecionada,
-                    new Cadeira(linhasIngressos.get(i), colunasIngressos.get(i)));
-
-                if (cupom() == null) simulacao.comprarBilhete(b);
-                else simulacao.comprarBilhete(b, cupom());
-            }
-
-            bilhetes = totalBilhetes(simulacao, usarPerfil());
-        }
-
-
-
-        double produtos = 0;
-        int selecionado = view.getTabelaProdutos().getSelectedRow();
-        atualizando = true;
-
-        view.getModeloProdutos().setRowCount(0);
-
-        for (int i = 0; i < rascunho.getProdutos().size(); i++) {
-            Produtos p = rascunho.getProdutos().get(i);
-            int qtd = rascunho.getQtdCadaProduto().get(i);
-            double subtotal = p.getValor() * qtd * (cupom() == null ? 1 : 1 - cupom().getPercentualDesconto());
-            produtos += subtotal;
-            view.getModeloProdutos().addRow(new Object[]{p.name(), qtd, String.format("R$ %.2f", subtotal), ""});
-        }
-
-
-
-        if (selecionado >= 0 && selecionado < rascunho.getProdutos().size()) {
-            view.getTabelaProdutos().setRowSelectionInterval(selecionado, selecionado);
-        }
-
-
-
-        atualizando = false;
-        view.getLblBilhetes().setText(String.format("Bilhetes: R$ %.2f", bilhetes));
-        view.getLblProdutos().setText(String.format("Produtos: R$ %.2f", produtos));
-        view.getLblTotal().setText(String.format("TOTAL: R$ %.2f", bilhetes + produtos));
-        view.getTxtResumo().setText("Sessao: " + (sessaoSelecionada == null ? "nenhuma" :
-
-            sessaoSelecionada.getFilme().getNome() + " - " + sessaoSelecionada.getHorario()) +
-            "\nIngressos adicionados: " + qtdIngressos +
-            "\n" + view.getLblCadeira().getText() +
-            "\nDesconto: " + view.getCbCupom().getSelectedItem() +
-            "\n" + view.getLblTotal().getText());
+        carrinho.setCupom(cupom);
     }
 
-
-
-    private void confirmarCompra() {
-
-        if (indiceEdicao < 0 && !menu.podeRegistrarCompra()) {
-            JOptionPane.showMessageDialog(view, "Limite de compras atingido.");
-            return;
-        }
-
-        Compra nova = montarCompra();
-
-        if (nova == null || !nova.realizarCompra()) {
-            JOptionPane.showMessageDialog(view, "Adicione ingressos e selecione cadeiras validas. A quantidade deve corresponder aos ingressos.");
-            return;
-        }
-
-
-        Compra antiga = indiceEdicao < 0 ? null : menu.getCompra(indiceEdicao);
-
-
-        if (antiga != null) antiga.liberarCadeiras();
-        int ocupadas = 0;
-        for (int i = 0; i < nova.getBilhetes().size(); i++) {
-            Bilhete b = nova.getBilhetes().get(i);
-            if (!b.getSessao().ocuparCadeira(b.getCadeira().getLinha(), b.getCadeira().getColuna())) break;
-            ocupadas++;
-        }
-
-
-
-        if (ocupadas != nova.getBilhetes().size()) {
-            for (int i = 0; i < ocupadas; i++) {
-                Bilhete b = nova.getBilhetes().get(i);
-                b.getSessao().liberarCadeira(b.getCadeira().getLinha(), b.getCadeira().getColuna());
-            }
-
-
-
-            if (antiga != null) {
-                for (int i = 0; i < antiga.getBilhetes().size(); i++) {
-                    Bilhete b = antiga.getBilhetes().get(i);
-                    b.getSessao().ocuparCadeira(b.getCadeira().getLinha(), b.getCadeira().getColuna());
-                }
-            }
-
-            JOptionPane.showMessageDialog(view, "Nao foi possivel reservar as cadeiras.");
-            return;
-        }
-
-
-
-        boolean ok = antiga == null ? menu.registrarCompra(nova, usarPerfil(), cupom()) :
-            menu.atualizarCompra(indiceEdicao, nova, usarPerfil(), cupom());
-
-        if (!ok) {
-            nova.liberarCadeiras();
-            if (antiga != null) {
-                for (int i = 0; i < antiga.getBilhetes().size(); i++) {
-                    Bilhete b = antiga.getBilhetes().get(i);
-                    b.getSessao().ocuparCadeira(b.getCadeira().getLinha(), b.getCadeira().getColuna());
-                }
-            }
-
-            JOptionPane.showMessageDialog(view, "Nao foi possivel registrar a compra.");
-            return;
-        }
-
-
-
-        JOptionPane.showMessageDialog(view, String.format("Compra salva! Total: R$ %.2f",
-            totalBilhetes(nova, usarPerfil()) + nova.calcularTotalProdutos()));
-
-        novaCompra();
-
-        view.getAbas().setSelectedIndex(1);
-    }
-
-
-
-    private void cancelarCompra() {
-
-        int selecionada = indiceSelecionado();
-
-        if (selecionada < 0) {
-            JOptionPane.showMessageDialog(view, "Selecione uma compra registrada.");
-            return;
-        }
-
-
-        if (JOptionPane.showConfirmDialog(view, "Cancelar a compra registrada e liberar as cadeiras?",
-            "Confirmar", JOptionPane.YES_NO_OPTION) != JOptionPane.YES_OPTION) return;
-
-        Compra original = menu.getCompra(selecionada);
-
-        if (original != null && menu.excluirCompra(selecionada)) {
-            original.cancelarCompra();
-            JOptionPane.showMessageDialog(view, "Compra cancelada.");
-            novaCompra();
-            view.getAbas().setSelectedIndex(1);
+    // Remove um item do carrinho: primeiro vêm os bilhetes, depois os produtos
+    public void removerItemDoCarrinho(Compra carrinho, int indice) throws CompraException {
+        int qtdBilhetes = carrinho.getBilhetes().size();
+        if (indice < qtdBilhetes) {
+            carrinho.removerBilhete(indice);
         } else {
-            JOptionPane.showMessageDialog(view, "Nao foi possivel cancelar a compra.");
+            carrinho.removerProduto(indice - qtdBilhetes);
         }
     }
 
-    private void voltar() { menu.voltarMenu(); view.dispose(); }
+    
+    // REALIZAR COMPRA: confere tudo de novo, ocupa as poltronas e grava
+    public void finalizar(Compra compra) throws CompraException, VendasException, PersistenciaException {
+        if (compra.getBilhetes().isEmpty()) {
+            throw new CompraException("A compra deve ter pelo menos um ingresso.");
+        }
 
-    public void mostrarView() { view.setVisible(true); }
+        // Confere se as poltronas continuam livres e se as sessões ainda são válidas
+        for (Bilhete bilhete : compra.getBilhetes()) {
+            Sessao sessao = sessaoController.buscarSessaoDoBilhete(bilhete);
+            if (sessao == null || !sessao.getFilme().isEmCartaz()) {
+                throw new VendasException(VendasException.FORA_DE_CARTAZ, bilhete.getFilme(),
+                        "O filme \"" + bilhete.getFilme() + "\" não está mais em cartaz.");
+            }
+            if (sessao.jaComecou()) {
+                throw new VendasException(VendasException.SESSAO_INICIADA, bilhete.getFilme(),
+                        "A sessão de \"" + bilhete.getFilme() + "\" às " + sessao.getHorario() + " já começou.");
+            }
+            if (!sessao.cadeiraDisponivel(bilhete.getLinha(), bilhete.getColuna())) {
+                throw new VendasException(VendasException.POLTRONA_OCUPADA, bilhete.getFilme(),
+                        "A poltrona " + bilhete.getNomeCadeira() + " acabou de ser vendida.");
+            }
+        }
+
+        compra.setId(repositorio.gerarProximoId());
+        compra.setDataHora(LocalDateTime.now().format(DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm")));
+        repositorio.inserir(compra); // se falhar, lança PersistenciaException e nada é ocupado
+
+        for (Bilhete bilhete : compra.getBilhetes()) {
+            sessaoController.buscarSessaoDoBilhete(bilhete).ocuparCadeira(bilhete.getLinha(), bilhete.getColuna());
+        }
+    }
+
+    public ArrayList<Compra> comprasDoUsuario(String cpf) {
+        return repositorio.listarPorCpf(cpf);
+    }
+
+    // CANCELAR COMPRA: apaga a compra e libera as poltronas
+    public void cancelar(Compra compra) throws CompraException, PersistenciaException {
+        if (!repositorio.listar().contains(compra)) {
+            throw new CompraException("Compra não encontrada.");
+        }
+        repositorio.remover(compra);
+        sessaoController.liberarCadeiras(compra);
+    }
+
+    // ALTERAR COMPRA: remover um ingresso ou um produto
+    public void removerItemDaCompra(Compra compra, int indice) throws CompraException, PersistenciaException {
+        int qtdBilhetes = compra.getBilhetes().size();
+
+        if (indice < qtdBilhetes) {
+            if (qtdBilhetes == 1) {
+                throw new CompraException("A compra precisa ter pelo menos um ingresso. "
+                        + "Para remover o último, cancele a compra inteira.");
+            }
+            Bilhete removido = compra.removerBilhete(indice);
+            sessaoController.liberarCadeira(removido);
+        } else {
+            compra.removerProduto(indice - qtdBilhetes);
+        }
+        repositorio.atualizar(compra);
+    }
+
+    // ALTERAR COMPRA: adicionar produto (usa o mesmo cupom da compra)
+    public void adicionarProdutoNaCompra(Compra compra, Produtos produto, int quantidade)
+            throws ValidacaoException, PersistenciaException {
+        if (compra.getCupom() == null) {
+            compra.comprarProduto(produto, quantidade);
+        } else {
+            compra.comprarProduto(produto, quantidade, compra.getCupom());
+        }
+        repositorio.atualizar(compra);
+    }
 }

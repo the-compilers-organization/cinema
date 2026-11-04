@@ -1,19 +1,28 @@
 package model;
 
-public class Critica{
 
-    private String origem;
-    private String nome; //nome do critico
-    private String mensagem;
+// Parte 2 - Crítica feita por um crítico: nome, origem e mensagem
 
-    public Critica(String origem, String nome, String mensagem) {
-        this.origem = origem;
+public class Critica {
+
+    private String nome;     // nome do crítico
+    private String origem;   // veículo ao qual o crítico está ligado
+    private String mensagem; // texto do comentário
+
+    public Critica(String nome, String origem, String mensagem) {
         this.nome = nome;
+        this.origem = origem;
         this.mensagem = mensagem;
     }
-    
 
-    //GETS E SETS
+    public String getNome() {
+        return nome;
+    }
+
+    public void setNome(String nome) {
+        this.nome = nome;
+    }
+
     public String getOrigem() {
         return origem;
     }
@@ -22,17 +31,6 @@ public class Critica{
         this.origem = origem;
     }
 
-
-    public String getNome() {
-        return nome;
-    }
-
-
-    public void setNome(String nome) {
-        this.nome = nome;
-    }
-
-
     public String getMensagem() {
         return mensagem;
     }
@@ -40,5 +38,4 @@ public class Critica{
     public void setMensagem(String mensagem) {
         this.mensagem = mensagem;
     }
-    
-}   
+}

@@ -1,277 +1,124 @@
 package model;
 
 import java.time.LocalTime;
-import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 
 
+// Parte 1 - Sessão: filme exibido + matriz de cadeiras (10 linhas x 15 colunas)
+ 
 public class Sessao {
 
-    private static final int TAM_LINHA = 10;
-    private static final int TAM_COLUNA = 15;
+    public static final int LINHAS = 10;
+    public static final int COLUNAS = 15;
 
-    private String horario;
+    private String horario; // formato HH:mm
     private Filme filme;
     private Cadeira[][] cadeiras;
 
-    public Sessao(String horario, Filme filme){
+    public Sessao(String horario, Filme filme) {
         this.horario = horario;
         this.filme = filme;
-        this.cadeiras = new Cadeira[TAM_LINHA][TAM_COLUNA];
-        
-        int l, c;
+        this.cadeiras = new Cadeira[LINHAS][COLUNAS];
 
-        for(l = 0; l < TAM_LINHA; l += 1){
-            for(c = 0; c < TAM_COLUNA; c += 1){
+        for (int l = 0; l < LINHAS; l++) {
+            for (int c = 0; c < COLUNAS; c++) {
                 cadeiras[l][c] = new Cadeira(l, c);
             }
         }
     }
 
-    // false = cadeira disponível
-    // true  = cadeira ocupada
-
-    // se é valido
-    public boolean cadeiraValida(int linha, int coluna){
-        if((linha >= 0 && linha < TAM_LINHA) && (coluna >= 0 && coluna < TAM_COLUNA)){
-            return true;
-        }
-
-        return false;
+    public boolean cadeiraValida(int linha, int coluna) {
+        return linha >= 0 && linha < LINHAS && coluna >= 0 && coluna < COLUNAS;
     }
 
-    // na matriz cadeiras ==> false = cadeira disponível | true  = cadeira ocupada
-    // entao, se matriz retorna false, cadeira disponivel (cadeiraDisponivel retorna true) 
-    //  se matriz retorna true, cadeira ocupada (cadeiraDisponivel retorna false) 
-    public boolean cadeiraDisponivel(int linha, int coluna){
-        if(cadeiraValida(linha, coluna)){
-            if(!cadeiras[linha][coluna].isOcupada()){
-                return true;
-            }
-        }
-        return false;
+    public boolean cadeiraDisponivel(int linha, int coluna) {
+        return cadeiraValida(linha, coluna) && !cadeiras[linha][coluna].isOcupada();
     }
 
-
-    // se false, não ocupou cadeira. se true, ocupou a cadeira.
-    public boolean ocuparCadeira(int linha, int coluna){
-        if(cadeiraValida(linha, coluna) && cadeiraDisponivel(linha, coluna)){
+    public void ocuparCadeira(int linha, int coluna) {
+        if (cadeiraValida(linha, coluna)) {
             cadeiras[linha][coluna].setOcupada(true);
-            return true;
         }
-
-       return false;
     }
 
-    // se false, nao liberou a cadeira. se true, liberou a cadeira.
-    public boolean liberarCadeira(int linha, int coluna){
-        if(cadeiraValida(linha, coluna)){
-            if(!cadeiraDisponivel(linha, coluna)){
-                cadeiras[linha][coluna].setOcupada(false);
-                return true;
-            }
-
+    public void liberarCadeira(int linha, int coluna) {
+        if (cadeiraValida(linha, coluna)) {
+            cadeiras[linha][coluna].setOcupada(false);
         }
-
-        return false;
     }
 
-    // buscar cadeira
-    public Cadeira buscarCadeira(int linha, int coluna){
-        if(cadeiraValida(linha, coluna)){
-            return cadeiras[linha][coluna];
-        }
-        return null;
+    // Parte 3: verifica se o horário da sessão já passou
+    public boolean jaComecou() {
+        LocalTime inicio = LocalTime.parse(horario);
+        return LocalTime.now().isAfter(inicio);
     }
 
     
+    // Procura grupos de "quantidade" cadeiras livres lado a lado na mesma fileira
+    // Cada item da lista é um vetor {linha, colunaInicial}
+    // Usado para sugerir lugares juntos quando o usuário compra vários bilhetes
+     
+    public ArrayList<int[]> buscarCadeirasJuntas(int quantidade) {
+        ArrayList<int[]> opcoes = new ArrayList<int[]>();
 
-    
-
-    public boolean fazParteDeGrupo(int linha, int coluna, int qtd){
-        int inicio, i;
-        boolean grupoLivre;
-
-        if(qtd <= 1 || qtd > TAM_COLUNA || !cadeiraValida(linha, coluna)){
-            return false;
+        if (quantidade < 1 || quantidade > COLUNAS) {
+            return opcoes;
         }
 
-        for(inicio = 0; inicio <= TAM_COLUNA - qtd; inicio += 1){
-            grupoLivre = true;
+        // Começa pelas fileiras do meio da sala (melhor visão da tela)
+        int[] ordemFileiras = {4, 5, 3, 6, 2, 7, 1, 8, 0, 9};
 
-            for(i = inicio; i < inicio + qtd; i += 1){
-                if(!cadeiraDisponivel(linha, i)){
-                    grupoLivre = false;
-                    break;
-                }
-
-            }
-
-
-            if(grupoLivre && coluna >= inicio && coluna < inicio + qtd){
-                return true;
-            }
-
-        }
-       
-        
-        return false;
-    }
-
-    
-
-    // buscar cadeiras livres juntas na mesma fileira
-    public int[][] buscarCadeirasJuntas(int qtd){
-        if(qtd <= 1 || qtd > TAM_COLUNA){
-            return null;
-        }
-        int[][] temporario = new int[TAM_LINHA * (TAM_COLUNA - qtd + 1)][2];
-        int quantidade = 0;
-        for(int linha = 0; linha < TAM_LINHA; linha += 1){
-            for(int inicio = 0; inicio <= TAM_COLUNA - qtd; inicio += 1){
-                boolean livre = true;
-                for(int coluna = inicio; coluna < inicio + qtd; coluna += 1){
-                    if(!cadeiraDisponivel(linha, coluna)){
-                        livre = false;
+        for (int linha : ordemFileiras) {
+            for (int inicio = 0; inicio <= COLUNAS - quantidade; inicio++) {
+                boolean todasLivres = true;
+                for (int c = inicio; c < inicio + quantidade; c++) {
+                    if (!cadeiraDisponivel(linha, c)) {
+                        todasLivres = false;
                         break;
                     }
                 }
-                if(livre){
-                    temporario[quantidade][0] = linha;
-                    temporario[quantidade][1] = inicio;
-                    quantidade += 1;
+                if (todasLivres) {
+                    opcoes.add(new int[]{linha, inicio});
                 }
             }
-        }
-        int[][] opcoes = new int[quantidade][2];
-        for(int i = 0; i < quantidade; i += 1){
-            opcoes[i][0] = temporario[i][0];
-            opcoes[i][1] = temporario[i][1];
         }
         return opcoes;
     }
 
-    
-    // ficará no view public void exibirCadeiras() - exibir todas as cadeiras livres no caso da compra de apenas um bilhete
-    // public void exibirCadeiras(){
-    //    int l, c;
-
-    //     System.out.println(" ".repeat(28) + "TELA" + " ".repeat(28));
-
-    //     System.out.printf("  ");
-    //     for(c = 0; c < TAM_COLUNA; c += 1){
-    //         System.out.printf("%02d  ", c);
-    //     }
-
-    //     System.out.println();
-
-    //     for(l = 0; l < TAM_LINHA; l += 1){
-    //         for(c = 0; c < TAM_COLUNA; c += 1){
-    //             System.out.printf("%02d", l);
-    //             if(cadeiraDisponivel(l, c)){
-    //                 System.out.printf("%02d  ", "O");
-    //             }else{
-    //                 System.out.printf("%02d  ", "X");
-    //             }
-    //         }
-    //         System.out.println();
-
-    //     }
-    //     System.out.println();
-
-    //     System.out.println("X = Cadeira Ocupada");
-    //     System.out.println("O = Cadeira Disponivel");
-        
-    // }
-
-    // ficará no view public void exibirCadeirasJuntas(int quantidade) - exibir cadeiras livres juntas na mesma fileira quando a compra for de mais de um bilhete
-    // public void exibirCadeirasJuntas(int quantidade){
-    //     int linha, coluna;
-
-    //     System.out.println(" ".repeat(28) + "TELA" + " ".repeat(28));
-
-    //     System.out.printf("  ");
-    //     for(coluna = 0; coluna < TAM_COLUNA; coluna += 1){
-    //         System.out.printf("%02d  ", coluna);
-    //     }
-
-    //     for(linha = 0; linha < TAM_LINHA; linha += 1){
-    //         System.out.printf("%02d  ", linha);
-
-    //         for(coluna = 0; coluna < TAM_COLUNA; coluna += 1){
-    //             if(!cadeiraDisponivel(linha, coluna)){
-    //                 System.out.printf("X  ");
-    //             }else{
-    //                 if(fazParteDeGrupo(linha, coluna, quantidade)){
-    //                     System.out.printf("O  ");
-    //                 }else{
-    //                     System.out.printf("-  ");
-    //                 }
-    //             }
-    //         }
-
-    //         System.out.println();
-    //     }
-    //     System.out.println();
-
-    //     System.out.println("LEGENDA:");
-    //     System.out.println("O = cadeira disponivel no grupo");
-    //     System.out.println("X = cadeira ocupada");
-    //     System.out.println("- = cadeira livre fora de grupo");
-
-    // }
-
-    // ficará no view public void exibirOpcoesCadeirasJuntas(int quantidade)
-    // public void exibirOpcoesCadeirasJuntas(int quantidade){
-    //     int[][] opcoes = buscarCadeirasJuntas(quantidade);
-
-    //     if(opcoes == null){
-    //         System.out.println("Nao existem cadeiras juntas disponiveis.");
-    //         return;
-    //     }
-
-    //     int i, j;
-
-    //     for(i = 0; i < opcoes.length; i += 1){
-    //         int linha = opcoes[i][0];
-    //         int coluna = opcoes[i][1];
-
-    //         System.out.printf("%d. Linha %d | Cadeiras: ", i + 1, linha);
-
-    //         for(j = 0; j < quantidade; j += 1){
-    //             System.out.printf("%d", coluna + j);
-
-    //             if(j < quantidade - 1){
-    //                 System.out.printf(", ");
-    //             }
-    //         }
-    //         System.out.println();
-    //     }
-    // }
-
-    // gets e sets
-	public String getHorario() {
-		return horario;
-	}
-	public void setHorario(String horario) {
-		this.horario = horario;
-	}
-	public Filme getFilme() {
-		return filme;
-	}
-	public void setFilme(Filme filme) {
-		this.filme = filme;
-	}
-	public Cadeira[][] getCadeiras() {
-		return cadeiras;
-	}
-	public void setCadeiras(Cadeira[][] cadeiras) {
-		this.cadeiras = cadeiras;
-	}
-
-    //============================ MÉTODO NOVO FILME QUE JA COEÇOU NA SESSAO
-    public boolean jaComecou(){
-        LocalTime hora = LocalTime.parse(horario, DateTimeFormatter.ofPattern("HH:mm"));
-        return hora.isBefore(LocalTime.now());
+    // Nome da cadeira para o usuário
+    public static String nomeDaCadeira(int linha, int coluna) {
+        char letra = (char) ('A' + linha);
+        return "" + letra + (coluna + 1);
     }
-    
+
+    @Override
+    public String toString() {
+        return horario + "  -  " + filme.getNome();
+    }
+
+    //  GETTERS E SETTERS 
+
+    public String getHorario() {
+        return horario;
+    }
+
+    public void setHorario(String horario) {
+        this.horario = horario;
+    }
+
+    public Filme getFilme() {
+        return filme;
+    }
+
+    public void setFilme(Filme filme) {
+        this.filme = filme;
+    }
+
+    public Cadeira[][] getCadeiras() {
+        return cadeiras;
+    }
+
+    public void setCadeiras(Cadeira[][] cadeiras) {
+        this.cadeiras = cadeiras;
+    }
 }

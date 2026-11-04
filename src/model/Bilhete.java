@@ -1,26 +1,50 @@
 package model;
 
+import model.enums.TipoSala;
+
+
+// Parte 1 - Bilhete: user, CPF, sala, sessão, filme, valor e cadeira comprada
+// Para salvar no JSON de forma simples, o bilhete guarda os DADOS que identificam sala, sessão, filme e cadeira (número da sala,
+// horário da sessão, nome do filme, linha e coluna) em vez dos objetos
+ 
 public class Bilhete {
+
     private String user;
     private String cpf;
-    private Sala sala;
-    private Sessao sessao;
-    private Filme filme;
+    private int numeroSala;
+    private TipoSala tipoSala;
+    private String horarioSessao;
+    private String filme;
     private double valor;
-    private Cadeira cadeira;
+    private int linha;
+    private int coluna;
 
-    // Construtor
-    public Bilhete(Usuario usuario, Sala sala, Sessao sessao, Cadeira cadeira){
+    // O valor é calculado com base no filme e na sala escolhidos
+    public Bilhete(Usuario usuario, Sala sala, Sessao sessao, int linha, int coluna) {
         this.user = usuario.getUser();
         this.cpf = usuario.getCpf();
-        this.sala = sala;
-        this.sessao = sessao;
-        this.filme = sessao.getFilme();
-        this.valor = filme.getValor() * sala.getTipoSala().getMultiplicador();
-        this.cadeira = cadeira;
+        this.numeroSala = sala.getNumero();
+        this.tipoSala = sala.getTipoSala();
+        this.horarioSessao = sessao.getHorario();
+        this.filme = sessao.getFilme().getNome();
+        this.valor = sala.calcularValorIngresso(sessao.getFilme());
+        this.linha = linha;
+        this.coluna = coluna;
     }
 
-    // Gets e Sets
+    // Verifica se este bilhete é da mesma cadeira/sessão/sala informada
+    public boolean mesmaCadeira(int numeroSala, String horario, int linha, int coluna) {
+        return this.numeroSala == numeroSala
+                && this.horarioSessao.equals(horario)
+                && this.linha == linha
+                && this.coluna == coluna;
+    }
+
+    public String getNomeCadeira() {
+        return Sessao.nomeDaCadeira(linha, coluna);
+    }
+
+    //  GETTERS E SETTERS 
     public String getUser() {
         return user;
     }
@@ -37,27 +61,35 @@ public class Bilhete {
         this.cpf = cpf;
     }
 
-    public Sala getSala() {
-        return sala;
+    public int getNumeroSala() {
+        return numeroSala;
     }
 
-    public void setSala(Sala sala) {
-        this.sala = sala;
+    public void setNumeroSala(int numeroSala) {
+        this.numeroSala = numeroSala;
     }
 
-    public Sessao getSessao() {
-        return sessao;
+    public TipoSala getTipoSala() {
+        return tipoSala;
     }
 
-    public void setSessao(Sessao sessao) {
-        this.sessao = sessao;
+    public void setTipoSala(TipoSala tipoSala) {
+        this.tipoSala = tipoSala;
     }
 
-    public Filme getFilme() {
+    public String getHorarioSessao() {
+        return horarioSessao;
+    }
+
+    public void setHorarioSessao(String horarioSessao) {
+        this.horarioSessao = horarioSessao;
+    }
+
+    public String getFilme() {
         return filme;
     }
 
-    public void setFilme(Filme filme) {
+    public void setFilme(String filme) {
         this.filme = filme;
     }
 
@@ -69,12 +101,19 @@ public class Bilhete {
         this.valor = valor;
     }
 
-    public Cadeira getCadeira() {
-        return cadeira;
+    public int getLinha() {
+        return linha;
     }
 
-    public void setCadeira(Cadeira cadeira) {
-        this.cadeira = cadeira;
+    public void setLinha(int linha) {
+        this.linha = linha;
     }
 
+    public int getColuna() {
+        return coluna;
+    }
+
+    public void setColuna(int coluna) {
+        this.coluna = coluna;
+    }
 }

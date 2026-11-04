@@ -1,64 +1,132 @@
 package model;
+
+import exceptions.ValidacaoException;
+
+
+// Parte 1 - Filme: nome, duração, sinopse e valor
+// Parte 2 - nota (média), quantidadeCriticos e vetor de críticas (tamanho 100)
+// Parte 3 - emCartaz (usado pela VendasException)
+
 public class Filme {
-    private static final int TAM_CRITICAS = 100;
+
+    public static final int MAX_CRITICAS = 100;
+
     private String nome;
-    private int duracao;
+    private int duracao;        // em minutos
     private String sinopse;
     private double valor;
-    private double[] notas;
-    private double nota;
-    private int qtdCriticas;
-    private int qtdComentarios;
-    private Critica[] criticas;
+    private boolean emCartaz;
 
-    // GETS E SETS
+    private double nota;                 // média das notas dos críticos
+    private int quantidadeCriticos;      // quantos críticos deram nota
+    private Critica[] criticas;          // vetor de comentários
+    private int quantidadeComentarios;   // posições ocupadas do vetor
+
+    public Filme(String nome, int duracao, String sinopse, double valor) throws ValidacaoException {
+        setNome(nome);
+        setDuracao(duracao);
+        setSinopse(sinopse);
+        setValor(valor);
+        this.emCartaz = true;
+        this.nota = 0.0;
+        this.quantidadeCriticos = 0;
+        this.criticas = new Critica[MAX_CRITICAS];
+        this.quantidadeComentarios = 0;
+    }
+
+    
+    // Adiciona uma nota (0 a 10), incrementa a quantidade de críticos e calcula a nova média.
+     
+    public void adicionarNota(double novaNota) throws ValidacaoException {
+        if (novaNota < 0 || novaNota > 10) {
+            throw new ValidacaoException("A nota deve estar entre 0 e 10.");
+        }
+        double soma = nota * quantidadeCriticos;  // soma das notas anteriores
+        quantidadeCriticos++;
+        nota = (soma + novaNota) / quantidadeCriticos;
+    }
+
+    // Coloca a crítica no final do vetor
+    public void adicionarCritica(Critica critica) throws ValidacaoException {
+        if (critica == null) {
+            throw new ValidacaoException("Crítica inválida.");
+        }
+        if (quantidadeComentarios >= MAX_CRITICAS) {
+            throw new ValidacaoException("O filme já atingiu o limite de " + MAX_CRITICAS + " críticas.");
+        }
+        criticas[quantidadeComentarios] = critica;
+        quantidadeComentarios++;
+    }
+
+    // Retorna apenas as posições preenchidas do vetor (sem os null)
+    public Critica[] getCriticasPreenchidas() {
+        Critica[] preenchidas = new Critica[quantidadeComentarios];
+        for (int i = 0; i < quantidadeComentarios; i++) {
+            preenchidas[i] = criticas[i];
+        }
+        return preenchidas;
+    }
+
+    // Copia os dados editáveis de outro filme (o nome não muda)
+    public void copiarDados(Filme outro) {
+        this.duracao = outro.duracao;
+        this.sinopse = outro.sinopse;
+        this.valor = outro.valor;
+        this.emCartaz = outro.emCartaz;
+    }
+
+    @Override
+    public String toString() {
+        return nome;
+    }
+
+    //  GETTERS E SETTERS 
     public String getNome() {
         return nome;
     }
-    public void setNome(String nome) {
-        this.nome = nome;
+
+    public void setNome(String nome) throws ValidacaoException {
+        Validador.textoObrigatorio(nome, "Nome do filme");
+        this.nome = nome.trim();
     }
+
     public int getDuracao() {
         return duracao;
     }
-    public void setDuracao(int duracao) {
+
+    public void setDuracao(int duracao) throws ValidacaoException {
+        if (duracao <= 0 || duracao > 600) {
+            throw new ValidacaoException("A duração deve ser entre 1 e 600 minutos.");
+        }
         this.duracao = duracao;
     }
+
     public String getSinopse() {
         return sinopse;
     }
-    public void setSinopse(String sinopse) {
-        this.sinopse = sinopse;
+
+    public void setSinopse(String sinopse) throws ValidacaoException {
+        Validador.textoObrigatorio(sinopse, "Sinopse");
+        this.sinopse = sinopse.trim();
     }
+
     public double getValor() {
         return valor;
     }
-    public void setValor(double valor) {
+
+    public void setValor(double valor) throws ValidacaoException {
+        if (valor <= 0) {
+            throw new ValidacaoException("O valor do filme deve ser maior que zero.");
+        }
         this.valor = valor;
     }
 
-    public Critica[] getCriticas() {
-        return criticas;
+    public boolean isEmCartaz() {
+        return emCartaz;
     }
 
-    public void setCriticas(Critica[] criticas) {
-        this.criticas = criticas;
-    }
-
-    public double[] getNotas() {
-        return notas;
-    }
-
-    public void setNotas(double[] notas) {
-        this.notas = notas;
-    }
-
-    public int getQtdCriticas() {
-        return qtdCriticas;
-    }
-
-    public void setQtdCriticas(int qtdCriticas) {
-        this.qtdCriticas = qtdCriticas;
+    public void setEmCartaz(boolean emCartaz) {
+        this.emCartaz = emCartaz;
     }
 
     public double getNota() {
@@ -69,89 +137,23 @@ public class Filme {
         this.nota = nota;
     }
 
-    public int getQtdComentarios() {
-        return qtdComentarios;
+    public int getQuantidadeCriticos() {
+        return quantidadeCriticos;
     }
 
-    // CONSTRUTOR
-    public Filme(String nome, int duracao, String sinopse, double valor) {
-        this.nome = nome;
-        this.duracao = duracao;
-        this.sinopse = sinopse;
-        this.valor = valor;
-
-        this.criticas = new Critica[TAM_CRITICAS];
-        this.notas = new double[TAM_CRITICAS];
-
-        this.qtdCriticas = 0;
-        this.qtdComentarios = 0;
-
-        this.nota = mediaDasNotas();
+    public void setQuantidadeCriticos(int quantidadeCriticos) {
+        this.quantidadeCriticos = quantidadeCriticos;
     }
 
-
-    //criar metodo para calcularMedia das notas do vetor critica!!!
-
-    //======================================================================= MÉTODOS
-
-    public void setQtdComentarios(int qtdComentarios) {
-        if(qtdComentarios >= 0 && qtdComentarios <= TAM_CRITICAS) {
-            this.qtdComentarios = qtdComentarios;
-        }
+    public Critica[] getCriticas() {
+        return criticas;
     }
 
-    public boolean adicionarNota(double nota) {
-
-        if(nota >= 0 && nota <= 10 && qtdCriticas < TAM_CRITICAS) {
-            notas[qtdCriticas] = nota;
-            qtdCriticas += 1;
-            this.nota = mediaDasNotas();
-            return true;
-        }
-
-        return false;
+    public void setCriticas(Critica[] criticas) {
+        this.criticas = criticas;
     }
 
-    public boolean adicionarCritica(Critica critica) {
-
-        if(critica != null && qtdComentarios < TAM_CRITICAS) {
-            criticas[qtdComentarios] = critica;
-            qtdComentarios += 1;
-            return true;
-        }
-
-        return false;
+    public int getQuantidadeComentarios() {
+        return quantidadeComentarios;
     }
-
-    public double mediaDasNotas() {
-        if(qtdCriticas > 0){
-            int i;
-            double soma = 0.00;
-            for(i = 0; i < qtdCriticas; i += 1){
-                soma += notas[i];
-            }
-
-            return soma / qtdCriticas;
-
-        }
-        
-        return 0.00;
-    }
-
-    //===================================ADICIONADO - EXCP.
-    private boolean emCartaz;
-
-    //get e set
-    public boolean isEmCartaz() {
-        return emCartaz;
-    }
-    public void setEmCartaz(boolean emCartaz) {
-        this.emCartaz = emCartaz;
-    }
-
-    //construtor
-    public Filme(boolean emCartaz) {
-        this.emCartaz = emCartaz;
-    }
-  
 }

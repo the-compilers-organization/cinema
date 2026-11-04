@@ -1,18 +1,24 @@
 package model.enums;
 
 public enum Sexo {
-    F(1),
-    M(2),
-    NB(3),
-    NI(4);
 
-    private int sexo;
+    FEMININO("Feminino"),
+    MASCULINO("Masculino"),
+    NAO_BINARIO("Não binário"),
+    NAO_INFORMADO("Prefiro não informar");
 
-    Sexo(int sexo){
-        this.sexo = sexo;
+    private String descricao;
+
+    Sexo(String descricao) {
+        this.descricao = descricao;
     }
 
-    public int getSexo() {
-        return sexo;
+    public String getDescricao() {
+        return descricao;
+    }
+
+    @Override
+    public String toString() {
+        return descricao;
     }
 }

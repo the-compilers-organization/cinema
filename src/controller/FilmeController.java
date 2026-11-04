@@ -1,140 +1,50 @@
 package controller;
 
+import java.util.ArrayList;
+
+import exceptions.FilmeException;
+import exceptions.PersistenciaException;
+import exceptions.ValidacaoException;
+import model.Critico;
 import model.Filme;
-import view.FilmeView;
+import model.Validador;
+import model.interfaces.GerenciaFilmes;
+import repository.IRepositorioFilme;
+
+
+// Camada de NEGÓCIO (controller) - regras envolvendo filmes e críticas
+// Acessa os dados somente pela interface IRepositorioFilme
 
 public class FilmeController {
 
-    private FilmeView view;
-    private Filme[] filmes;
-    private MenuController menu;
+    private IRepositorioFilme repositorio;
 
-    public FilmeController(
-            FilmeView view,
-            Filme[] filmes,
-            MenuController menu) {
-
-        this.view = view;
-        this.filmes = filmes;
-        this.menu = menu;
-
-        carregarFilmes();
-
-        view.getBtnVoltar().addActionListener(e -> voltar());
-
-        view.addWindowListener(new java.awt.event.WindowAdapter() {
-
-            @Override
-            public void windowClosing(java.awt.event.WindowEvent e) {
-                voltar();
-            }
-        });
+    public FilmeController(IRepositorioFilme repositorio) {
+        this.repositorio = repositorio;
     }
 
-    private void carregarFilmes() {
-
-        view.getModelo().setRowCount(0);
-
-        int i;
-
-        for (i = 0; i < filmes.length; i += 1) {
-
-            if (filmes[i] != null) {
-
-                Filme f = filmes[i];
-
-                view.getModelo().addRow(
-                        new Object[]{
-                                f.getNome(),
-                                f.getDuracao(),
-                                f.getSinopse(),
-                                String.format("R$ %.2f", f.getValor()),
-                                f.mediaDasNotas()
-                        }
-                );
-            }
-        }
+    public ArrayList<Filme> listar() {
+        return repositorio.listar();
     }
 
-    private void voltar() {
+    // "gerente" pode ser o Administrador ou o Funcionário (interface GerenciaFilmes)
+    public void incluir(GerenciaFilmes gerente, Filme filme) throws FilmeException, PersistenciaException {
+        gerente.incluirFilme(filme);
+    }
 
-        menu.voltarMenu();
+    public void alterar(GerenciaFilmes gerente, Filme filme) throws FilmeException, PersistenciaException {
+        gerente.alterarFilme(filme);
+    }
 
-        view.dispose();
+    public void excluir(GerenciaFilmes gerente, String nome) throws FilmeException, PersistenciaException {
+        gerente.excluirFilme(nome);
+    }
+
+    public void avaliar(Critico critico, Filme filme, double nota, String texto)
+            throws ValidacaoException, PersistenciaException {
+        Validador.textoObrigatorio(texto, "Crítica");
+        critico.atribuirNota(nota, filme);
+        critico.atribuirCritica(texto, filme);
+        repositorio.atualizar(filme);
     }
 }
-
-
-/*
- * ============================================================
- * ORIENTACOES PARA IMPLEMENTAR FilmeController
- * ============================================================
- *
- * OBJETIVO:
- *
- * Controlar a apresentacao dos filmes existentes.
- *
- *
- * ATRIBUTOS:
- *
- * - FilmeView view;
- * - Filme[] filmes;
- * - MenuController menuController.
- *
- *
- * CONSTRUTOR:
- *
- * Receber os tres objetos.
- *
- * Depois:
- *
- * - carregar os filmes;
- * - configurar o evento do botao Voltar.
- *
- *
- * carregarFilmes():
- *
- * Limpar o DefaultTableModel antes de preencher.
- *
- * Percorrer Filme[] utilizando for.
- *
- * Para cada:
- *
- * filmes[i] != null
- *
- * adicionar uma linha contendo:
- *
- * - nome;
- * - duracao;
- * - sinopse;
- * - valor;
- * - nota/media.
- *
- *
- * O fluxo sera:
- *
- * Filme[]
- *    |
- *    v
- * FilmeController
- *    |
- *    v
- * DefaultTableModel da View
- *    |
- *    v
- * JTable
- *
- *
- * O Controller pode consultar os getters do Filme.
- *
- * Nao deve alterar os atributos internos do Filme
- * diretamente.
- *
- *
- * voltar():
- *
- * Mostrar MenuView novamente atraves do MenuController e
- * fechar FilmeView.
- *
- * ============================================================
- */

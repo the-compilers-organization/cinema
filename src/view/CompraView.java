@@ -1,345 +1,520 @@
 package view;
 
-import model.enums.Produtos;
-import model.enums.CupomPromocional;
-import javax.swing.*;
+import java.awt.BorderLayout;
+import java.awt.Dimension;
+import java.awt.FlowLayout;
+import java.awt.Font;
+import java.awt.GridLayout;
+
+import javax.swing.BorderFactory;
+import javax.swing.JButton;
+import javax.swing.JComboBox;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JSpinner;
+import javax.swing.JTable;
+import javax.swing.SpinnerNumberModel;
 import javax.swing.table.DefaultTableModel;
-import javax.swing.table.TableCellRenderer;
-import javax.swing.table.TableCellEditor;
-import javax.swing.AbstractCellEditor;
-import java.util.function.IntConsumer;
-import java.awt.*;
 
-public class CompraView extends JFrame {
-    private final JTabbedPane abas = new JTabbedPane();
-    private final JComboBox<String> cbCompras = new JComboBox<>();
-    private final JComboBox<String> cbSessao = new JComboBox<>();
-    private final JSpinner spQtdBilhetes = new JSpinner(new SpinnerNumberModel(0, 0, 15, 1));
-    private final JButton btnEscolherCadeiras = new JButton("Escolher cadeiras");
-    private final JButton btnExcluirCadeiras = new JButton("Excluir cadeiras");
-    private final JComboBox<Produtos> cbProduto = new JComboBox<>(Produtos.values());
-    private final JSpinner spQtdProduto = new JSpinner(new SpinnerNumberModel(0, 0, 20, 1));
-    private final JButton btnAdicionarProduto = new JButton("Adicionar produto");
-    private final JComboBox<String> cbCupom = new JComboBox<>();
-    private final JLabel lblCadeira = new JLabel("Nenhuma cadeira selecionada");
-    private final JLabel lblBilhetes = new JLabel("Ingressos: R$ 0,00");
-    private final JLabel lblProdutos = new JLabel("Produtos: R$ 0,00");
-    private final JLabel lblTotal = new JLabel("TOTAL: R$ 0,00");
-    private final JLabel lblEstado = new JLabel("NOVA COMPRA");
-    private final DefaultTableModel modeloProdutos = new DefaultTableModel(new Object[]{"Produto", "Quantidade", "Subtotal", "Acoes"}, 0) {
-        @Override public boolean isCellEditable(int linha, int coluna) { return coluna == 3; }
+import model.Sala;
+import model.Sessao;
+import model.enums.CupomPromocional;
+import model.enums.Produtos;
+import java.util.ArrayList;
+import exceptions.CompraException;
+import exceptions.PersistenciaException;
+import exceptions.ValidacaoException;
+import exceptions.VendasException;
+import model.Bilhete;
+import model.Compra;
+import model.ItemCompra;
+import model.Usuario;
+import controller.IFachada;
+
+
+// Tela "Comprar ingressos"
+// Fluxo: escolha da sala -> escolha da sessão -> poltronas -> lanchonete -> finalizar
+
+public class CompraView extends JPanel implements Atualizavel {
+
+    public static final String SEM_CUPOM = "Sem cupom";
+
+    //  1. Sessão e poltronas 
+    private JComboBox<Sala> cbSala = new JComboBox<Sala>();
+    private JComboBox<Sessao> cbSessao = new JComboBox<Sessao>();
+    private JLabel lblInfoSessao = Estilo.textoSuave(" ");
+    private MapaCadeirasPanel mapa = new MapaCadeirasPanel();
+    private JSpinner spQtdIngressos = new JSpinner(new SpinnerNumberModel(1, 1, 15, 1));
+    private JButton btnSugerir = Estilo.botaoSecundario("Sugerir lugares juntos");
+    private JButton btnLimparSelecao = Estilo.botaoSecundario("Limpar seleção");
+    private JLabel lblSelecao = Estilo.textoSuave("Nenhuma poltrona selecionada.");
+    private JButton btnAdicionarIngressos = Estilo.botao("Adicionar ingressos ao carrinho", Estilo.AZUL);
+
+    //  2. Lanchonete e carrinho 
+    private JComboBox<Produtos> cbProduto = new JComboBox<Produtos>(Produtos.values());
+    private JSpinner spQtdProduto = new JSpinner(new SpinnerNumberModel(1, 1, 20, 1));
+    private JButton btnAdicionarProduto = Estilo.botao("Adicionar", Estilo.AZUL);
+    private JComboBox<Object> cbCupom = new JComboBox<Object>();
+
+    private DefaultTableModel modeloCarrinho = new DefaultTableModel(
+            new Object[]{"Item", "Detalhe", "Valor"}, 0) {
+        @Override
+        public boolean isCellEditable(int linha, int coluna) {
+            return false;
+        }
     };
-    private final JTable tabelaProdutos = new JTable(modeloProdutos);
-    private final DefaultTableModel modeloIngressos = new DefaultTableModel(
-            new Object[]{"Ingresso", "Cadeira", "Valor", "Acoes"}, 0) {
-        @Override public boolean isCellEditable(int linha, int coluna) { return coluna == 3; }
-    };
-    private final JTable tabelaIngressos = new JTable(modeloIngressos);
-    private final JTextArea txtResumo = new JTextArea(4, 24);
-    private final JTextArea txtDetalhesCompra = new JTextArea(11, 35);
-    private final JButton btnNovaCompra = new JButton("Limpar formulario");
-    private final JButton btnCarregarCompra = new JButton("Editar compra selecionada");
-    private final JButton btnFinalizar = new JButton("Confirmar compra");
-    private final JButton btnCancelar = new JButton("Cancelar compra selecionada");
-    private final JButton btnVoltar = new JButton("Voltar ao menu");
+    private JTable tabelaCarrinho = new JTable(modeloCarrinho);
+    private JButton btnRemoverItem = Estilo.botaoSecundario("Remover item");
+    private JButton btnEsvaziar = Estilo.botaoSecundario("Esvaziar");
+    private JLabel lblIngressos = new JLabel("Ingressos: R$ 0,00");
+    private JLabel lblProdutos = new JLabel("Lanchonete: R$ 0,00");
+    private JLabel lblTotal = new JLabel("TOTAL  R$ 0,00");
+    private JButton btnFinalizar = Estilo.botao("Finalizar compra", Estilo.VERDE);
 
-    public CompraView() {
-        setTitle("Central de compras - Cinema");
-        setSize(950, 750);
-        setMinimumSize(new Dimension(760, 600));
-        setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
-        setLocationRelativeTo(null);
-        setLayout(new BorderLayout(8, 8));
+    public CompraView(IFachada fachada, Usuario usuario) {
+        setLayout(new BorderLayout(16, 0));
+        add(Estilo.cabecalho("Comprar ingressos",
+                "1) escolha a sala e a sessão   2) escolha as poltronas   3) adicione lanches   4) finalize"),
+                BorderLayout.NORTH);
+        add(montarPainelSessao(), BorderLayout.CENTER);
+        add(montarPainelCarrinho(), BorderLayout.EAST);
 
-        cbCupom.addItem("Desconto do perfil (se houver)");
-        cbCupom.addItem("Sem desconto");
-        for (CupomPromocional cupom : CupomPromocional.values()) cbCupom.addItem(cupom.name());
-        cbProduto.setRenderer(new DefaultListCellRenderer() {
-            @Override public Component getListCellRendererComponent(JList<?> lista, Object valor, int indice, boolean selecionado, boolean foco) {
-                super.getListCellRendererComponent(lista, valor, indice, selecionado, foco);
-                if (valor instanceof Produtos) {
-                    Produtos p = (Produtos) valor;
-                    setText(String.format("%s - R$ %.2f", p.name(), p.getValor()));
-                }
-                return this;
+        //  eventos da tela 
+        this.fachada = fachada;
+        this.usuario = usuario;
+        this.carrinho = fachada.novaCompra(usuario);
+
+        for (Sala sala : fachada.getSalas()) {
+            getCbSala().addItem(sala);
+        }
+
+        getCbSala().addActionListener(e -> carregarSessoes());
+        getCbSessao().addActionListener(e -> carregarMapa());
+        getMapa().adicionarOuvinte(e -> mostrarSelecao());
+        getBtnSugerir().addActionListener(e -> sugerirLugares());
+        getBtnLimparSelecao().addActionListener(e -> getMapa().limparSelecao());
+        getBtnAdicionarIngressos().addActionListener(e -> adicionarIngressos());
+        getBtnAdicionarProduto().addActionListener(e -> adicionarProduto());
+        getBtnRemoverItem().addActionListener(e -> removerItem());
+        getBtnEsvaziar().addActionListener(e -> esvaziarCarrinho());
+        getBtnFinalizar().addActionListener(e -> finalizar());
+
+        carregarSessoes();
+    }
+
+    private JPanel montarPainelSessao() {
+        JPanel cartao = Estilo.cartao();
+        cartao.setLayout(new BorderLayout(0, 12));
+
+        JPanel escolha = new JPanel(new GridLayout(1, 2, 12, 0));
+        escolha.setOpaque(false);
+        escolha.add(Estilo.campo("Sala", cbSala));
+        escolha.add(Estilo.campo("Sessão", cbSessao));
+
+        JPanel topo = new JPanel(new BorderLayout(0, 6));
+        topo.setOpaque(false);
+        topo.add(Estilo.subtitulo("Sessão e poltronas"), BorderLayout.NORTH);
+        topo.add(escolha, BorderLayout.CENTER);
+        topo.add(lblInfoSessao, BorderLayout.SOUTH);
+        cartao.add(topo, BorderLayout.NORTH);
+
+        cartao.add(mapa, BorderLayout.CENTER);
+
+        JPanel grupo = new JPanel(new FlowLayout(FlowLayout.LEFT, 8, 0));
+        grupo.setOpaque(false);
+        grupo.add(new JLabel("Quantas pessoas?"));
+        grupo.add(spQtdIngressos);
+        grupo.add(btnSugerir);
+        grupo.add(btnLimparSelecao);
+
+        JPanel rodape = new JPanel(new BorderLayout(0, 8));
+        rodape.setOpaque(false);
+        rodape.add(grupo, BorderLayout.NORTH);
+        rodape.add(lblSelecao, BorderLayout.CENTER);
+        rodape.add(btnAdicionarIngressos, BorderLayout.SOUTH);
+        cartao.add(rodape, BorderLayout.SOUTH);
+        return cartao;
+    }
+
+    private JPanel montarPainelCarrinho() {
+        JPanel cartao = Estilo.cartao();
+        cartao.setLayout(new BorderLayout(0, 12));
+        cartao.setPreferredSize(new Dimension(380, 10));
+
+        // Lanchonete
+        JPanel lanchonete = new JPanel(new BorderLayout(0, 6));
+        lanchonete.setOpaque(false);
+        lanchonete.add(Estilo.subtitulo("Lanchonete"), BorderLayout.NORTH);
+        JPanel linhaProduto = new JPanel(new BorderLayout(0, 6));
+        linhaProduto.setOpaque(false);
+        linhaProduto.add(cbProduto, BorderLayout.NORTH);
+        JPanel qtd = new JPanel(new BorderLayout(8, 0));
+        qtd.setOpaque(false);
+        spQtdProduto.setPreferredSize(new Dimension(60, 30));
+        JPanel rotuloQtd = new JPanel(new FlowLayout(FlowLayout.LEFT, 0, 0));
+        rotuloQtd.setOpaque(false);
+        rotuloQtd.add(new JLabel("Quantidade  "));
+        rotuloQtd.add(spQtdProduto);
+        qtd.add(rotuloQtd, BorderLayout.WEST);
+        qtd.add(btnAdicionarProduto, BorderLayout.CENTER);
+        linhaProduto.add(qtd, BorderLayout.SOUTH);
+        lanchonete.add(linhaProduto, BorderLayout.CENTER);
+
+        cbCupom.addItem(SEM_CUPOM);
+        for (CupomPromocional cupom : CupomPromocional.values()) {
+            cbCupom.addItem(cupom);
+        }
+        cbCupom.setToolTipText("O cupom vale para a compra inteira e é aplicado a cada item adicionado.");
+        lanchonete.add(Estilo.campo("Cupom promocional", cbCupom), BorderLayout.SOUTH);
+        cartao.add(lanchonete, BorderLayout.NORTH);
+
+        // Carrinho
+        Estilo.estilizarTabela(tabelaCarrinho);
+        tabelaCarrinho.getColumnModel().getColumn(0).setPreferredWidth(150);
+        tabelaCarrinho.getColumnModel().getColumn(1).setPreferredWidth(110);
+        tabelaCarrinho.getColumnModel().getColumn(2).setPreferredWidth(70);
+        JPanel carrinho = new JPanel(new BorderLayout(0, 6));
+        carrinho.setOpaque(false);
+        JPanel tituloCarrinho = new JPanel(new BorderLayout());
+        tituloCarrinho.setOpaque(false);
+        tituloCarrinho.add(Estilo.subtitulo("Carrinho"), BorderLayout.WEST);
+        JPanel acoes = new JPanel(new FlowLayout(FlowLayout.RIGHT, 6, 0));
+        acoes.setOpaque(false);
+        acoes.add(btnRemoverItem);
+        acoes.add(btnEsvaziar);
+        tituloCarrinho.add(acoes, BorderLayout.EAST);
+        carrinho.add(tituloCarrinho, BorderLayout.NORTH);
+        carrinho.add(Estilo.rolagem(tabelaCarrinho), BorderLayout.CENTER);
+        cartao.add(carrinho, BorderLayout.CENTER);
+
+        // Totais
+        JPanel totais = new JPanel(new GridLayout(0, 1, 0, 2));
+        totais.setOpaque(false);
+        totais.setBorder(BorderFactory.createCompoundBorder(
+                BorderFactory.createMatteBorder(1, 0, 0, 0, Estilo.BORDA),
+                BorderFactory.createEmptyBorder(10, 0, 0, 0)));
+        lblIngressos.setForeground(Estilo.TEXTO_SUAVE);
+        lblProdutos.setForeground(Estilo.TEXTO_SUAVE);
+        lblTotal.setFont(new Font("SansSerif", Font.BOLD, 20));
+        totais.add(lblIngressos);
+        totais.add(lblProdutos);
+        totais.add(lblTotal);
+        totais.add(btnFinalizar);
+        cartao.add(totais, BorderLayout.SOUTH);
+        return cartao;
+    }
+
+    public void mostrarTotais(double ingressos, double produtos, double total) {
+        lblIngressos.setText("Ingressos: " + Estilo.dinheiro(ingressos));
+        lblProdutos.setText("Lanchonete: " + Estilo.dinheiro(produtos));
+        lblTotal.setText("TOTAL  " + Estilo.dinheiro(total));
+    }
+
+    //  getters usados pelo CompraController 
+    public JComboBox<Sala> getCbSala() {
+        return cbSala;
+    }
+
+    public JComboBox<Sessao> getCbSessao() {
+        return cbSessao;
+    }
+
+    public JLabel getLblInfoSessao() {
+        return lblInfoSessao;
+    }
+
+    public MapaCadeirasPanel getMapa() {
+        return mapa;
+    }
+
+    public int getQtdIngressos() {
+        return (Integer) spQtdIngressos.getValue();
+    }
+
+    public JButton getBtnSugerir() {
+        return btnSugerir;
+    }
+
+    public JButton getBtnLimparSelecao() {
+        return btnLimparSelecao;
+    }
+
+    public JLabel getLblSelecao() {
+        return lblSelecao;
+    }
+
+    public JButton getBtnAdicionarIngressos() {
+        return btnAdicionarIngressos;
+    }
+
+    public Produtos getProduto() {
+        return (Produtos) cbProduto.getSelectedItem();
+    }
+
+    public int getQtdProduto() {
+        return (Integer) spQtdProduto.getValue();
+    }
+
+    public JButton getBtnAdicionarProduto() {
+        return btnAdicionarProduto;
+    }
+
+    public JComboBox<Object> getCbCupom() {
+        return cbCupom;
+    }
+
+    // Retorna o cupom escolhido ou null para "Sem cupom"
+    public CupomPromocional getCupom() {
+        Object item = cbCupom.getSelectedItem();
+        if (item instanceof CupomPromocional) {
+            return (CupomPromocional) item;
+        }
+        return null;
+    }
+
+    public DefaultTableModel getModeloCarrinho() {
+        return modeloCarrinho;
+    }
+
+    public JTable getTabelaCarrinho() {
+        return tabelaCarrinho;
+    }
+
+    public JButton getBtnRemoverItem() {
+        return btnRemoverItem;
+    }
+
+    public JButton getBtnEsvaziar() {
+        return btnEsvaziar;
+    }
+
+    public JButton getBtnFinalizar() {
+        return btnFinalizar;
+    }
+
+ 
+    //  EVENTOS DA TELA - chamam a IFachada
+  
+    private IFachada fachada;
+    private Usuario usuario;
+    private Compra carrinho;
+
+    // Controle das sugestões de lugares juntos
+    private ArrayList<int[]> sugestoes = new ArrayList<int[]>();
+    private int proximaSugestao = 0;
+    private int quantidadeSugerida = 0;
+
+    @Override
+    public void atualizar() {
+        carregarMapa(); // outra compra pode ter ocupado/liberado poltronas
+    }
+
+    //  SALA, SESSÃO E MAPA 
+
+    private Sala salaSelecionada() {
+        return (Sala) getCbSala().getSelectedItem();
+    }
+
+    private Sessao sessaoSelecionada() {
+        return (Sessao) getCbSessao().getSelectedItem();
+    }
+
+    private void carregarSessoes() {
+        getCbSessao().removeAllItems();
+        Sala sala = salaSelecionada();
+        if (sala != null) {
+            for (Sessao sessao : sala.getSessoesDisponiveis()) {
+                getCbSessao().addItem(sessao);
             }
-        });
+        }
+        carregarMapa();
+    }
 
-        JPanel nova = new JPanel();
-        nova.setLayout(new BoxLayout(nova, BoxLayout.Y_AXIS));
-        nova.setBorder(BorderFactory.createEmptyBorder(12, 16, 12, 16));
-        nova.add(lblEstado);
-        nova.add(Box.createVerticalStrut(10));
+    private void carregarMapa() {
+        Sala sala = salaSelecionada();
+        Sessao sessao = sessaoSelecionada();
+        sugestoes.clear();
 
-        JPanel ingressos = secao("1. Ingressos");
-        ingressos.add(campo("Filme / sessao", cbSessao));
-        JPanel linhaIngressos = new JPanel(new GridLayout(1, 2, 12, 0));
-        linhaIngressos.add(campo("Quantidade de ingressos", spQtdBilhetes));
-        JPanel painelSelecao = new JPanel(new GridLayout(1, 2, 8, 0));
-        painelSelecao.add(btnEscolherCadeiras);
-        painelSelecao.add(btnExcluirCadeiras);
-        linhaIngressos.add(campo("Selecao", painelSelecao));
-        ingressos.add(linhaIngressos);
-        ingressos.add(lblCadeira);
-        nova.add(ingressos);
-        nova.add(Box.createVerticalStrut(12));
+        if (sala == null || sessao == null) {
+            getMapa().desabilitar();
+            getLblInfoSessao().setText("Nenhuma sessão nesta sala.");
+            return;
+        }
 
-        JPanel bomboniere = secao("2. Bomboniere");
-        JPanel linhaProduto = new JPanel(new GridLayout(1, 3, 10, 0));
-        linhaProduto.add(campo("Produto", cbProduto));
-        linhaProduto.add(campo("Quantidade", spQtdProduto));
-        linhaProduto.add(campo("Adicionar", btnAdicionarProduto));
-        bomboniere.add(linhaProduto);
-        tabelaProdutos.setRowHeight(25);
-        tabelaProdutos.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-        tabelaProdutos.setFillsViewportHeight(true);
-        JScrollPane rolagemTabela = new JScrollPane(tabelaProdutos);
-        rolagemTabela.setPreferredSize(new Dimension(550, 110));
-        bomboniere.add(rolagemTabela);
-        nova.add(bomboniere);
-        nova.add(Box.createVerticalStrut(12));
+        boolean[][] ocupadas = new boolean[Sessao.LINHAS][Sessao.COLUNAS];
+        boolean[][] noCarrinho = new boolean[Sessao.LINHAS][Sessao.COLUNAS];
+        for (int l = 0; l < Sessao.LINHAS; l++) {
+            for (int c = 0; c < Sessao.COLUNAS; c++) {
+                ocupadas[l][c] = !sessao.cadeiraDisponivel(l, c);
+                noCarrinho[l][c] = carrinho.contemCadeira(sala.getNumero(), sessao.getHorario(), l, c);
+            }
+        }
+        getMapa().carregar(ocupadas, noCarrinho);
 
-        JPanel resumo = secao("3. Resumo e pagamento");
-        resumo.add(campo("Escolha somente um desconto", cbCupom));
-        txtResumo.setEditable(false);
-        txtResumo.setLineWrap(true);
-        txtResumo.setWrapStyleWord(true);
-        txtResumo.setBackground(UIManager.getColor("Panel.background"));
-        JScrollPane rolagemResumo = new JScrollPane(txtResumo);
-        rolagemResumo.setPreferredSize(new Dimension(550, 80));
-        resumo.add(rolagemResumo);
-        JPanel valores = new JPanel(new GridLayout(3, 1, 3, 3));
-        valores.add(lblBilhetes);
-        valores.add(lblProdutos);
-        lblTotal.setFont(lblTotal.getFont().deriveFont(Font.BOLD, 17f));
-        valores.add(lblTotal);
-        resumo.add(valores);
-        nova.add(resumo);
-        nova.add(Box.createVerticalStrut(12));
+        String info = sessao.getFilme().getNome() + "  |  " + sessao.getFilme().getDuracao() + " min  |  "
+                + "Ingresso: " + Estilo.dinheiro(sala.calcularValorIngresso(sessao.getFilme()));
+        if (usuario.getTipo().equals("Estudante")) {
+            info += "  (você paga meia)";
+        } else if (usuario.getTipo().equals("Crítico")) {
+            info += "  (cortesia para crítico)";
+        }
+        getLblInfoSessao().setText(info);
+    }
 
-        JPanel acoesNova = new JPanel(new GridLayout(1, 2, 12, 0));
-        acoesNova.add(btnNovaCompra);
-        acoesNova.add(btnFinalizar);
-        nova.add(acoesNova);
-        nova.add(Box.createVerticalGlue());
+    private void mostrarSelecao() {
+        ArrayList<int[]> selecionadas = getMapa().getSelecionadas();
+        if (selecionadas.isEmpty()) {
+            getLblSelecao().setText("Nenhuma poltrona selecionada. Clique em uma poltrona livre.");
+            return;
+        }
+        String nomes = "";
+        for (int[] cadeira : selecionadas) {
+            nomes += Sessao.nomeDaCadeira(cadeira[0], cadeira[1]) + " ";
+        }
+        getLblSelecao().setText(selecionadas.size() + " poltrona(s) selecionada(s): " + nomes);
+    }
 
-        JPanel minhas = new JPanel(new BorderLayout(12, 12));
-        minhas.setBorder(BorderFactory.createEmptyBorder(18, 18, 18, 18));
-        JPanel topoMinhas = new JPanel(new BorderLayout(5, 5));
-        topoMinhas.add(new JLabel("Compra registrada:"), BorderLayout.NORTH);
-        topoMinhas.add(cbCompras, BorderLayout.CENTER);
-        minhas.add(topoMinhas, BorderLayout.NORTH);
-        txtDetalhesCompra.setEditable(false);
-        txtDetalhesCompra.setFont(new Font(Font.MONOSPACED, Font.PLAIN, 13));
-        txtDetalhesCompra.setBorder(BorderFactory.createEmptyBorder(12, 12, 12, 12));
-        minhas.add(new JScrollPane(txtDetalhesCompra), BorderLayout.CENTER);
-        JPanel acoesMinhas = new JPanel(new GridLayout(1, 2, 12, 0));
-        acoesMinhas.add(btnCarregarCompra);
-        acoesMinhas.add(btnCancelar);
-        minhas.add(acoesMinhas, BorderLayout.SOUTH);
+    // Compra de vários bilhetes: o sistema sugere poltronas juntas
+    private void sugerirLugares() {
+        try {
+            int quantidade = getQtdIngressos();
 
-        abas.addTab("Nova compra", new JScrollPane(nova));
-        abas.addTab("Minhas compras", minhas);
-        add(abas, BorderLayout.CENTER);
-        JPanel rodape = new JPanel(new FlowLayout(FlowLayout.RIGHT));
-        rodape.add(btnVoltar);
-        add(rodape, BorderLayout.SOUTH);
+            // Se mudou a quantidade ou ainda não buscou, busca novamente
+            if (sugestoes.isEmpty() || quantidade != quantidadeSugerida) {
+                sugestoes = fachada.sugerirCadeirasJuntas(carrinho, salaSelecionada(),
+                        sessaoSelecionada(), quantidade);
+                quantidadeSugerida = quantidade;
+                proximaSugestao = 0;
+            }
 
-        Color rosinha = Color.decode("#edc0df");
-        for (JButton b : new JButton[]{btnNovaCompra, btnCarregarCompra, btnEscolherCadeiras, btnExcluirCadeiras,
-                btnAdicionarProduto, btnFinalizar, btnCancelar, btnVoltar}) {
-            b.setBackground(rosinha);
-            b.setForeground(Color.BLACK);
-            b.setFocusPainted(false);
+            if (sugestoes.isEmpty()) {
+                Mensagens.aviso(this, "Não há " + getQtdIngressos()
+                        + " poltronas livres lado a lado nesta sessão. Escolha as poltronas manualmente.");
+                return;
+            }
+
+            int[] sugestao = sugestoes.get(proximaSugestao % sugestoes.size());
+            getMapa().selecionarGrupo(sugestao[0], sugestao[1], quantidade);
+            getLblSelecao().setText("Sugestão " + (proximaSugestao % sugestoes.size() + 1) + " de "
+                    + sugestoes.size() + ": fileira " + (char) ('A' + sugestao[0]) + ", poltronas "
+                    + (sugestao[1] + 1) + " a " + (sugestao[1] + quantidade)
+                    + ".  Clique de novo para outra opção.");
+            proximaSugestao++;
+
+        } catch (ValidacaoException e) {
+            Mensagens.aviso(this, e.getMessage());
         }
     }
 
-    private JPanel secao(String titulo) {
-        JPanel painel = new JPanel();
-        painel.setLayout(new BoxLayout(painel, BoxLayout.Y_AXIS));
-        painel.setBorder(BorderFactory.createCompoundBorder(
-                BorderFactory.createTitledBorder(titulo),
-                BorderFactory.createEmptyBorder(8, 10, 10, 10)));
-        painel.setAlignmentX(Component.LEFT_ALIGNMENT);
-        return painel;
-    }
+    //  CARRINHO 
 
-    private JPanel campo(String rotulo, JComponent componente) {
-        JPanel painel = new JPanel(new BorderLayout(3, 5));
-        painel.setBorder(BorderFactory.createEmptyBorder(3, 0, 6, 0));
-        painel.add(new JLabel(rotulo), BorderLayout.NORTH);
-        painel.add(componente, BorderLayout.CENTER);
-        return painel;
-    }
+    private void adicionarIngressos() {
+        try {
+            fachada.adicionarIngressos(carrinho, usuario, salaSelecionada(), sessaoSelecionada(),
+                    getMapa().getSelecionadas(), getQtdIngressos(), getCupom());
+            atualizarCarrinho();
+            carregarMapa();
 
-
-    // A View apenas informa qual linha e qual acao foram acionadas.
-    // As regras de alteracao e exclusao continuam no Controller.
-    public void configurarAcoesProdutos(IntConsumer editar, IntConsumer excluir) {
-        tabelaProdutos.getColumnModel().getColumn(3).setCellRenderer(new RenderizadorAcoes());
-        tabelaProdutos.getColumnModel().getColumn(3).setCellEditor(new EditorAcoes(editar, excluir));
-        tabelaProdutos.getColumnModel().getColumn(3).setPreferredWidth(210);
-        tabelaProdutos.setRowHeight(36);
-    }
-
-    private JPanel painelAcoes(JButton editar, JButton excluir) {
-        JPanel painel = new JPanel(new GridLayout(1, 2, 6, 0));
-        painel.setBorder(BorderFactory.createEmptyBorder(3, 5, 3, 5));
-        for (JButton botao : new JButton[]{editar, excluir}) {
-            botao.setBackground(Color.decode("#edc0df"));
-            botao.setForeground(Color.BLACK);
-            botao.setFocusPainted(false);
-            botao.setMargin(new Insets(2, 4, 2, 4));
-        }
-        painel.add(editar);
-        painel.add(excluir);
-        return painel;
-    }
-
-    private class RenderizadorAcoes implements TableCellRenderer {
-        private final JPanel painel = painelAcoes(new JButton("Editar"), new JButton("Excluir"));
-        @Override
-        public Component getTableCellRendererComponent(JTable tabela, Object valor,
-                boolean selecionada, boolean foco, int linha, int coluna) {
-            painel.setBackground(selecionada ? tabela.getSelectionBackground() : tabela.getBackground());
-            return painel;
+        } catch (VendasException e) {
+            // Os 3 erros de venda pedidos na Parte 3
+            Mensagens.erro(this, "Venda não permitida - " + e.getMotivo(), e.getMessage());
+            carregarMapa();
+        } catch (ValidacaoException e) {
+            Mensagens.aviso(this, e.getMessage());
         }
     }
 
-    private class EditorAcoes extends AbstractCellEditor implements TableCellEditor {
-        private final JPanel painel;
-        private int linhaAtual = -1;
-
-        EditorAcoes(IntConsumer editar, IntConsumer excluir) {
-            JButton btnEditar = new JButton("Editar");
-            JButton btnExcluir = new JButton("Excluir");
-            painel = painelAcoes(btnEditar, btnExcluir);
-            btnEditar.addActionListener(e -> executar(editar));
-            btnExcluir.addActionListener(e -> executar(excluir));
+    private void adicionarProduto() {
+        try {
+            fachada.adicionarProduto(carrinho, getProduto(), getQtdProduto(), getCupom());
+            atualizarCarrinho();
+        } catch (ValidacaoException e) {
+            Mensagens.aviso(this, e.getMessage());
         }
-
-        private void executar(IntConsumer acao) {
-            int linha = linhaAtual;
-            fireEditingStopped();
-            if (linha >= 0) SwingUtilities.invokeLater(() -> acao.accept(linha));
-        }
-
-        @Override
-        public Component getTableCellEditorComponent(JTable tabela, Object valor,
-                boolean selecionada, int linha, int coluna) {
-            linhaAtual = tabela.convertRowIndexToModel(linha);
-            return painel;
-        }
-
-        @Override
-        public Object getCellEditorValue() { return ""; }
     }
 
-    public void configurarAcoesIngressos(IntConsumer editar, IntConsumer excluir) {
-        tabelaIngressos.getColumnModel().getColumn(3).setCellRenderer(new RenderizadorAcoes());
-        tabelaIngressos.getColumnModel().getColumn(3).setCellEditor(new EditorAcoes(editar, excluir));
-        tabelaIngressos.getColumnModel().getColumn(3).setPreferredWidth(210);
+    private void removerItem() {
+        int linha = getTabelaCarrinho().getSelectedRow();
+        if (linha < 0) {
+            Mensagens.aviso(this, "Selecione um item do carrinho.");
+            return;
+        }
+        try {
+            fachada.removerItemDoCarrinho(carrinho, linha);
+            atualizarCarrinho();
+            carregarMapa();
+        } catch (CompraException e) {
+            Mensagens.erro(this, e.getMessage());
+        }
     }
-    public JTable getTabelaIngressos() { return tabelaIngressos; }
-    public DefaultTableModel getModeloIngressos() { return modeloIngressos; }
-    public JTabbedPane getAbas() { return abas; }
-    public JComboBox<String> getCbCompras() { return cbCompras; }
-    public JComboBox<String> getCbSessao() { return cbSessao; }
-    public JSpinner getSpQtdBilhetes() { return spQtdBilhetes; }
-    public JButton getBtnEscolherCadeiras() { return btnEscolherCadeiras; }
-    public JButton getBtnExcluirCadeiras() { return btnExcluirCadeiras; }
-    public JComboBox<Produtos> getCbProduto() { return cbProduto; }
-    public JSpinner getSpQtdProduto() { return spQtdProduto; }
-    public JButton getBtnAdicionarProduto() { return btnAdicionarProduto; }
-    public JComboBox<String> getCbCupom() { return cbCupom; }
-    public JLabel getLblCadeira() { return lblCadeira; }
-    public JLabel getLblProdutos() { return lblProdutos; }
-    public JLabel getLblBilhetes() { return lblBilhetes; }
-    public JLabel getLblTotal() { return lblTotal; }
-    public JLabel getLblEstado() { return lblEstado; }
-    public DefaultTableModel getModeloProdutos() { return modeloProdutos; }
-    public JTable getTabelaProdutos() { return tabelaProdutos; }
-    public JTextArea getTxtResumo() { return txtResumo; }
-    public JTextArea getTxtDetalhesCompra() { return txtDetalhesCompra; }
-    public JButton getBtnNovaCompra() { return btnNovaCompra; }
-    public JButton getBtnCarregarCompra() { return btnCarregarCompra; }
-    public JButton getBtnFinalizar() { return btnFinalizar; }
-    public JButton getBtnCancelar() { return btnCancelar; }
-    public JButton getBtnVoltar() { return btnVoltar; }
+
+    private void esvaziarCarrinho() {
+        if (!carrinho.estaVazia() && !Mensagens.confirmar(this, "Remover todos os itens do carrinho?")) {
+            return;
+        }
+        carrinho = fachada.novaCompra(usuario);
+        atualizarCarrinho();
+        carregarMapa();
+    }
+
+    private void atualizarCarrinho() {
+        getModeloCarrinho().setRowCount(0);
+
+        for (Bilhete b : carrinho.getBilhetes()) {
+            getModeloCarrinho().addRow(new Object[]{
+                    "Ingresso " + b.getNomeCadeira() + " - " + b.getFilme(),
+                    "Sala " + b.getNumeroSala() + ", " + b.getHorarioSessao(),
+                    Estilo.dinheiro(b.getValor())
+            });
+        }
+        for (ItemCompra item : carrinho.getProdutos()) {
+            getModeloCarrinho().addRow(new Object[]{
+                    item.getProduto().getNome(),
+                    item.getQuantidade() + " un.",
+                    Estilo.dinheiro(item.getSubtotal())
+            });
+        }
+
+        mostrarTotais(carrinho.calcularTotalBilhetes(), carrinho.calcularTotalProdutos(),
+                carrinho.calcularTotal());
+
+        // Depois do primeiro item o cupom fica travado (vale para a compra toda)
+        getCbCupom().setEnabled(carrinho.estaVazia());
+    }
+
+    //  FINALIZAR (REALIZAR COMPRA) 
+
+    private void finalizar() {
+        if (carrinho.getBilhetes().isEmpty()) {
+            Mensagens.aviso(this, "Adicione pelo menos um ingresso ao carrinho.");
+            return;
+        }
+        String resumo = carrinho.getBilhetes().size() + " ingresso(s) e " + carrinho.getProdutos().size()
+                + " produto(s).\nTotal: " + Estilo.dinheiro(carrinho.calcularTotal())
+                + "\nCartão final " + finalDoCartao() + "\n\nConfirmar a compra?";
+        if (!Mensagens.confirmar(this, resumo)) {
+            return;
+        }
+
+        try {
+            fachada.finalizarCompra(carrinho);
+            Mensagens.sucesso(this, "Compra nº " + carrinho.getId() + " realizada com sucesso!\n"
+                    + "Veja seus ingressos em \"Minhas compras\".");
+            carrinho = fachada.novaCompra(usuario);
+            atualizarCarrinho();
+            carregarMapa();
+
+        } catch (VendasException e) {
+            Mensagens.erro(this, "Venda não permitida - " + e.getMotivo(), e.getMessage());
+        } catch (CompraException e) {
+            Mensagens.erro(this, e.getMessage());
+        } catch (PersistenciaException e) {
+            Mensagens.erro(this, "Erro ao gravar o arquivo", e.getMessage());
+        }
+    }
+
+    private String finalDoCartao() {
+        String numero = usuario.getNumeroCartao();
+        return numero.substring(numero.length() - 4);
+    }
 }
-
-
-/*
- * ============================================================
- * ORIENTACOES PARA IMPLEMENTAR CompraView
- * ============================================================
- *
- * OBJETIVO:
- *
- * Construir a interface visual utilizada durante a compra.
- *
- *
- * COMPONENTES:
- *
- * Criar componentes para:
- *
- * - escolher Sessao;
- * - informar quantidade de bilhetes;
- * - escolher cadeiras;
- * - escolher Produto;
- * - quantidade do Produto;
- * - adicionar Produto;
- * - escolher CupomPromocional;
- * - apresentar cadeira selecionada;
- * - apresentar total dos produtos;
- * - apresentar total da compra;
- * - finalizar;
- * - voltar.
- *
- *
- * A View deve construir os componentes e disponibiliza-los
- * atraves de getters.
- *
- *
- * Exemplos:
- *
- * getCbSessao()
- * getSpQtdBilhetes()
- * getBtnEscolherCadeiras()
- * getCbProduto()
- * getSpQtdProduto()
- * getBtnAdicionarProduto()
- * getCbCupom()
- * getLblCadeira()
- * getLblProdutos()
- * getLblTotal()
- * getBtnFinalizar()
- * getBtnVoltar()
- *
- *
- * NAO devem permanecer na View:
- *
- * carregarSessoes()
- * buscarSessaoSelecionada()
- * abrirCadeiras()
- * adicionarProduto()
- * calcularValorBilhete()
- * atualizarTotal()
- * finalizar()
- * voltar()
- *
- * Essas operacoes passam para CompraController.
- *
- *
- * CompraView tambem nao deve armazenar:
- *
- * Sala selecionada
- * Sessao selecionada
- * totalProdutos
- * linhaSelecionada
- * colunaSelecionada
- *
- * Esse estado pertence ao CompraController nesta arquitetura.
- *
- * ============================================================
- */

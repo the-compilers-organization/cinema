@@ -1,294 +1,88 @@
 package controller;
 
-import model.enums.Sexo;
-import model.*;
-import view.UsuarioView;
+import java.util.ArrayList;
 
-import javax.swing.*;
+import exceptions.PersistenciaException;
+import exceptions.UsuarioException;
+import exceptions.ValidacaoException;
+import model.Administrador;
+import model.Base;
+import model.Funcionario;
+import model.Usuario;
+import model.Validador;
+import repository.IRepositorioUsuario;
+
+
+// Camada de NEGÓCIO (controller) - regras envolvendo usuários (login, cadastro, alteração, exclusão)
+// Acessa os dados somente pela interface IRepositorioUsuario
 
 public class UsuarioController {
 
-    private UsuarioView view;
-    private MenuController menu;
+    // Contas fixas da equipe do cinema
+    public static final String EMAIL_ADMIN = "admin@cinema.com";
+    public static final String SENHA_ADMIN = "admin123";
+    public static final String EMAIL_FUNCIONARIO = "func@cinema.com";
+    public static final String SENHA_FUNCIONARIO = "func123";
 
-    public UsuarioController(
-            UsuarioView view,
-            MenuController menu) {
+    private IRepositorioUsuario repositorio;
+    private Administrador administrador;
+    private Funcionario funcionario;
 
-        this.view = view;
-        this.menu = menu;
-
-        view.getCbTipoUsuario().addActionListener(e -> alterarTipoUsuario());
-
-        view.getBtnCadastrar().addActionListener(e -> cadastrarUsuario());
-
-        view.getBtnVoltar().addActionListener(e -> voltar());
-
-        view.addWindowListener(new java.awt.event.WindowAdapter() {
-
-            @Override
-            public void windowClosing(java.awt.event.WindowEvent e) {
-                voltar();
-            }
-        });
+    public UsuarioController(IRepositorioUsuario repositorio, Administrador administrador, Funcionario funcionario) {
+        this.repositorio = repositorio;
+        this.administrador = administrador;
+        this.funcionario = funcionario;
     }
 
-    private void alterarTipoUsuario() {
+    public Usuario entrarCliente(String cpf, String senha) throws ValidacaoException, UsuarioException {
+        Validador.textoObrigatorio(cpf, "CPF");
+        Validador.textoObrigatorio(senha, "Senha");
 
-        boolean critico = "Critico".equals(
-                view.getCbTipoUsuario().getSelectedItem()
-        );
-
-        view.getLblOrigem().setVisible(critico);
-
-        view.getTxtOrigem().setVisible(critico);
-    }
-
-    private void cadastrarUsuario() {
-
-        try {
-
-            String tipo = (String) view.getCbTipoUsuario().getSelectedItem();
-
-            String user = view.getTxtUser().getText().trim();
-
-            String cpf = view.getTxtCpf().getText().trim();
-
-            String senha = new String(view.getTxtSenha().getPassword());
-
-            int idade = Integer.parseInt(
-                    view.getTxtIdade().getText().trim()
-            );
-
-            Sexo sexo = (Sexo) view.getCbSexo().getSelectedItem();
-
-            String email = view.getTxtEmail().getText().trim();
-
-            String nomeCartao = view.getTxtNomeCartao().getText().trim();
-
-            String numeroCartao = view.getTxtNumeroCartao().getText().trim();
-
-            String codigo = view.getTxtCodigoVerificador().getText().trim();
-
-            if (user.isEmpty() ||
-                    cpf.isEmpty() ||
-                    senha.isEmpty() ||
-                    idade < 0 ||
-                    email.isEmpty()) {
-
-                JOptionPane.showMessageDialog(
-                        view,
-                        "Preencha os dados obrigatorios e informe idade valida."
-                );
-
-                return;
-            }
-
-            Usuario usuario;
-
-            if ("Estudante".equals(tipo)) {
-
-                usuario = new Estudante(
-                        user,
-                        cpf,
-                        senha,
-                        idade,
-                        sexo,
-                        email,
-                        nomeCartao,
-                        numeroCartao,
-                        codigo
-                );
-
-            } else if ("Critico".equals(tipo)) {
-
-                String origem = view.getTxtOrigem().getText().trim();
-
-                if (origem.isEmpty()) {
-
-                    JOptionPane.showMessageDialog(
-                            view,
-                            "Informe a origem do critico."
-                    );
-
-                    return;
-                }
-
-                usuario = new Critico(
-                        user,
-                        cpf,
-                        senha,
-                        idade,
-                        sexo,
-                        email,
-                        nomeCartao,
-                        numeroCartao,
-                        codigo,
-                        origem
-                );
-
-            } else {
-
-                usuario = new Usuario(
-                        user,
-                        cpf,
-                        senha,
-                        idade,
-                        sexo,
-                        email,
-                        nomeCartao,
-                        numeroCartao,
-                        codigo
-                );
-            }
-
-            if (!menu.cadastrarUsuario(usuario)) {
-                JOptionPane.showMessageDialog(view, "CPF ja cadastrado.");
-                return;
-            }
-
-            JOptionPane.showMessageDialog(
-                    view,
-                    "Usuario cadastrado com sucesso. Faca login no menu principal."
-            );
-
-            voltar();
-
-        } catch (NumberFormatException ex) {
-
-            JOptionPane.showMessageDialog(
-                    view,
-                    "A idade deve ser um numero inteiro."
-            );
+        Usuario usuario = repositorio.buscar(Validador.limparCpf(cpf));
+        if (usuario == null || !usuario.getSenha().equals(senha)) {
+            throw new UsuarioException("CPF ou senha incorretos.");
         }
+        return usuario;
     }
 
-    private void voltar() {
+    public Base entrarEquipe(String email, String senha) throws ValidacaoException, UsuarioException {
+        Validador.textoObrigatorio(email, "E-mail");
+        Validador.textoObrigatorio(senha, "Senha");
 
-        menu.voltarMenu();
+        if (email.trim().equalsIgnoreCase(EMAIL_ADMIN) && senha.equals(SENHA_ADMIN)) {
+            return administrador;
+        }
+        if (email.trim().equalsIgnoreCase(EMAIL_FUNCIONARIO) && senha.equals(SENHA_FUNCIONARIO)) {
+            return funcionario;
+        }
+        throw new UsuarioException("E-mail ou senha da equipe incorretos.");
+    }
 
-        view.dispose();
+    // "responsavel" é o Administrador ou o Funcionário (polimorfismo com a classe abstrata Base)
+    public void cadastrar(Base responsavel, Usuario usuario) throws UsuarioException, PersistenciaException {
+        responsavel.adicionarUsuario(usuario);
+    }
+
+    public void alterar(Base responsavel, Usuario usuario) throws UsuarioException, PersistenciaException {
+        responsavel.alterarUsuario(usuario);
+    }
+
+    public void excluir(Base equipe, String cpf, boolean possuiCompras) throws UsuarioException, PersistenciaException {
+        // Somente o Administrador possui o método excluirUsuario
+        if (!(equipe instanceof Administrador)) {
+            throw new UsuarioException("Somente o administrador pode excluir usuários.");
+        }
+        if (possuiCompras) {
+            throw new UsuarioException("Este usuário possui compras. Cancele as compras antes de excluí-lo.");
+        }
+        ((Administrador) equipe).excluirUsuario(cpf);
+    }
+
+    public ArrayList<Usuario> listar() {
+        return repositorio.listar();
+    }
+
+    public Administrador getAdministrador() {
+        return administrador;
     }
 }
-
-
-/*
- * ============================================================
- * ORIENTACOES PARA IMPLEMENTAR UsuarioController
- * ============================================================
- *
- * OBJETIVO:
- *
- * Controlar o formulario de cadastro apresentado por
- * UsuarioView.
- *
- *
- * ATRIBUTOS:
- *
- * - UsuarioView view;
- * - MenuController menuController.
- *
- *
- * CONSTRUTOR:
- *
- * Receber UsuarioView e MenuController.
- *
- * Guardar as referencias e configurar os eventos.
- *
- *
- * EVENTOS:
- *
- * Tipo de usuario alterado -> alterarTipoUsuario()
- * Cadastrar                -> cadastrarUsuario()
- * Voltar                   -> voltar()
- *
- *
- * alterarTipoUsuario():
- *
- * Consultar o tipo selecionado na View.
- *
- * Se:
- *
- * "Critico"
- *
- * mostrar:
- *
- * - JLabel Origem;
- * - JTextField Origem.
- *
- * Caso contrario, esconder os dois.
- *
- *
- * cadastrarUsuario():
- *
- * Obter da View:
- *
- * - tipo;
- * - user;
- * - CPF;
- * - senha;
- * - idade;
- * - sexo;
- * - email;
- * - nome do cartao;
- * - numero do cartao;
- * - codigo verificador;
- * - origem, quando for Critico.
- *
- * Converter idade de String para int.
- *
- * Tratar NumberFormatException.
- *
- *
- * HERANCA:
- *
- * Dependendo do tipo selecionado:
- *
- * "Usuario"
- *       |
- *       v
- * new Usuario(...)
- *
- * "Estudante"
- *       |
- *       v
- * new Estudante(...)
- *
- * "Critico"
- *       |
- *       v
- * new Critico(...)
- *
- *
- * Todos podem ser armazenados em:
- *
- * Usuario usuario
- *
- * pois Estudante e Critico herdam de Usuario.
- *
- *
- * Depois do cadastro:
- *
- * enviar o objeto para:
- *
- * menuController.setUsuario(usuario)
- *
- * Dessa maneira o mesmo objeto podera ser utilizado nas
- * outras funcionalidades.
- *
- *
- * voltar():
- *
- * Solicitar ao MenuController que mostre novamente o menu e
- * fechar UsuarioView.
- *
- *
- * NAO FAZER:
- *
- * - construir JPanel;
- * - criar JTextField;
- * - criar JButton;
- * - colocar regras especificas de Usuario dentro da View.
- *
- * ============================================================
- */

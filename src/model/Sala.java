@@ -1,70 +1,74 @@
 package model;
+
+import java.util.ArrayList;
+
+import exceptions.ValidacaoException;
 import model.enums.TipoSala;
 
+
+// Parte 1 - Sala: possui um vetor de sessões de TAMANHO FIXO, organizado por uma grade de horários
+// Se não houver sessão em um horário, a posição fica null e não aparece para o usuário
+
 public class Sala {
-    private static final int TAM = 10;
+
+    // Grade de horários (cada posição do vetor de sessões corresponde a um horário)
+    public static final String[] HORARIOS = {"10:00", "12:00", "14:00", "16:00", "18:00", "20:00", "22:00"};
 
     private int numero;
-    private Sessao[] sessoes;
-    private int qtdSessoes;
     private TipoSala tipoSala;
+    private Sessao[] sessoes;
 
-    public Sala(int numero, TipoSala tipoSala){
+    public Sala(int numero, TipoSala tipoSala) {
         this.numero = numero;
-        this.sessoes = new Sessao[TAM];
         this.tipoSala = tipoSala;
-        this.qtdSessoes = 0;
+        this.sessoes = new Sessao[HORARIOS.length];
     }
 
-    public boolean adicionarSessao(Sessao sessao){
-        
-        if(sessao != null && qtdSessoes < TAM){
-            sessoes[qtdSessoes] = sessao;
-            qtdSessoes += 1;
-            
-            return true;
+    // Cria uma sessão do filme no horário da grade indicado
+    public void adicionarSessao(int indiceHorario, Filme filme) throws ValidacaoException {
+        if (indiceHorario < 0 || indiceHorario >= HORARIOS.length) {
+            throw new ValidacaoException("Horário inválido.");
         }
-        return false;
+        if (filme == null) {
+            throw new ValidacaoException("Filme inválido.");
+        }
+        if (sessoes[indiceHorario] != null) {
+            throw new ValidacaoException("Já existe sessão às " + HORARIOS[indiceHorario] + " na sala " + numero + ".");
+        }
+        sessoes[indiceHorario] = new Sessao(HORARIOS[indiceHorario], filme);
     }
 
-    public int buscarSessao(String horario){
-        int i;
-
-        if(horario != null){
-            for(i = 0; i < sessoes.length; i += 1){
-                if(sessoes[i] != null){
-                    if(sessoes[i].getHorario().equals(horario)){
-                        return i;
-                    }
-                }    
+    // Retorna só as sessões que existem (ignora as posições null)
+    public ArrayList<Sessao> getSessoesDisponiveis() {
+        ArrayList<Sessao> lista = new ArrayList<Sessao>();
+        for (Sessao sessao : sessoes) {
+            if (sessao != null) {
+                lista.add(sessao);
             }
-        }    
-
-        return -1;
+        }
+        return lista;
     }
 
-    // ficará no view public void listarSessoes()
-    // public void listarSessoes(){
-    //     int i;
+    public Sessao buscarSessao(String horario) {
+        for (Sessao sessao : sessoes) {
+            if (sessao != null && sessao.getHorario().equals(horario)) {
+                return sessao;
+            }
+        }
+        return null;
+    }
 
-    //     // System.out.print("=".repeat(41));
-    //     // System.out.print(" SESSOES ");
-    //     // System.out.print("=".repeat(41));
-    //     // System.out.println();
-        
-    //     System.out.printf("%-10d | %-10s | %-20s | %-45s | %-15s\n","Sala", "Tipo de Sala","Horario", "Filme", "Valor R$");
-    //     System.out.println("-".repeat(100));
+    // Valor do ingresso nesta sala = valor do filme x multiplicador
+    public double calcularValorIngresso(Filme filme) {
+        return filme.getValor() * tipoSala.getMultiplicador();
+    }
 
-    //     for(i = 0; i < sessoes.length; i += 1){
-    //         if(sessoes[i] != null){
-    //             System.out.printf("%-10d | %-10s | %-20s | %-45s | %-15s\n", numero, tipoSala, sessoes[i].getHorario(), sessoes[i].getFilme().getNome(), sessoes[i].getFilme().getValor());
-    //         }
+    @Override
+    public String toString() {
+        return "Sala " + numero + "  (" + tipoSala.getTipo() + ")";
+    }
 
-    //     }
-    //     // System.out.printf("=".repeat(91));
-    //     // System.out.println();
-    // }
-
+    //  GETTERS E SETTERS 
     public int getNumero() {
         return numero;
     }
@@ -73,27 +77,19 @@ public class Sala {
         this.numero = numero;
     }
 
-    public Sessao[] getSessoes() {
-        return sessoes;
-    }
-
-    public void setSessoes(Sessao[] sessoes) {
-        this.sessoes = sessoes;
-    }
-
-    public int getQtdSessoes() {
-        return qtdSessoes;
-    }
-
-    public void setQtdSessoes(int qtdSessoes) {
-        this.qtdSessoes = qtdSessoes;
-    }  
-    
     public TipoSala getTipoSala() {
         return tipoSala;
     }
 
     public void setTipoSala(TipoSala tipoSala) {
         this.tipoSala = tipoSala;
+    }
+
+    public Sessao[] getSessoes() {
+        return sessoes;
+    }
+
+    public void setSessoes(Sessao[] sessoes) {
+        this.sessoes = sessoes;
     }
 }

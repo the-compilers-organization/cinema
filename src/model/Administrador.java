@@ -1,207 +1,144 @@
 package model;
 
-import java.util.ArrayList;
-
+import exceptions.FilmeException;
+import exceptions.PersistenciaException;
+import exceptions.UsuarioException;
+import exceptions.ValidacaoException;
 import model.interfaces.GerenciaFilmes;
+import repository.IRepositorioFilme;
+import repository.IRepositorioUsuario;
 
-// A classe Administrador é uma classe concreta que deve possuir as seguintes
-    // características:
-    // ○ Atributos: salário e ID.
-    // ○ Métodos: getters e setters para os atributos;
-    // ○ Métodos implementados na classe abstrata;
-    // ○ Método: Excluir usuário;
-    // ○ Implementar métodos de gerência de filmes.
-    // OBS: Usar ArrayList. Exemplos: 
-    // ArrayList<Usuario> usuarios
-    // ArrayList<Filme> filmes
 
-public class Administrador extends Base implements GerenciaFilmes{
+// Parte 3 - Classe concreta Administrador
+// Atributos: salário e ID
+// Implementa os métodos abstratos de Base, exclui usuários e implementa a interface GerenciaFilmes
+// O Administrador é o responsável pela PERSISTÊNCIA de usuários e filmes. Ele conversa com a camada de dados apenas pelas INTERFACES
+// IRepositorioUsuario e IRepositorioFilme (não sabe que é JSON)
+
+public class Administrador extends Base implements GerenciaFilmes {
 
     private int id;
     private double salario;
-    private ArrayList<Usuario> usuarios;
-    private ArrayList<Filme> filmes;
+    private IRepositorioUsuario repositorioUsuarios;
+    private IRepositorioFilme repositorioFilmes;
 
-    public Administrador(int id, double salario, String nome, int idade, String email){
+    public Administrador(int id, String nome, int idade, String email, double salario,
+                         IRepositorioUsuario repositorioUsuarios, IRepositorioFilme repositorioFilmes)
+            throws ValidacaoException {
         super(nome, idade, email);
-        this.id = id;
-        this.salario = salario;
-        this.usuarios = new ArrayList<Usuario>();
-        this.filmes = new ArrayList<Filme>();
-
+        setId(id);
+        setSalario(salario);
+        this.repositorioUsuarios = repositorioUsuarios;
+        this.repositorioFilmes = repositorioFilmes;
     }
 
+    @Override
+    public String getCargo() {
+        return "Administrador";
+    }
 
-    // ○ Métodos implementados na classe abstrata;
+    //  USUÁRIOS 
+    // Retorna o usuário com o CPF informado ou null se não existir
+    public Usuario buscarUsuario(String cpf) {
+        return repositorioUsuarios.buscar(Validador.limparCpf(cpf));
+    }
 
-    public int buscarUsuario(String cpf){
-        if(cpf != null){
-            int i = 0;
-
-            for(Usuario usuario : usuarios){
-                if(usuario.getCpf().equals(cpf)){
-                    return i;
-                }
-                i += 1;
-            }
+    @Override
+    public void adicionarUsuario(Usuario usuario) throws UsuarioException, PersistenciaException {
+        if (usuario == null) {
+            throw new UsuarioException("Usuário inválido.");
         }
-
-        return -1;
-    }
-
-
-
-    public boolean adicionarUsuario(Usuario usuario){
-        if(usuario != null){
-            int indice = buscarUsuario(usuario.getCpf());
-
-            if(indice == -1){
-                usuarios.add(usuario);
-                return true;
-            }
-
+        if (buscarUsuario(usuario.getCpf()) != null) {
+            throw new UsuarioException("Já existe um usuário cadastrado com o CPF " + usuario.getCpf() + ".");
         }
-
-
-        return false;
+        repositorioUsuarios.inserir(usuario);
     }
 
-    // regra de negocio: não pode alterar cpf do usuario
-    public boolean alterarUsuario(Usuario usuarioAtualizado){
-        if(usuarioAtualizado != null){
-            int indice = buscarUsuario(usuarioAtualizado.getCpf());
-
-            if(indice != -1){
-                usuarios.set(indice, usuarioAtualizado);
-                return true;
-            }
-
+    // Regra de negócio: o CPF não pode ser alterado (ele identifica o usuário)
+    @Override
+    public void alterarUsuario(Usuario usuarioAtualizado) throws UsuarioException, PersistenciaException {
+        if (usuarioAtualizado == null) {
+            throw new UsuarioException("Usuário inválido.");
         }
-
-        return false;
-    }
-
-
-    // ○ Método: Excluir usuário;
-    public boolean excluirUsuario(Usuario usuarioExcluido){
-        if(usuarioExcluido != null){
-            int indice = buscarUsuario(usuarioExcluido.getCpf());
-
-            if(indice != -1){
-                usuarios.remove(indice);
-                return true;
-            }
+        Usuario atual = buscarUsuario(usuarioAtualizado.getCpf());
+        if (atual == null) {
+            throw new UsuarioException("Usuário com CPF " + usuarioAtualizado.getCpf() + " não encontrado.");
         }
-
-        return false;
+        // Atualiza o próprio objeto: quem já tem a referência (ex.: usuário logado) vê os dados novos
+        atual.copiarDados(usuarioAtualizado);
+        repositorioUsuarios.atualizar(atual);
     }
-        
 
-
-
-    // ○ Implementar métodos de gerência de filmes.
-    public int buscarFilme(String nome){
-        if(nome != null){
-            int i = 0;
-
-            for(Filme filme : filmes){
-                if(filme.getNome().equals(nome)){
-                    return i;
-                }
-                i += 1;
-            }
-
+    // Método exclusivo do Administrador
+    public void excluirUsuario(String cpf) throws UsuarioException, PersistenciaException {
+        Usuario usuario = buscarUsuario(cpf);
+        if (usuario == null) {
+            throw new UsuarioException("Usuário com CPF " + cpf + " não encontrado.");
         }
-
-        return -1;
+        repositorioUsuarios.remover(usuario.getCpf());
     }
-    
-    public boolean incluirFilme(Filme filme){
-        if(filme != null){
-            int indice = buscarFilme(filme.getNome());
 
-            if(indice == -1){
-                filmes.add(filme);
-                return true;
-            }
+    // FILMES (interface GerenciaFilmes) 
+
+    public Filme buscarFilme(String nome) {
+        return repositorioFilmes.buscar(nome);
+    }
+
+    @Override
+    public void incluirFilme(Filme filme) throws FilmeException, PersistenciaException {
+        if (filme == null) {
+            throw new FilmeException("Filme inválido.");
         }
-
-        return false;
-    }
-
-    
-    // regra de negocio: não pode alterar nome do filme
-    public boolean alterarFilme(Filme filmeAtualizado){
-        if(filmeAtualizado != null){
-            int indice = buscarFilme(filmeAtualizado.getNome());
-
-            if(indice != -1){
-                filmes.set(indice, filmeAtualizado);
-                return true;
-            }
-
+        if (buscarFilme(filme.getNome()) != null) {
+            throw new FilmeException("O filme \"" + filme.getNome() + "\" já está cadastrado.");
         }
-
-        return false;
+        repositorioFilmes.inserir(filme);
     }
 
-    public boolean excluirFilme(Filme filmeExcluido){
-        if(filmeExcluido != null){
-            int indice = buscarFilme(filmeExcluido.getNome());
-
-            if(indice != -1){
-                filmes.remove(indice);
-                return true;
-            }
-
+    // Regra de negócio: o nome do filme não pode ser alterado
+    @Override
+    public void alterarFilme(Filme filmeAtualizado) throws FilmeException, PersistenciaException {
+        if (filmeAtualizado == null) {
+            throw new FilmeException("Filme inválido.");
         }
-
-        return false;
+        Filme atual = buscarFilme(filmeAtualizado.getNome());
+        if (atual == null) {
+            throw new FilmeException("Filme \"" + filmeAtualizado.getNome() + "\" não encontrado.");
+        }
+        // Atualiza o próprio objeto: as sessões que exibem o filme veem os novos dados
+        atual.copiarDados(filmeAtualizado);
+        repositorioFilmes.atualizar(atual);
     }
 
-    
+    @Override
+    public void excluirFilme(String nome) throws FilmeException, PersistenciaException {
+        Filme filme = buscarFilme(nome);
+        if (filme == null) {
+            throw new FilmeException("Filme \"" + nome + "\" não encontrado.");
+        }
+        repositorioFilmes.remover(filme.getNome());
+    }
 
-
+    //  GETTERS E SETTERS 
     public int getId() {
         return id;
     }
 
-
-    public void setId(int id) {
+    public void setId(int id) throws ValidacaoException {
+        if (id <= 0) {
+            throw new ValidacaoException("O ID do administrador deve ser positivo.");
+        }
         this.id = id;
     }
-
 
     public double getSalario() {
         return salario;
     }
 
-
-    public void setSalario(double salario) {
+    public void setSalario(double salario) throws ValidacaoException {
+        if (salario < 0) {
+            throw new ValidacaoException("O salário não pode ser negativo.");
+        }
         this.salario = salario;
     }
-
-
-    public ArrayList<Usuario> getUsuarios() {
-        return usuarios;
-    }
-
-
-    public void setUsuarios(ArrayList<Usuario> usuarios) {
-        this.usuarios = usuarios;
-    }
-
-
-    public ArrayList<Filme> getFilmes() {
-        return filmes;
-    }
-
-
-    public void setFilmes(ArrayList<Filme> filmes) {
-        this.filmes = filmes;
-    }
-
-
-    
-        
 }

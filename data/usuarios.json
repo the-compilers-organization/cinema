@@ -1,12 +1,39 @@
 [
   {
-    "tipo": "Usuario",
-    "user": "teste1 teste",
-    "cpf": "123456789",
-    "email": "teste1@teste.com",
-    "senhaHash": "JDEZjeU039AeGo82Imh5fqZstlSFYq5PHM6Qhp11Nz8\u003d",
-    "senhaSalt": "6nAMGPd7bXn2g6b9fX5zWA\u003d\u003d",
+    "user": "Maria Cliente",
+    "cpf": "11111111111",
+    "senha": "1234",
     "idade": 30,
-    "sexo": "F"
+    "sexo": "FEMININO",
+    "email": "maria@email.com",
+    "nomeCartao": "MARIA CLIENTE",
+    "numeroCartao": "4111111111111111",
+    "codigoVerificador": "123",
+    "tipo": "Cliente"
+  },
+  {
+    "user": "João Estudante",
+    "cpf": "22222222222",
+    "senha": "1234",
+    "idade": 20,
+    "sexo": "MASCULINO",
+    "email": "joao@email.com",
+    "nomeCartao": "JOAO ESTUDANTE",
+    "numeroCartao": "5555444433332222",
+    "codigoVerificador": "456",
+    "tipo": "Estudante"
+  },
+  {
+    "origem": "Revista Cine Recife",
+    "user": "Paula Crítica",
+    "cpf": "33333333333",
+    "senha": "1234",
+    "idade": 42,
+    "sexo": "FEMININO",
+    "email": "paula@cinerecife.com",
+    "nomeCartao": "PAULA CRITICA",
+    "numeroCartao": "4000123412341234",
+    "codigoVerificador": "789",
+    "tipo": "Crítico"
   }
 ]
