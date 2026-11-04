@@ -12,16 +12,7 @@ public interface GerenciaFilmes {
 
     void incluirFilme(Filme filme) throws FilmeException, PersistenciaException;
 
-<<<<<<< Updated upstream
-    int buscarFilme(String nome);
-    boolean incluirFilme(Filme filme);
-    boolean excluirFilme(Filme filmeExcluido);
-    boolean alterarFilme(Filme filmeAtualizado);
-
-}
-=======
     void excluirFilme(String nome) throws FilmeException, PersistenciaException;
 
     void alterarFilme(Filme filmeAtualizado) throws FilmeException, PersistenciaException;
 }
->>>>>>> Stashed changes

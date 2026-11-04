@@ -37,26 +37,17 @@ public abstract class Base {
         return nome;
     }
 
-<<<<<<< Updated upstream
-    public void setNome(String nome) {
-        this.nome = nome;
-=======
     public void setNome(String nome) throws ValidacaoException {
         Validador.textoObrigatorio(nome, "Nome");
         this.nome = nome.trim();
->>>>>>> Stashed changes
     }
 
     public int getIdade() {
         return idade;
     }
 
-<<<<<<< Updated upstream
-    public void setIdade(int idade) {
-=======
     public void setIdade(int idade) throws ValidacaoException {
         Validador.idade(idade);
->>>>>>> Stashed changes
         this.idade = idade;
     }
 
@@ -64,13 +55,8 @@ public abstract class Base {
         return email;
     }
 
-<<<<<<< Updated upstream
-    public void setEmail(String email) {
-        this.email = email;
-=======
     public void setEmail(String email) throws ValidacaoException {
         Validador.email(email);
         this.email = email.trim();
->>>>>>> Stashed changes
     }
 }
