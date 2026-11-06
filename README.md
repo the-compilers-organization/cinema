@@ -150,9 +150,6 @@ Aplicação de um padrão de projeto com justificativa e preparação da apresen
 
 🔗 [Apresentação de projeto - Parte 4](doc/apresentacao_de_projeto_parte4.pdf)
 
-### 📄 Material de apoio
-
-🔗 [Aula 14 - Exceptions](doc/aula14_exceptions.pdf)
 
 📁 [Acessar todos os documentos do projeto](https://github.com/the-compilers-organization/cinema/tree/main/doc)
 
