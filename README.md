@@ -729,12 +729,14 @@ Antes de clonar e executar o projeto, é necessário ter instalado:
 
 ### 4. IDE ou editor de código
 
-O projeto pode ser desenvolvido utilizando, por exemplo:
+O projeto pode compilado e executado em:
 
 - VS Code (com o Extension Pack for Java);
 - IntelliJ IDEA;
 - Eclipse;
 - NetBeans.
+
+> :warning:A IDE deve utilizar o JDK configurado para o projeto e reconhecer as dependências declaradas no arquivo pom.xml.
 
 ---
 
@@ -795,9 +797,9 @@ Também é possível criar uma nova conta pelo botão **"Criar minha conta"**.
 # Tecnologias Utilizadas :wrench:
 
 - **Java 17**
-- **Java Swing** (interface gráfica)
-- **Gson** (leitura e gravação de JSON)
-- **Maven**
+- **Java Swing** (interface gráfica): Biblioteca utilizada para criar a interface gráfica, incluindo telas, botões, formulários e o mapa de cadeiras.
+- **Gson** (leitura e gravação de JSON): Biblioteca utilizada para ler e gravar os dados de usuários, filmes e compras em arquivos JSON.
+- **Maven**: Ferramenta utilizada para gerenciar as dependências do projeto, como o Gson, e automatizar a compilação e execução.
 - **Programação Orientada a Objetos**
 - **Git**
 - **GitHub**
