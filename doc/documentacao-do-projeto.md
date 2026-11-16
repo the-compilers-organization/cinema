@@ -1,76 +1,57 @@
-# Roteiro de Apresentação (8 Minutos) — Sistema de Cinema
+## Mapeamento dos 4 Slides do Professor vs. Código Implementado
 
-> [!IMPORTANT]
-> **3 Detalhes do Código Real para Ajustar na Sua Fala (Evita Pegadinhas do Professor!):**
-> 1. **Nome da tela da matriz de poltronas:** No pacote `view`, o componente gráfico da matriz `10x15` chama-se [`MapaCadeirasPanel.java`](file:///C:/Users/Amanda%20Aziz/Documents/cinema/src/view/MapaCadeirasPanel.java) (embutido dentro da tela [`CompraView.java`](file:///C:/Users/Amanda%20Aziz/Documents/cinema/src/view/CompraView.java)), e não `CadeiraView`.
-> 2. **Sobre `VendasException`:** Na versão final de [`VendasException.java`](file:///C:/Users/Amanda%20Aziz/Documents/cinema/src/exceptions/VendasException.java#L10-L32), os 3 motivos são definidos por **constantes estáticas** (`SESSAO_INICIADA`, `POLTRONA_OCUPADA`, `FORA_DE_CARTAZ`) passadas ao construtor `new VendasException(motivo, filme, mensagem)` em [`Usuario.comprarBilhete`](file:///C:/Users/Amanda%20Aziz/Documents/cinema/src/model/Usuario.java#L51-L84). Já os métodos estáticos auxiliares estão em [`Validador.java`](file:///C:/Users/Amanda%20Aziz/Documents/cinema/src/model/Validador.java) e [`Sessao.nomeDaCadeira()`](file:///C:/Users/Amanda%20Aziz/Documents/cinema/src/model/Sessao.java#L89-L92).
-> 3. **Cuidado com o relógio na Demo ao vivo!** O método [`Sessao.jaComecou()`](file:///C:/Users/Amanda%20Aziz/Documents/cinema/src/model/Sessao.java#L51-L54) compara o horário da sessão com `LocalTime.now()` do computador. Se você apresentar à noite (ex.: após as 20h), escolha a sessão das **22:00**! Se escolher 14:00 ou 18:00, o sistema vai disparar a `VendasException` de *"Sessão já iniciada"* (o que inclusive é ótimo para mostrar o erro funcionando!).
-
----
-
-## Parte 1: O Que Escrever em Cada Slide no Canva (6 Slides + Capa)
-
-Para não poluir os slides como no PDF original de 22 páginas, use apenas **tópicos curtos (bullet points)** em cada slide:
-
-### **Slide 1 — Introdução e Arquitetura Geral**
-* **Objetivo:** Sistema desktop completo para gestão de cinema, venda de ingressos/lanchonete e críticas de filmes.
-* **Interface Gráfica (`view`):** Desenvolvida em **Java Swing** (`LoginView`, `PrincipalView`, `CompraView`, `MapaCadeirasPanel`).
-* **Divisão de Pacotes (MVC + Repository + Facade):**
-  * `view`: Telas Swing e eventos de interface.
-  * `controller`: `IFachada` / `Fachada` + 4 Controllers (`Usuario`, `Filme`, `Sessao`, `Compra`).
-  * `model`: Regras de domínio, entidades, `enums` e `interfaces`.
-  * `repository`: Persistência em `data/*.json` via biblioteca **Gson** (`IRepositorio...`).
-  * `exceptions`: 6 exceções customizadas transversais.
-
-### **Slide 2 — Núcleo do Domínio e Matriz 10×15**
-* **[`Sala`](file:///C:/Users/Amanda%20Aziz/Documents/cinema/src/model/Sala.java):** Número, `TipoSala` e vetor fixo `Sessao[7]` (grade das `10:00` às `22:00`).
-* **[`Sessao`](file:///C:/Users/Amanda%20Aziz/Documents/cinema/src/model/Sessao.java):** Associa 1 `Filme` + Matriz **`Cadeira[10][15]`** (Fileiras `A` a `J`, Colunas `1` a `15` = 150 lugares).
-* **Algoritmo [`buscarCadeirasJuntas(int qtd)`](file:///C:/Users/Amanda%20Aziz/Documents/cinema/src/model/Sessao.java#L61-L86):** Varre a matriz priorizando as fileiras centrais (`E`, `F`, `D`, `G`...) para sugerir poltronas livres lado a lado.
-* **[`Bilhete`](file:///C:/Users/Amanda%20Aziz/Documents/cinema/src/model/Bilhete.java) & [`Compra`](file:///C:/Users/Amanda%20Aziz/Documents/cinema/src/model/Compra.java):**
-  * `Bilhete`: Calcula `valor = filme.getValor() * tipoSala.getMultiplicador()`.
-  * `Compra`: Agrupa `ArrayList<Bilhete>`, `ArrayList<ItemCompra>` e `CupomPromocional`.
-
-### **Slide 3 — Herança, Polimorfismo, Sobrecarga e Enums**
-* **Enums (`model.enums`):**
-  * `TipoSala`: `COMUM (1.0)`, `SALA_3D (1.2)`, `XD (1.3)`, `XD_3D (1.4)`.
-  * `Produtos`: Pipoca (R\$ 18), Refrigerante (R\$ 9), Nachos (R\$ 16), Chocolate, Água, Bala.
-  * `CupomPromocional`: `BEMVINDO10` (10%), `CINEPOO20` (20%), `QUARTA30` (30%).
-* **Herança e Sobrescrita (`@Override comprarBilhete`):**
-  * `Usuario` (Superclasse): paga valor integral.
-  * `Estudante extends Usuario`: chama `super` e divide o valor por 2 (**meia-entrada**).
-  * `Critico extends Usuario`: atributo `origem`, ingresso **gratuito (`0.0`)** + métodos `atribuirNota` e `atribuirCritica` (vetor `Critica[100]` em `Filme`).
-* **Sobrecarga (Overload):**
-  * Em `Compra`: `comprarProduto(produto, qtd)` e `comprarProduto(produto, qtd, cupom)`.
-  * Em `Usuario`: `comprarBilhete(..., cupom)`.
-
-### **Slide 4 — Abstração, Interfaces e Exceções**
-* **Classe Abstrata [`Base`](file:///C:/Users/Amanda%20Aziz/Documents/cinema/src/model/Base.java) vs. Interface [`GerenciaFilmes`](file:///C:/Users/Amanda%20Aziz/Documents/cinema/src/model/interfaces/GerenciaFilmes.java):**
-  * `Base` (*"quem a equipe é"*): guarda `nome`, `idade`, `email` e métodos abstratos `adicionarUsuario` e `alterarUsuario`.
-  * `GerenciaFilmes` (*"o que faz"*): contrato `incluirFilme`, `alterarFilme`, `excluirFilme`.
-  * `Administrador` (persiste dados e possui `excluirUsuario`) vs. `Funcionario` (delega ao Admin e não exclui usuários).
-* **[`VendasException`](file:///C:/Users/Amanda%20Aziz/Documents/cinema/src/exceptions/VendasException.java) (3 Erros de Venda):**
-  1. `SESSAO_INICIADA`: Horário da sessão já passou (`LocalTime.now().isAfter(inicio)`).
-  2. `POLTRONA_OCUPADA`: Cadeira já vendida ou repetida no carrinho.
-  3. `FORA_DE_CARTAZ`: Filme desmarcado de "Em cartaz" (`!filme.isEmCartaz()`).
-
-### **Slide 5 — Padrões de Projeto e Demonstração (`Main.java`)**
-* **Arquitetura MVC:** Separação clara entre Telas (`view`), Regras (`controller`/`model`) e Arquivos JSON (`repository`).
-* **Padrões Auxiliares:**
-  * **Repository (DAO):** Interfaces `IRepositorio...` desacoplam o JSON do negócio.
-  * **Observer:** `MapaCadeirasPanel` notifica `CompraView` a cada clique de assento.
-  * **Constantes Tipadas & Validador Estático:** Padronização dos motivos em `VendasException` e validações em `Validador`.
-* **Roteiro da Demo ao Vivo (`Main.java`):**
-  * Cadastrar/Logar Crítico ou Estudante $\rightarrow$ Avaliar Filme $\rightarrow$ Sugerir Assentos Juntos $\rightarrow$ Lanchonete + Cupom $\rightarrow$ Finalizar Compra!
-
-### **Slide 6 — Por que o Padrão Facade?**
-* **Problema:** Comprar ou excluir dados exige coordenar `Usuario`, `Sala`, `Sessao`, `Compra`, 4 Controllers e 3 Repositórios.
-* **Solução ([`IFachada`](file:///C:/Users/Amanda%20Aziz/Documents/cinema/src/controller/IFachada.java) + [`Fachada`](file:///C:/Users/Amanda%20Aziz/Documents/cinema/src/controller/Fachada.java)):**
-  * Ponto único de comunicação para todas as telas Swing (`view` só enxerga `IFachada`).
-  * Coordenação entre controllers: ex. `excluirUsuario` consulta `compraController` antes de chamar `usuarioController`; `excluirFilme` consulta `sessaoController`.
+### 🎬 ATO 1 (Parte 1) — Classes e Encapsulamento
+| Exigência do Slide (Ato 1) | Onde e Como Foi Implementado no Código |
+| :--- | :--- |
+| **Atributos `private`, métodos `public`, construtores, getters e setters** | Todas as classes de [`src/model`](file:///C:/Users/Amanda%20Aziz/Documents/cinema/src/model) têm atributos `private`. Os construtores chamam os próprios `setters` (ex.: [`Usuario.java`](file:///C:/Users/Amanda%20Aziz/Documents/cinema/src/model/Usuario.java#L25-L37)), garantindo que nenhum objeto nasça inválido. |
+| **Classe `Usuario`** (`user`, `CPF`, `senha`, `idade`, `sexo`, `email`, `nomeCartao`, `numeroCartao`, `codigoVerificador`) + realizar, alterar e cancelar compra | Implementada em [`Usuario.java`](file:///C:/Users/Amanda%20Aziz/Documents/cinema/src/model/Usuario.java#L13-L202). O método `comprarBilhete` gera o ingresso; as operações de realizar, alterar e cancelar compra são coordenadas por [`CompraController.java`](file:///C:/Users/Amanda%20Aziz/Documents/cinema/src/controller/CompraController.java) e [`Compra.java`](file:///C:/Users/Amanda%20Aziz/Documents/cinema/src/model/Compra.java). |
+| **Classe `Filme`** (`nome`, `duração`, `sinopse`, `valor`) | Implementada em [`Filme.java`](file:///C:/Users/Amanda%20Aziz/Documents/cinema/src/model/Filme.java#L10-L35). |
+| **Classe `Bilhete`** (`user`, `CPF`, `sala`, `sessão`, `filme`, `valor` calculado por filme e sala, `cadeira`) | Implementada em [`Bilhete.java`](file:///C:/Users/Amanda%20Aziz/Documents/cinema/src/model/Bilhete.java#L10-L33). Calcula o preço inicial na linha 30: `this.valor = sala.calcularValorIngresso(sessao.getFilme())`. |
+| **Classe `Sala`** (lista de sessões de tamanho fixo com grade de horário; horário sem sessão fica `null` e não aparece para o usuário) | Implementada em [`Sala.java`](file:///C:/Users/Amanda%20Aziz/Documents/cinema/src/model/Sala.java#L12-L50). Possui o vetor estático `HORARIOS` com 7 horários (`10:00` às `22:00`) e o vetor fixo `Sessao[7]`. O método [`getSessoesDisponiveis()`](file:///C:/Users/Amanda%20Aziz/Documents/cinema/src/model/Sala.java#L42-L50) filtra posições `null`. |
+| **Classe `Sessao`** (filme exibido + matriz de cadeiras `10 linhas x 15 colunas`) | Implementada em [`Sessao.java`](file:///C:/Users/Amanda%20Aziz/Documents/cinema/src/model/Sessao.java#L9-L28) com `Cadeira[10][15]` (fileiras `A` a `J`, colunas `1` a `15`). |
+| **Classe `Compra`** (itens de lanchonete com estoque infinito + 1 ou mais bilhetes; método de compra de bilhetes à parte; sugestão de cadeiras juntas) | Implementada em [`Compra.java`](file:///C:/Users/Amanda%20Aziz/Documents/cinema/src/model/Compra.java) e [`Sessao.buscarCadeirasJuntas(int quantidade)`](file:///C:/Users/Amanda%20Aziz/Documents/cinema/src/model/Sessao.java#L61-L86). |
 
 ---
 
-## Parte 2: Roteiro de Fala Cronometrado (8 Minutos)
+### 🎬 ATO 2 (Parte 2) — Herança, Sobrescrita, Sobrecarga e Enums
+| Exigência do Slide (Ato 2) | Onde e Como Foi Implementado no Código |
+| :--- | :--- |
+| **Enum `Produtos`** (5 ou 6 produtos de balcão com `String nome` e `double valor` integrados à `Compra`) | [`Produtos.java`](file:///C:/Users/Amanda%20Aziz/Documents/cinema/src/model/enums/Produtos.java): 6 itens (`PIPOCA` R\$ 18, `REFRIGERANTE` R\$ 9, `CHOCOLATE` R\$ 7,50, `AGUA` R\$ 5, `NACHOS` R\$ 16, `BALA` R\$ 4). |
+| **Enum `CupomPromocional`** (3 cupons com descontos à escolha da equipe) | [`CupomPromocional.java`](file:///C:/Users/Amanda%20Aziz/Documents/cinema/src/model/enums/CupomPromocional.java): `BEMVINDO10` (10%), `CINEPOO20` (20%) e `QUARTA30` (30%), com método `aplicarDesconto(double valor)`. |
+| **Enum de Salas** (`Comum 1.0`, `3D 1.2`, `XD 1.3`, `XD/3D 1.4`) e escolha do fluxo (`Sala -> Filme/Sessão`) | [`TipoSala.java`](file:///C:/Users/Amanda%20Aziz/Documents/cinema/src/model/enums/TipoSala.java). A equipe adotou o fluxo simplificado sugerido pelo professor: **escolha da Sala $\rightarrow$ escolha da Sessão/Filme**. |
+| **Herança e Sobrescrita — `Estudante`** (herda tudo de `Usuario` e sobrescreve compra de bilhete para metade do valor) | [`Estudante.java`](file:///C:/Users/Amanda%20Aziz/Documents/cinema/src/model/Estudante.java#L24-L31): `@Override comprarBilhete(...)` chama `super.comprarBilhete(...)` e aplica `bilhete.setValor(bilhete.getValor() / 2)`. |
+| **Herança e Sobrescrita — `Critico`** (herda de `Usuario`, atributo `origem`, compra de bilhete sempre zero, `atribuirNota` e `atribuirCritica`) | [`Critico.java`](file:///C:/Users/Amanda%20Aziz/Documents/cinema/src/model/Critico.java#L11-L56): possui `private String origem`, `@Override comprarBilhete(...)` que define `bilhete.setValor(0.0)`, além de `atribuirNota(double nota, Filme filme)` e `atribuirCritica(String critica, Filme filme)`. |
+| **Classe `Critica` e evolução de `Filme`** (`nota`, `quantidadeCriticos`, vetor `Critica[100]`) | [`Critica.java`](file:///C:/Users/Amanda%20Aziz/Documents/cinema/src/model/Critica.java) guarda `nome`, `origem` e `mensagem`. [`Filme.java`](file:///C:/Users/Amanda%20Aziz/Documents/cinema/src/model/Filme.java#L12-L60) tem `MAX_CRITICAS = 100`, recalcula a média em `adicionarNota` e insere no final do vetor em `adicionarCritica`. |
+| **Sobrecarga nas Compras** (sobrecarregar compra de produtos e compra de bilhetes com `CupomPromocional`) | 1) Em [`Usuario.java`](file:///C:/Users/Amanda%20Aziz/Documents/cinema/src/model/Usuario.java#L89-L98): `comprarBilhete(Sala, Sessao, int, int, CupomPromocional)`.<br>2) Em [`Compra.java`](file:///C:/Users/Amanda%20Aziz/Documents/cinema/src/model/Compra.java#L61-L89): `comprarProduto(Produtos, int)` e `comprarProduto(Produtos, int, CupomPromocional)`. |
+
+---
+
+### 🎬 ATO 3 (Parte 3) — Classes Abstratas, Interfaces, Exceções e Persistência
+| Exigência do Slide (Ato 3) | Onde e Como Foi Implementado no Código |
+| :--- | :--- |
+| **Exceção `VendasException`** tratando os 3 erros de compra de bilhetes:<br>1) Horário do filme já passou;<br>2) Poltrona já selecionada;<br>3) Filme fora de cartaz. | [`VendasException.java`](file:///C:/Users/Amanda%20Aziz/Documents/cinema/src/exceptions/VendasException.java) define as 3 constantes (`SESSAO_INICIADA`, `POLTRONA_OCUPADA`, `FORA_DE_CARTAZ`) e guarda `motivo` e `filme`. É lançada em [`Usuario.comprarBilhete`](file:///C:/Users/Amanda%20Aziz/Documents/cinema/src/model/Usuario.java#L60-L81), [`Compra.adicionarBilhete`](file:///C:/Users/Amanda%20Aziz/Documents/cinema/src/model/Compra.java#L34-L41) e [`CompraController.finalizar`](file:///C:/Users/Amanda%20Aziz/Documents/cinema/src/controller/CompraController.java#L113-L127). |
+| **Classe Abstrata `Base`** (`nome`, `idade`, `email`, getters/setters e métodos abstratos `adicionarUsuario` e `alterarUsuario`) | [`Base.java`](file:///C:/Users/Amanda%20Aziz/Documents/cinema/src/model/Base.java#L13-L62). |
+| **Interface `GerenciaFilmes`** (`incluirFilme`, `excluirFilme`, `alterarFilme`) | [`GerenciaFilmes.java`](file:///C:/Users/Amanda%20Aziz/Documents/cinema/src/model/interfaces/GerenciaFilmes.java). |
+| **Classe Concreta `Funcionario`** (herda de `Base`, atributo `salario`, implementa métodos abstratos e `GerenciaFilmes`) | [`Funcionario.java`](file:///C:/Users/Amanda%20Aziz/Documents/cinema/src/model/Funcionario.java#L16-L58). Não possui método de excluir usuário e delega a persistência ao `Administrador`. |
+| **Classe Concreta `Administrador`** (herda de `Base`, atributos `salario` e `id`, implementa `Base` + `GerenciaFilmes` + `excluirUsuario` + responsável pela **Persistência**) | [`Administrador.java`](file:///C:/Users/Amanda%20Aziz/Documents/cinema/src/model/Administrador.java#L18-L120). Recebe `IRepositorioUsuario` e `IRepositorioFilme` e executa todas as gravações de usuários e filmes. |
+| **Escolha da Tecnologia de Persistência** (Arquivos de texto, vetores, listas ou BD) | A equipe escolheu **Arquivos JSON (`data/*.json`) com a biblioteca Gson** (e listas `ArrayList` em memória), isolados pela camada `repository`. |
+
+---
+
+### 🎬 ATO 4 (Parte 4) — Padrões de Projeto e Justificativa
+| Exigência do Slide (Ato 4) | Escolha da Equipe e Justificativa para a Apresentação |
+| :--- | :--- |
+| **Escolher um Padrão de Projeto, aplicá-lo ao sistema e justificar a escolha** | **Padrão Principal Escolhido: Fachada (*Facade*)** — [`IFachada.java`](file:///C:/Users/Amanda%20Aziz/Documents/cinema/src/controller/IFachada.java) e [`Fachada.java`](file:///C:/Users/Amanda%20Aziz/Documents/cinema/src/controller/Fachada.java).<br><br>**Por que escolhemos o Facade (Justificativa):**<br>1. **Redução de Acoplamento:** O sistema possui 11 telas/componentes no pacote `view`, 4 controladores (`UsuarioController`, `FilmeController`, `SessaoController`, `CompraController`), 15 classes no `model` e 3 repositórios JSON. Sem a Fachada, cada tela precisaria conhecer e instanciar vários controladores e modelos.<br>2. **Ponto Único de Entrada:** As telas recebem apenas `IFachada`. Toda operação da interface gráfica resume-se a uma chamada na fachada (ex.: `fachada.finalizarCompra(carrinho)`).<br>3. **Coordenação entre Subsistemas:** Operações que envolvem mais de um controlador são orquestradas pela própria `Fachada`. Exemplo: em [`Fachada.excluirUsuario`](file:///C:/Users/Amanda%20Aziz/Documents/cinema/src/controller/Fachada.java#L96-L99), a fachada consulta primeiro o `compraController` para verificar se o cliente tem compras ativas antes de chamar o `usuarioController`. Em [`Fachada.excluirFilme`](file:///C:/Users/Amanda%20Aziz/Documents/cinema/src/controller/Fachada.java#L124-L130), ela consulta o `sessaoController` para impedir a exclusão de um filme que está na grade de hoje. |
+
+> [!TIP]
+> **Outros Padrões Presentes no Código (Bônus para citar se o professor perguntar):**
+> - **MVC (Model-View-Controller):** Separação clara entre `model`, `view` e `controller`.
+> - **Repository / DAO (Data Access Object):** Interfaces `IRepositorio...` desacoplam a lógica de negócio dos arquivos JSON.
+> - **Observer (Listener):** Usado em [`MapaCadeirasPanel.java`](file:///C:/Users/Amanda%20Aziz/Documents/cinema/src/view/MapaCadeirasPanel.java#L235-L243) (`adicionarOuvinte` / `avisarOuvintes`) para notificar a `CompraView` sempre que o usuário clica em uma poltrona.
+
+---
+
+## Roteiro
 
 ### ⏱️ Tópico 1: Introdução e Arquitetura Geral (0:00 – 0:50 | ~50 seg)
 **O que falar:**
@@ -159,19 +140,3 @@ Para não poluir os slides como no PDF original de 22 páginas, use apenas **tó
 > Assim garantimos um sistema coeso, fácil de manter e que aplica todos os pilares de POO na prática. Muito obrigada!"
 
 ---
-
-## Cola Rápida para Deixar ao Lado na Hora da Apresentação
-
-| Perfil | Login (CPF ou E-mail) | Senha | O que demonstrar |
-| :--- | :--- | :--- | :--- |
-| **Crítico** | `33333333333` | `1234` | Ingresso a `R$ 0,00` + Aba **Avaliar filmes** |
-| **Estudante** | `22222222222` | `1234` | Paga **meia-entrada** + acumula com Cupom |
-| **Cliente Comum** | `11111111111` | `1234` | Paga valor cheio (`filme × multiplicador da sala`) |
-| **Administrador** | `admin@cinema.com` | `admin123` | Aba Equipe: gerencia filmes e **exclui usuários** |
-| **Funcionário** | `func@cinema.com` | `func123` | Aba Equipe: gerencia filmes, mas **bloqueado ao excluir usuário** |
-
-* **Dados válidos caso queira cadastrar alguém ao vivo:**
-  * **Nome / Nome no Cartão:** Somente letras (ex.: `Amanda Crítica` / `AMANDA CRITICA`)
-  * **CPF:** Exatamente 11 dígitos numéricos (ex.: `44444444444`)
-  * **Cartão:** Exatamente 16 dígitos numéricos (ex.: `1111222233334444`)
-  * **CVV:** Exatamente 3 dígitos numéricos (ex.: `123`)
