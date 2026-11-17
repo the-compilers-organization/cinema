@@ -16,7 +16,7 @@ public class Validador {
         }
     }
 
-    // Aceita somente letras (inclusive acentuadas, como "João") e espaços
+    // Aceita somente letras ( e espaços
     public static void somenteLetras(String valor, String nomeDoCampo) throws ValidacaoException {
         textoObrigatorio(valor, nomeDoCampo);
 
