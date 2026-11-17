@@ -1,4 +1,4 @@
-<h1 align="center">🎬 Sistema de Cinema - Cine Jhey/h1>
+<h1 align="center">🎬 Sistema de Cinema - Cine Jhey</h1>
 
 <p align="center">
   <img src="https://img.shields.io/static/v1?label=Java&message=17%2B&color=ED8B00&style=for-the-badge&logo=openjdk"/>
