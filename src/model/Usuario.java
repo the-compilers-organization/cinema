@@ -8,7 +8,7 @@ import model.enums.Sexo;
 
 // Parte 1 - Usuário que compra bilhetes online
 // Parte 2 - É a superclasse de Estudante e Critico
-// Os setters validam os dados e lançam ValidacaoException quando algo está errado.
+// Os setters validam os dados e lançam ValidacaoException quando algo está errado
 
 public class Usuario {
 

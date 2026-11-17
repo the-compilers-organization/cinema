@@ -14,7 +14,7 @@ import model.Usuario;
 
 
 // Implementação de IRepositorioUsuario que guarda os dados em data/usuarios.json
-// Os usuários ficam numa lista em memória; a cada alteração o arquivo é regravado
+// Os usuários ficam numa lista em memória. a cada alteração o arquivo é regravado
 // O campo "tipo" é gravado para saber se o objeto é Usuario, Estudante ou Critico
  
 public class RepositorioUsuarioJSON implements IRepositorioUsuario {

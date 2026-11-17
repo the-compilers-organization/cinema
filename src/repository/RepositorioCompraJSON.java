@@ -10,8 +10,7 @@ import exceptions.PersistenciaException;
 import model.Compra;
 
 
-// Implementação de IRepositorioCompra que guarda os dados em data/compras.json.
-
+// Implementação de IRepositorioCompra que guarda os dados em data/compras.json
 public class RepositorioCompraJSON implements IRepositorioCompra {
 
     private String caminho;

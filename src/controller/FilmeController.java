@@ -40,8 +40,7 @@ public class FilmeController {
         gerente.excluirFilme(nome);
     }
 
-    public void avaliar(Critico critico, Filme filme, double nota, String texto)
-            throws ValidacaoException, PersistenciaException {
+    public void avaliar(Critico critico, Filme filme, double nota, String texto) throws ValidacaoException, PersistenciaException {
         Validador.textoObrigatorio(texto, "Crítica");
         critico.atribuirNota(nota, filme);
         critico.atribuirCritica(texto, filme);

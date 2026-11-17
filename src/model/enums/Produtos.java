@@ -1,10 +1,10 @@
 package model.enums;
 
-/**
- * Parte 2 - Produtos de balcão do cinema.
- * Cada produto tem um nome (String) e um valor (double).
- * O estoque é considerado infinito.
- */
+
+// Parte 2 - Produtos de balcão do cinema
+// Cada produto tem um nome (String) e um valor (double)
+// O estoque é considerado infinito
+
 public enum Produtos {
 
     PIPOCA("Pipoca grande", 18.00),

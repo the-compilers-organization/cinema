@@ -35,7 +35,7 @@ public class Filme {
     }
 
     
-    // Adiciona uma nota (0 a 10), incrementa a quantidade de críticos e calcula a nova média.
+    // Adiciona uma nota (0 a 10), incrementa a quantidade de críticos e calcula a nova média
      
     public void adicionarNota(double novaNota) throws ValidacaoException {
         if (novaNota < 0 || novaNota > 10) {

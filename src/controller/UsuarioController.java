@@ -18,7 +18,7 @@ import repository.IRepositorioUsuario;
 
 public class UsuarioController {
 
-    // Contas fixas da equipe do cinema
+    // TODO: Contas fixas da equipe do cinema para testes. OBS: Nunca façam uma merda dessas de expor os dados
     public static final String EMAIL_ADMIN = "admin@cinema.com";
     public static final String SENHA_ADMIN = "admin123";
     public static final String EMAIL_FUNCIONARIO = "func@cinema.com";

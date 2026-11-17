@@ -30,7 +30,7 @@ public class Compra {
     }
 
     //  BILHETES 
-    // Adiciona um bilhete. Não deixa a mesma poltrona entrar duas vezes na compra.
+    // Adiciona um bilhete. Não deixa a mesma poltrona entrar duas vezes na compra
     public void adicionarBilhete(Bilhete bilhete) throws VendasException {
         if (contemCadeira(bilhete.getNumeroSala(), bilhete.getHorarioSessao(),
                 bilhete.getLinha(), bilhete.getColuna())) {

@@ -18,8 +18,7 @@ public class Funcionario extends Base implements GerenciaFilmes {
     private double salario;
     private Administrador administrador;
 
-    public Funcionario(String nome, int idade, String email, double salario, Administrador administrador)
-            throws ValidacaoException {
+    public Funcionario(String nome, int idade, String email, double salario, Administrador administrador) throws ValidacaoException {
         super(nome, idade, email);
         setSalario(salario);
         this.administrador = administrador;

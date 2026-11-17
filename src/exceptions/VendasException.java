@@ -5,7 +5,6 @@ package exceptions;
 // 1) compra de bilhete de uma sessão cujo horário já passou
 // 2) compra de bilhete de uma poltrona que já foi selecionada
 // 3) compra de bilhete de um filme que não está mais em cartaz
-// Assim como no exemplo SaldoInsuficienteException da aula, a exceção guarda informações extras sobre o erro (o filme e o motivo)
  
 public class VendasException extends Exception {
 

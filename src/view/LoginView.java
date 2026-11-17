@@ -41,7 +41,7 @@ public class LoginView extends JFrame {
     private JLabel lblDica = new JLabel();
 
     public LoginView(IFachada fachada) {
-        setTitle("Cine POO - Entrar");
+        setTitle("Cine JHEY - Entrar");
         setSize(900, 600);
         setMinimumSize(new Dimension(820, 560));
         setLocationRelativeTo(null);
@@ -79,7 +79,7 @@ public class LoginView extends JFrame {
         faixa.setFont(Estilo.FONTE_NEGRITO);
         faixa.setForeground(Estilo.DOURADO);
 
-        JLabel nome = new JLabel("CINE POO");
+        JLabel nome = new JLabel("CINE JHEY");
         nome.setFont(new Font("SansSerif", Font.BOLD, 44));
         nome.setForeground(Color.WHITE);
 

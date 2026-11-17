@@ -20,10 +20,9 @@ import model.enums.Produtos;
 import model.interfaces.GerenciaFilmes;
 
 
-// PADRÃO DE PROJETO FACHADA - interface IFachada.
-// É o "contrato" entre a camada de UI (telas) e a camada de NEGÓCIO.
-// As telas só conhecem esta interface: não sabem que existem UsuarioController, FilmeController, repositórios, arquivos JSON etc.
-
+// PADRÃO DE PROJETO FACHADA - interface IFachada
+// É o "contrato" entre a camada de UI (telas) e a camada de NEGÓCIO
+// As telas só conhecem esta interface: não sabem que existem UsuarioController, FilmeController, repositórios, arquivos JSON etc
 public interface IFachada {
 
     //  Usuários 
@@ -52,24 +51,19 @@ public interface IFachada {
 
     void excluirFilme(GerenciaFilmes gerente, String nome) throws FilmeException, PersistenciaException;
 
-    void avaliarFilme(Critico critico, Filme filme, double nota, String texto)
-            throws ValidacaoException, PersistenciaException;
+    void avaliarFilme(Critico critico, Filme filme, double nota, String texto) throws ValidacaoException, PersistenciaException;
 
     //  Salas e sessões 
     Sala[] getSalas();
 
-    ArrayList<int[]> sugerirCadeirasJuntas(Compra carrinho, Sala sala, Sessao sessao, int quantidade)
-            throws ValidacaoException;
+    ArrayList<int[]> sugerirCadeirasJuntas(Compra carrinho, Sala sala, Sessao sessao, int quantidade) throws ValidacaoException;
 
     //  Compras 
     Compra novaCompra(Usuario usuario);
 
-    void adicionarIngressos(Compra carrinho, Usuario usuario, Sala sala, Sessao sessao,
-                            ArrayList<int[]> cadeiras, int quantidadePessoas, CupomPromocional cupom)
-            throws VendasException, ValidacaoException;
+    void adicionarIngressos(Compra carrinho, Usuario usuario, Sala sala, Sessao sessao, ArrayList<int[]> cadeiras, int quantidadePessoas, CupomPromocional cupom) throws VendasException, ValidacaoException;
 
-    void adicionarProduto(Compra carrinho, Produtos produto, int quantidade, CupomPromocional cupom)
-            throws ValidacaoException;
+    void adicionarProduto(Compra carrinho, Produtos produto, int quantidade, CupomPromocional cupom) throws ValidacaoException;
 
     void removerItemDoCarrinho(Compra carrinho, int indice) throws CompraException;
 
@@ -81,6 +75,5 @@ public interface IFachada {
 
     void removerItemDaCompra(Compra compra, int indice) throws CompraException, PersistenciaException;
 
-    void adicionarProdutoNaCompra(Compra compra, Produtos produto, int quantidade)
-            throws ValidacaoException, PersistenciaException;
+    void adicionarProdutoNaCompra(Compra compra, Produtos produto, int quantidade) throws ValidacaoException, PersistenciaException;
 }

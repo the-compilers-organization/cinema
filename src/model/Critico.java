@@ -12,9 +12,7 @@ public class Critico extends Usuario {
 
     private String origem;
 
-    public Critico(String user, String cpf, String senha, int idade, Sexo sexo, String email,
-                   String nomeCartao, String numeroCartao, String codigoVerificador, String origem)
-            throws ValidacaoException {
+    public Critico(String user, String cpf, String senha, int idade, Sexo sexo, String email, String nomeCartao, String numeroCartao, String codigoVerificador, String origem) throws ValidacaoException {
         super(user, cpf, senha, idade, sexo, email, nomeCartao, numeroCartao, codigoVerificador);
         setOrigem(origem);
     }

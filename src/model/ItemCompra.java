@@ -2,7 +2,7 @@ package model;
 
 import model.enums.Produtos;
 
-// Um produto da lanchonete dentro de uma compra (produto + quantidade + subtotal).
+// Um produto da lanchonete dentro de uma compra (produto + quantidade + subtotal)
 
 public class ItemCompra {
 

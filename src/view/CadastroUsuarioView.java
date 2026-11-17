@@ -25,7 +25,7 @@ import model.Usuario;
 import controller.IFachada;
 
 
-// Formulário de cadastro/edição de usuário (janela modal) 
+// Formulário de cadastro e edicao de usuario ( modal) 
 
 public class CadastroUsuarioView extends JDialog {
 
@@ -92,7 +92,7 @@ public class CadastroUsuarioView extends JDialog {
         cartao.add(Estilo.campo("Código verificador (CVV)", txtCvv));
         cartao.add(lblSenhaDica);
 
-        // O formulário fica no topo para os campos não esticarem
+        // O formulario fica no topo para os campos nao esticarem
         JPanel centro = new JPanel(new BorderLayout(0, 14));
         centro.setOpaque(false);
         centro.add(formulario, BorderLayout.NORTH);
@@ -134,7 +134,7 @@ public class CadastroUsuarioView extends JDialog {
         getBtnCancelar().addActionListener(e -> dispose());
     }
 
-    // Origem só pode ser preenchida quando o tipo é Crítico
+    // origem so pode ser preenchida quando o tipo é Critico
     public void atualizarCampoOrigem() {
         boolean critico = TIPO_CRITICO.equals(cbTipo.getSelectedItem());
         txtOrigem.setEnabled(critico);
@@ -143,7 +143,7 @@ public class CadastroUsuarioView extends JDialog {
         }
     }
 
-    // Prepara a tela para edição: CPF e tipo não podem mudar
+    // Prepara a tela para edição: CPF e tipo nao podem mudar
     public void modoEdicao(String tipo, String user, String cpf, int idade, Sexo sexo, String email,
                            String nomeCartao, String numeroCartao, String cvv, String origem) {
         lblTitulo.setText("Editar dados");

@@ -16,15 +16,15 @@ import com.google.gson.JsonParser;
 import exceptions.PersistenciaException;
 
 
-// Classe auxiliar que lê e grava arquivos JSON usando a biblioteca Gson
+// Classe auxiliar para ler e grava arquivos JSON usando a biblioteca Gson
 // Todos os erros de arquivo viram PersistenciaException
 
 public class ArquivoJson {
 
-    // setPrettyPrinting deixa o arquivo identado e fácil de ler
+    
     public static final Gson GSON = new GsonBuilder().setPrettyPrinting().create();
 
-    // Lê o arquivo e devolve um vetor JSON (vazio se o arquivo não existir)
+    // ler o arquivo e devolve um vetor JSON (vazio se o arquivo nAO existir)
     public static JsonArray ler(String caminho) throws PersistenciaException {
         File arquivo = new File(caminho);
         if (!arquivo.exists() || arquivo.length() == 0) {
@@ -44,11 +44,11 @@ public class ArquivoJson {
         } catch (JsonParseException e) {
             throw new PersistenciaException("O arquivo " + caminho + " está com o JSON inválido.");
         } finally {
-            fechar(leitor); // o finally SEMPRE executa, com ou sem erro
+            fechar(leitor); // o finally sempre executa, com ou sem erro
         }
     }
 
-    // Grava o conteúdo no arquivo (cria a pasta "data" se precisar)
+    // Grava o conteúdo no arquivo (ou cria pasta data quando nao existir
     public static void gravar(String caminho, JsonElement conteudo) throws PersistenciaException {
         File arquivo = new File(caminho);
         File pasta = arquivo.getAbsoluteFile().getParentFile();
@@ -72,7 +72,7 @@ public class ArquivoJson {
             try {
                 arquivo.close();
             } catch (IOException e) {
-                // não há o que fazer se falhar ao fechar
+                // nao tem o que fazer se falhar ao fechar
             }
         }
     }

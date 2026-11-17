@@ -39,7 +39,7 @@ public class PrincipalView extends JFrame {
     private ArrayList<JButton> botoesMenu = new ArrayList<JButton>();
 
     public PrincipalView(IFachada fachada, Usuario cliente, Base equipe, LoginView login) {
-        setTitle("Cine POO");
+        setTitle("Cine JHEY");
         setSize(1240, 780);
         setMinimumSize(new Dimension(1100, 700));
         setLocationRelativeTo(null);
@@ -79,7 +79,7 @@ public class PrincipalView extends JFrame {
         barra.setBackground(Estilo.ESCURO);
         barra.setBorder(BorderFactory.createEmptyBorder(12, 22, 12, 18));
 
-        JLabel logo = new JLabel("CINE POO");
+        JLabel logo = new JLabel("CINE JHEY");
         logo.setFont(new Font("SansSerif", Font.BOLD, 22));
         logo.setForeground(Color.WHITE);
         barra.add(logo, BorderLayout.WEST);

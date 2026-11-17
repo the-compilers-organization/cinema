@@ -6,7 +6,7 @@ import exceptions.PersistenciaException;
 import model.Compra;
 
 
-// Interface da camada de DADOS para compras.
+// Interface da camada de DADOS para compras
 
 public interface IRepositorioCompra {
 

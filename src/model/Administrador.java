@@ -22,9 +22,7 @@ public class Administrador extends Base implements GerenciaFilmes {
     private IRepositorioUsuario repositorioUsuarios;
     private IRepositorioFilme repositorioFilmes;
 
-    public Administrador(int id, String nome, int idade, String email, double salario,
-                         IRepositorioUsuario repositorioUsuarios, IRepositorioFilme repositorioFilmes)
-            throws ValidacaoException {
+    public Administrador(int id, String nome, int idade, String email, double salario, IRepositorioUsuario repositorioUsuarios, IRepositorioFilme repositorioFilmes) throws ValidacaoException {
         super(nome, idade, email);
         setId(id);
         setSalario(salario);

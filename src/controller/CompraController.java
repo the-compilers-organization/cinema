@@ -43,9 +43,7 @@ public class CompraController {
     // Primeiro cria todos os bilhetes (validando); só depois coloca no carrinho
     // Assim, se uma cadeira der erro, nenhuma é adicionada
    
-    public void adicionarIngressos(Compra carrinho, Usuario usuario, Sala sala, Sessao sessao,
-                                   ArrayList<int[]> cadeiras, int quantidadePessoas, CupomPromocional cupom)
-            throws VendasException, ValidacaoException {
+    public void adicionarIngressos(Compra carrinho, Usuario usuario, Sala sala, Sessao sessao, ArrayList<int[]> cadeiras, int quantidadePessoas, CupomPromocional cupom) throws VendasException, ValidacaoException {
 
         if (cadeiras == null || cadeiras.isEmpty()) {
             throw new ValidacaoException("Selecione pelo menos uma poltrona no mapa.");
@@ -70,8 +68,7 @@ public class CompraController {
             }
 
             if (carrinho.contemCadeira(sala.getNumero(), sessao.getHorario(), cadeira[0], cadeira[1])) {
-                throw new VendasException(VendasException.POLTRONA_OCUPADA, sessao.getFilme().getNome(),
-                        "A poltrona " + bilhete.getNomeCadeira() + " já está no seu carrinho.");
+                throw new VendasException(VendasException.POLTRONA_OCUPADA, sessao.getFilme().getNome(), "A poltrona " + bilhete.getNomeCadeira() + " já está no seu carrinho.");
             }
             novos.add(bilhete);
         }
@@ -82,8 +79,7 @@ public class CompraController {
         carrinho.setCupom(cupom);
     }
 
-    public void adicionarProduto(Compra carrinho, Produtos produto, int quantidade, CupomPromocional cupom)
-            throws ValidacaoException {
+    public void adicionarProduto(Compra carrinho, Produtos produto, int quantidade, CupomPromocional cupom) throws ValidacaoException {
         if (cupom == null) {
             carrinho.comprarProduto(produto, quantidade);
         } else {
@@ -166,8 +162,7 @@ public class CompraController {
     }
 
     // ALTERAR COMPRA: adicionar produto (usa o mesmo cupom da compra)
-    public void adicionarProdutoNaCompra(Compra compra, Produtos produto, int quantidade)
-            throws ValidacaoException, PersistenciaException {
+    public void adicionarProdutoNaCompra(Compra compra, Produtos produto, int quantidade) throws ValidacaoException, PersistenciaException {
         if (compra.getCupom() == null) {
             compra.comprarProduto(produto, quantidade);
         } else {

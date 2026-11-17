@@ -10,11 +10,7 @@ import view.Mensagens;
 
 
 // Ponto de entrada do sistema
-// Arquitetura em 3 camadas (MVC + Fachada):
-// UI (view) ............ telas Swing; tratam os cliques e chamam a IFachada
-// NEGÓCIO (controller) . IFachada, Fachada e UsuarioController, FilmeController, SessaoController, CompraController
-//  (model) ..... entidades: Usuario, Filme, Sala, Sessao, Compra ...
-//  DADOS (repository) ... IRepositorio... (interfaces) e Repositorio...JSON
+// Arquitetura em camadas:
 
 public class Main {
 

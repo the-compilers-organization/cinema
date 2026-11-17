@@ -6,7 +6,7 @@ import exceptions.PersistenciaException;
 import model.Filme;
 
 
-// Interface da camada de DADOS para filmes.
+// Interface da camada de DADOS para filmes
 
 public interface IRepositorioFilme {
 

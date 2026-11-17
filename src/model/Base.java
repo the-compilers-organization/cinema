@@ -5,10 +5,10 @@ import exceptions.UsuarioException;
 import exceptions.ValidacaoException;
 
 
-// Parte 3 - Classe abstrata Base.
-// Atributos: nome, idade e email.
-// Métodos abstratos: adicionar usuário e alterar usuário.
-// Funcionario e Administrador herdam desta classe.
+// Parte 3 - Classe abstrata Base
+// Atributos: nome, idade e email
+// Métodos abstratos: adicionar usuário e alterar usuário
+// Funcionario e Administrador herdam desta classe
 
 public abstract class Base {
 
@@ -23,11 +23,9 @@ public abstract class Base {
     }
 
     //  métodos abstratos 
-    public abstract void adicionarUsuario(Usuario usuario)
-            throws UsuarioException, PersistenciaException;
+    public abstract void adicionarUsuario(Usuario usuario) throws UsuarioException, PersistenciaException;
 
-    public abstract void alterarUsuario(Usuario usuarioAtualizado)
-            throws UsuarioException, PersistenciaException;
+    public abstract void alterarUsuario(Usuario usuarioAtualizado) throws UsuarioException, PersistenciaException;
 
     // Usado na tela para mostrar o cargo de quem está logado
     public abstract String getCargo();

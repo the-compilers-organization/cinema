@@ -1,9 +1,9 @@
 package model.enums;
 
-/**
- * Parte 2 - Três cupons promocionais com seus descontos.
- * O percentual é guardado como fração: 0.10 = 10%.
- */
+
+//  Parte 2 - Três cupons promocionais com seus descontos
+//  O percentual é guardado como fração: 0.10 = 10%
+
 public enum CupomPromocional {
 
     BEMVINDO10(0.10),

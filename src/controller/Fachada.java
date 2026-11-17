@@ -46,11 +46,9 @@ public class Fachada implements IFachada {
         IRepositorioFilme repositorioFilme = new RepositorioFilmeJSON();
         IRepositorioCompra repositorioCompra = new RepositorioCompraJSON();
 
-        // Equipe do cinema (o Administrador é o responsável pela persistência)
-        Administrador administrador = new Administrador(1, "Ana Administradora", 35,
-                UsuarioController.EMAIL_ADMIN, 6500.00, repositorioUsuario, repositorioFilme);
-        Funcionario funcionario = new Funcionario("Caio Funcionário", 24,
-                UsuarioController.EMAIL_FUNCIONARIO, 2500.00, administrador);
+        // TODO: gambiarra para funcionamento - criando Equipe do cinema (o Administrador é o responsável pela persistência)
+        Administrador administrador = new Administrador(1, "Ana Administradora", 35, UsuarioController.EMAIL_ADMIN, 6500.00, repositorioUsuario, repositorioFilme);
+        Funcionario funcionario = new Funcionario("Caio Funcionário", 24, UsuarioController.EMAIL_FUNCIONARIO, 2500.00, administrador);
 
         // Camada de negócio: controladores
         usuarioController = new UsuarioController(repositorioUsuario, administrador, funcionario);
@@ -123,15 +121,13 @@ public class Fachada implements IFachada {
     @Override
     public void excluirFilme(GerenciaFilmes gerente, String nome) throws FilmeException, PersistenciaException {
         if (sessaoController.filmeEstaNaProgramacao(nome)) {
-            throw new FilmeException("\"" + nome + "\" está na programação de hoje e não pode ser excluído. "
-                    + "Desmarque a opção \"Em cartaz\" para retirá-lo das vendas.");
+            throw new FilmeException("\"" + nome + "\" está na programação de hoje e não pode ser excluído. " + "Desmarque a opção \"Em cartaz\" para retirá-lo das vendas.");
         }
         filmeController.excluir(gerente, nome);
     }
 
     @Override
-    public void avaliarFilme(Critico critico, Filme filme, double nota, String texto)
-            throws ValidacaoException, PersistenciaException {
+    public void avaliarFilme(Critico critico, Filme filme, double nota, String texto) throws ValidacaoException, PersistenciaException {
         filmeController.avaliar(critico, filme, nota, texto);
     }
 
@@ -142,8 +138,7 @@ public class Fachada implements IFachada {
     }
 
     @Override
-    public ArrayList<int[]> sugerirCadeirasJuntas(Compra carrinho, Sala sala, Sessao sessao, int quantidade)
-            throws ValidacaoException {
+    public ArrayList<int[]> sugerirCadeirasJuntas(Compra carrinho, Sala sala, Sessao sessao, int quantidade) throws ValidacaoException {
         return sessaoController.sugerirCadeirasJuntas(carrinho, sala, sessao, quantidade);
     }
 
@@ -154,15 +149,12 @@ public class Fachada implements IFachada {
     }
 
     @Override
-    public void adicionarIngressos(Compra carrinho, Usuario usuario, Sala sala, Sessao sessao,
-                                   ArrayList<int[]> cadeiras, int quantidadePessoas, CupomPromocional cupom)
-            throws VendasException, ValidacaoException {
+    public void adicionarIngressos(Compra carrinho, Usuario usuario, Sala sala, Sessao sessao, ArrayList<int[]> cadeiras, int quantidadePessoas, CupomPromocional cupom) throws VendasException, ValidacaoException {
         compraController.adicionarIngressos(carrinho, usuario, sala, sessao, cadeiras, quantidadePessoas, cupom);
     }
 
     @Override
-    public void adicionarProduto(Compra carrinho, Produtos produto, int quantidade, CupomPromocional cupom)
-            throws ValidacaoException {
+    public void adicionarProduto(Compra carrinho, Produtos produto, int quantidade, CupomPromocional cupom) throws ValidacaoException {
         compraController.adicionarProduto(carrinho, produto, quantidade, cupom);
     }
 
@@ -192,8 +184,7 @@ public class Fachada implements IFachada {
     }
 
     @Override
-    public void adicionarProdutoNaCompra(Compra compra, Produtos produto, int quantidade)
-            throws ValidacaoException, PersistenciaException {
+    public void adicionarProdutoNaCompra(Compra compra, Produtos produto, int quantidade) throws ValidacaoException, PersistenciaException {
         compraController.adicionarProdutoNaCompra(compra, produto, quantidade);
     }
 }

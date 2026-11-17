@@ -1,8 +1,7 @@
 package model.enums;
 
-/**
- * Parte 2 - Tipos de sala com seu multiplicador de preço.
- */
+// Parte 2 - Tipos de sala com seu multiplicador de preço
+
 public enum TipoSala {
 
     COMUM("Comum", 1.0),

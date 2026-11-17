@@ -10,9 +10,7 @@ import model.enums.Sexo;
 
 public class Estudante extends Usuario {
 
-    public Estudante(String user, String cpf, String senha, int idade, Sexo sexo, String email,
-                     String nomeCartao, String numeroCartao, String codigoVerificador)
-            throws ValidacaoException {
+    public Estudante(String user, String cpf, String senha, int idade, Sexo sexo, String email, String nomeCartao, String numeroCartao, String codigoVerificador) throws ValidacaoException {
         super(user, cpf, senha, idade, sexo, email, nomeCartao, numeroCartao, codigoVerificador);
     }
 
