@@ -1,4 +1,4 @@
-## Mapeamento dos 4 Slides do Professor vs. Código Implementado
+## Mapeamento dos pdf's x Código Implementado
 
 ### 🎬 ATO 1 (Parte 1) — Classes e Encapsulamento
 | Exigência do Slide (Ato 1) | Onde e Como Foi Implementado no Código |
