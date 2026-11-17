@@ -84,7 +84,7 @@ O projeto consiste na implementação de um sistema de cinema em Java, envolvend
 
 <p align="justify">
 
-O desenvolvimento foi realizado de forma incremental, em quatro etapas. A cada etapa a estrutura foi ampliada com os novos conceitos apresentados em aula, até chegar à versão final: uma aplicação com interface gráfica em <strong>Java Swing</strong>, arquitetura em camadas <strong>MVC</strong> com o padrão de projeto <strong>Fachada</strong>, validação com <strong>exceções</strong> e persistência dos dados em <strong>arquivos JSON</strong>, sem banco de dados.
+O desenvolvimento foi realizado de forma incremental, em quatro etapas. A cada etapa a estrutura foi ampliada com os novos conceitos apresentados em aula, até chegar à versão final: uma aplicação com interface gráfica em <strong>Java Swing</strong>, arquitetura em  <strong>camadas</strong> com o padrão de projeto <strong>FACADE</strong>, validação com <strong>exceções</strong> e persistência dos dados em <strong>arquivos JSON</strong>, sem banco de dados.
 
 </p>
 
@@ -231,7 +231,7 @@ Telas disponíveis para cada perfil:
 
 # Arquitetura :building_construction:
 
-O projeto segue a **arquitetura em 3 camadas** vista em aula, com **MVC** e o padrão de projeto **Fachada**.
+O projeto segue a **arquitetura em camadas** vista em aula com  padrão de projeto **Facade**.
 
 ```text
  UI (view)          LoginView, CompraView, FilmesView ...  (telas Swing)
@@ -254,7 +254,7 @@ O projeto segue a **arquitetura em 3 camadas** vista em aula, com **MVC** e o pa
 | **Negócio** | `controller` e `model` | `Fachada`, controllers e entidades, com as regras de negócio e as validações. | interfaces `IRepositorioUsuario`, `IRepositorioFilme` e `IRepositorioCompra` |
 | **Dados** | `repository` | Leitura e gravação dos arquivos JSON. | arquivos da pasta `data/` |
 
-Leitura MVC do projeto:
+Leitura Camadas do projeto:
 
 - **Model** → pacote `model` (entidades: `Usuario`, `Filme`, `Sala`, `Sessao`, `Bilhete`, `Compra`...);
 - **View** → pacote `view` (telas);
@@ -601,7 +601,7 @@ Para voltar aos dados iniciais, basta restaurar os arquivos da pasta `data/` (ou
 | Classes abstratas | `Base` |
 | Polimorfismo | `Base` (administrador ou funcionário) e `GerenciaFilmes` usados pelo tipo da classe-mãe ou da interface |
 | Exceções | `VendasException`, `ValidacaoException`, `UsuarioException`, `FilmeException`, `CompraException`, `PersistenciaException` |
-| Padrões de projeto | Fachada (`IFachada` + `Fachada`) e arquitetura em camadas (MVC) |
+| Padrões de projeto | Fachada (`IFachada` + `Fachada`) e arquitetura em camadas |
 
 ---
 
