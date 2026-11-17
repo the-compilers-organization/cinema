@@ -650,7 +650,6 @@ cinema/
 │   ├── apresentacao_de_projeto_parte2.pdf
 │   ├── apresentacao_de_projeto_parte3.pdf
 │   ├── apresentacao_de_projeto_parte4.pdf
-│   ├── aula14_exceptions.pdf
 │   └── telas/                         imagens das telas
 │
 ├── src/
