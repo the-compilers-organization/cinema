@@ -49,7 +49,6 @@
 > - **Repository / DAO (Data Access Object):** Interfaces `IRepositorio...` desacoplam a lógica de negócio dos arquivos JSON.
 > - **Observer (Listener):** Usado em [`MapaCadeirasPanel.java`] (`adicionarOuvinte` / `avisarOuvintes`) para notificar a `CompraView` sempre que o usuário clica em uma poltrona.
 
----
 
 ---
 
